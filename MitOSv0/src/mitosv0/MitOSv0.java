@@ -17,5 +17,8 @@ public class MitOSv0 {
         // TODO code application logic here
         
         //I'm writing!!!!
+        
+        VirtualMachine VM = new VirtualMachine();
+        
     }
 }
