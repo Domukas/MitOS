@@ -50,11 +50,13 @@ public class VirtualMachine {
     {
                 
         //Testing
+        /*
         System.out.println(C);
         C = BitEdit.setBit(C, 1);
         System.out.println(C);
         C = BitEdit.unSetBit(C, 1);
         System.out.println(C);
+        * */
         //-Testing
         
     }
