@@ -56,6 +56,7 @@ public class VirtualMachine {
         C = BitEdit.unSetBit(C, 1);
         System.out.println(C);
         //-Testing
+        //LOLOLOL
         
     }
     
