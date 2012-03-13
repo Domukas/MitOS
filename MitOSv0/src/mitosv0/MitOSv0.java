@@ -24,7 +24,7 @@ public class MitOSv0 {
         
         
         VirtualMachine VM = new VirtualMachine();
-        
+        /*
         try {
             FileInputStream input = new FileInputStream("src/mitosv0/program1.mit");
             int c;
@@ -34,5 +34,7 @@ public class MitOSv0 {
         } catch (IOException ex) {
             Logger.getLogger(MitOSv0.class.getName()).log(Level.SEVERE, null, ex);
         }
+        * 
+        */
     }
 }

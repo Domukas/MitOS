@@ -35,7 +35,7 @@ public class SemaphoreRegister extends Register {
     
     public void setBit(int number)
     {
-        if (number > 8)
+        if (number >= 8)
         {
             number -= 8;
             data[1] = (byte) (data[1] | (1 << number)); 
@@ -48,7 +48,7 @@ public class SemaphoreRegister extends Register {
     
     public void unsetBit(int number)
     {
-        if (number > 8)
+        if (number >= 8)
         {
             number -= 8;
             data[1] = (byte) (data[1] & ~(1 << number)); 

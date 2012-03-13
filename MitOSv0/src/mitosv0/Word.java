@@ -37,4 +37,37 @@ public class Word {
         return data[number];
     }
     
+    public long getLong()
+    {
+        long rez = 0;
+        int pow = 0;
+        int val;
+        
+        for (int i = 0; i < 3; i++)
+        {
+            for (int n = 0; n < 8; n++)
+            {
+                val = data[i]>>(n) & 0x0001;
+                if (val == 1)
+                    rez = rez += ((int) Math.pow(2, pow));
+                
+                pow++;
+            }
+        }   
+        
+        for (int n = 0; n < 7; n++)
+            {
+                val = data[3]>>(n) & 0x0001;
+                if (val == 1)
+                    rez = rez += ((int) Math.pow(2, pow));
+                pow++;
+            }
+        
+        val = data[3]>>(8) & 0x0001;
+        if (val == 1)
+            rez *= -1;
+        
+        return rez;
+    }
+    
 }

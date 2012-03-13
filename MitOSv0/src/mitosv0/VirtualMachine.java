@@ -54,6 +54,28 @@ public class VirtualMachine {
         S = new SemaphoreRegister();
         
         memory = new VirtualMemory(256);
+        
+        //System.out.println(C.getValue().getByte(0));
+        Word w = new Word();
+        w.setByte((byte)255, 0);
+        w.setByte((byte)255, 1);
+        w.setByte((byte)255, 2);
+        w.setByte((byte)127, 3);
+        
+        Long l = w.getLong();
+        System.out.println(l);
+        String s = Long.toHexString(l);
+        System.out.println(s);
+        //2147483647 <-- Max teigiamas 32 bit skaicius
+        
+        w.setByte((byte)255, 0);
+        w.setByte((byte)255, 1);
+        w.setByte((byte)255, 2);
+        w.setByte((byte)255, 3);
+        l = w.getLong();
+        System.out.println(l);
+        //Max neigiamas
+        
     }
     /*
     public Word getCurrentCommand(){
