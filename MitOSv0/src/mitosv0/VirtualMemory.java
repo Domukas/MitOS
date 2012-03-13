@@ -10,17 +10,17 @@ package mitosv0;
  */
 public class VirtualMemory {
     
-    private byte[] memory;
+    private Word[] memory;
     
     public VirtualMemory(int size){
-        memory = new byte [size];
+        memory = new Word() [size];
     }
     
-    public byte getWord(int index)
+    public Word getWord(int index)
     {
         return memory[index];
     }
-    public void setWord(int index, byte value)
+    public void setWord(int index, Word value)
     {
         memory[index] = value;
     }
