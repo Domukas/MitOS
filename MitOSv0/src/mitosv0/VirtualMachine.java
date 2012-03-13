@@ -39,12 +39,18 @@ OF = 1 – priešingu atveju.
 
 public class VirtualMachine {
     
-    
+    private VirtualMemory memory;
     public VirtualMachine()
     {
-                
-        
+        memory = new VirtualMemory(256);
     }
     
+    public Word getCurrentCommand(){
+        return memory.getWord((int) iC.getValue());
+    }
     
+    private void processCommand(){
+        Word command = getCurrentCommand();
+        
+    }
 }
