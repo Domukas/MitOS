@@ -10,14 +10,19 @@ package mitosv0;
  */
 public class DataRegister extends Register {
 
+    protected Word data;
+    
+    public DataRegister()
+    {
+        data = new Word();
+    }
+    
     public void setValue(Word value) {
         data = value;
-        //throw new UnsupportedOperationException("Not supported yet.");
     }
     
     public Word getValue() {
         return data;
-        //throw new UnsupportedOperationException("Not supported yet.");
     }
     
 }

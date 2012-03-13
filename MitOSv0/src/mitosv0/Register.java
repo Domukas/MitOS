@@ -9,8 +9,6 @@ package mitosv0;
  * @author Tomas
  */
 public abstract class Register {
-    protected Word data;
-    
     public abstract void setValue(Word value);
     public abstract Word getValue();
     

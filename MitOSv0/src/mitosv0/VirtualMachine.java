@@ -39,18 +39,30 @@ OF = 1 – priešingu atveju.
 
 public class VirtualMachine {
     
+    private DataRegister R1, R2;
+    private ICRegister IC;
+    private CRegister C;
+    private SemaphoreRegister S;
+    
     private VirtualMemory memory;
     public VirtualMachine()
     {
+        R1 = new DataRegister();
+        R2 = new DataRegister();
+        IC = new ICRegister();
+        C = new CRegister();
+        S = new SemaphoreRegister();
+        
         memory = new VirtualMemory(256);
     }
-    
+    /*
     public Word getCurrentCommand(){
-        return memory.getWord((int) iC.getValue());
+        return memory.getWord((int) IC.getValue());
     }
     
     private void processCommand(){
         Word command = getCurrentCommand();
         
     }
+    */
 }
