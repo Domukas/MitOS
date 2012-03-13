@@ -13,7 +13,7 @@ public class VirtualMemory {
     private Word[] memory;
     
     public VirtualMemory(int size){
-        memory = new Word() [size];
+        memory = new Word[size];
     }
     
     public Word getWord(int index)
