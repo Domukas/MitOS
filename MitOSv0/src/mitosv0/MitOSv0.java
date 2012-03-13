@@ -16,7 +16,6 @@ public class MitOSv0 {
     public static void main(String[] args) {
         // TODO code application logic here
         
-        //I'm writing!!!!
         
         VirtualMachine VM = new VirtualMachine();
         
