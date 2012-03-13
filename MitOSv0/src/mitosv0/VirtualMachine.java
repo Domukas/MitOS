@@ -40,25 +40,9 @@ OF = 1 – priešingu atveju.
 public class VirtualMachine {
     
     
-    private byte R1[] = new byte[4];
-    private byte R2[] = new byte[4];
-    private byte IC[] = new byte[2];
-    private byte C = 1;
-    
-    
     public VirtualMachine()
     {
                 
-        //Testing
-        /*
-        System.out.println(C);
-        C = BitEdit.setBit(C, 1);
-        System.out.println(C);
-        C = BitEdit.unSetBit(C, 1);
-        System.out.println(C);
-        * */
-        //-Testing
-        //LOLOLOL
         
     }
     
