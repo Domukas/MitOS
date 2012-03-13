@@ -4,6 +4,12 @@
  */
 package mitosv0;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author Zory
@@ -18,6 +24,14 @@ public class MitOSv0 {
         
         
         VirtualMachine VM = new VirtualMachine();
-        
+        try {
+            FileInputStream input = new FileInputStream("src/mitosv0/program1.mit");
+            int c;
+            while ((c = input.read()) != -1){
+                System.out.println(c);
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(MitOSv0.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 }
