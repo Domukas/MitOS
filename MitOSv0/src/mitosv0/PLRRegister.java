@@ -8,19 +8,14 @@ package mitosv0;
  *
  * @author Tomas
  */
-public class DataRegister extends Register {
+public class PLRRegister extends Register {
 
     private int data;
-    
-    public DataRegister()
-    {
-        data = 0;
-    }
     
     public void setValue(int value) {
         data = value;
     }
-    
+
     public int getValue() {
         return data;
     }
