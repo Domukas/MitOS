@@ -9,7 +9,7 @@ package mitosv0;
  * @author Tomas
  */
 public abstract class Register {
-    public abstract void setValue(Word value);
-    public abstract Word getValue();
+    public abstract void setValue(int value);
+    public abstract int getValue();
     
 }

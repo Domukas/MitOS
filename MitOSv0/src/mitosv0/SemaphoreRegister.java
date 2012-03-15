@@ -10,53 +10,51 @@ package mitosv0;
  */
 public class SemaphoreRegister extends Register {
 
-    private byte[] data = new byte[2];
+    private short data;
     
-    public void setValue(Word value) {
-        data[0] = value.getByte(0);
-        data[1] = value.getByte(1);
+    public void setValue(int value) {
+        
+        data = (short)value;
+        
     }
 
-    public Word getValue() {
-        Word rez = new Word();
-        
-        rez.setByte(data[0], 0);
-        rez.setByte(data[1], 1);
-        
-        return rez;   
+    public int getValue() {
+        return data;
     }
     
     public SemaphoreRegister() //Pradzioj visi locked ar unlocked?
     {
-        data = new byte[2];
-        data[0] = 0;
-        data[1] = 0;
+        data = 0;
     }
     
     public void setBit(int number)
     {
-        if (number >= 8)
-        {
-            number -= 8;
-            data[1] = (byte) (data[1] | (1 << number)); 
-        }
-        else 
-        {
-            data[0] = (byte) (data[0] | (1 << number));
-        }   
+        short temp = (short)(1 << number);
+        data = (short)(data | temp);
+        
     }
     
     public void unsetBit(int number)
     {
-        if (number >= 8)
-        {
-            number -= 8;
-            data[1] = (byte) (data[1] & ~(1 << number)); 
-        }
-        else 
-        {
-            data[0] = (byte) (data[0] & ~(1 << number));
-        }   
-    }
+        short temp  = (short)(1 << number);
+        short temp2 = (short)(data ^ temp);
+        data = (short)(data & temp2);
         
+        // 1001 1111 
+        // 0000 0100 XOR
+        // 1001 1011 AND su pirmu
+        // 1001 1011
+    }
+    
+    public boolean isBitSet(int number)
+    {
+        short temp  = (short)(1 << number);
+        temp  = (short)(temp & data);
+        temp  = (short)(temp >> number);
+        
+        if (temp == 0)
+            return false;
+        else 
+            return true;
+    }
 }

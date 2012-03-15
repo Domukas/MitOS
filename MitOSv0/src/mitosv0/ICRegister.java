@@ -10,27 +10,27 @@ package mitosv0;
  */
 public class ICRegister extends Register {
 
-    private byte[] data; 
+    private short data; 
     
     public ICRegister()
     {
-        data = new byte[2];
-        data[0] = 0;
-        data[1] = 0;
+        data = 0;
     }
     
-    public void setValue(Word value) {
-        data[0] = value.getByte(0);
-        data[1] = value.getByte(1);
+    public void setValue(int value) {
+        data = (short)value;
     }
+    
+    public void setValue(short value) {
+        data = value;
+    }    
 
-    public Word getValue() {
-        Word rez = new Word();
-        
-        rez.setByte(data[0], 0);
-        rez.setByte(data[1], 1);
-        
-        return rez;
+    public int getValue() {
+        return data;
+    }
+    
+    public short getValueShort() {
+        return data;
     }
     
     

@@ -17,20 +17,27 @@ public class CRegister extends Register {
         data = 0;
     }
     
-    public void setValue(Word value) {
-        data = value.getByte(0);
+    public void setValue(int value)
+    {
+        data = (byte)value;
     }
 
-    public Word getValue() {
-        Word rez = new Word();
-        
-        rez.setByte(data, 0);
-        return rez;
+    public int getValue()
+    {
+        return data;
     }
     
     public void setZeroFlag()
     {
         data = (byte) (data | 1); 
+    }
+    
+    public boolean isZeroFlagSet()
+    {
+        if ((data & 1) == 1)
+            return true;
+        else 
+            return false;
     }
     
     public void unsetZeroFlag()
@@ -43,6 +50,14 @@ public class CRegister extends Register {
         data = (byte) (data | (1 << 1)); 
     }
     
+    public boolean isSignFlagSet()
+    {
+        if (((data >> 1) & 1) == 1)
+            return true;
+        else 
+            return false;
+    }
+    
     public void unsetSignFlag()
     {
         data = (byte) (data & ~(1 << 1)); 
@@ -51,6 +66,14 @@ public class CRegister extends Register {
     public void setOverflowFlag()
     {
         data = (byte) (data | (1 << 2)); 
+    }
+    
+    public boolean isOverflowFlagSet()
+    {
+        if (((data >> 2) & 1) == 1)
+            return true;
+        else 
+            return false;
     }
     
     public void unsetOverflowFlag()

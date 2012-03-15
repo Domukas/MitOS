@@ -10,18 +10,18 @@ package mitosv0;
  */
 public class DataRegister extends Register {
 
-    protected Word data;
+    protected int data;
     
     public DataRegister()
     {
-        data = new Word();
+        data = 0;
     }
     
-    public void setValue(Word value) {
+    public void setValue(int value) {
         data = value;
     }
     
-    public Word getValue() {
+    public int getValue() {
         return data;
     }
     
