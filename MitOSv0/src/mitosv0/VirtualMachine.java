@@ -45,6 +45,7 @@ public class VirtualMachine {
     private SemaphoreRegister S;
     
     private VirtualMemory memory;
+    
     public VirtualMachine()
     {
         R1 = new DataRegister();
@@ -55,15 +56,118 @@ public class VirtualMachine {
         
         memory = new VirtualMemory(256);
    
-    }
-    
-    public int getCurrentCommand(){
-        return memory.getWord((int) IC.getValue());
-    }
-    
-    private void processCommand(){
-        int command = getCurrentCommand();
+        R1.setValue(2147483646);
+        memory.setWord(0, 501);
+        
+        A1(0);
+        System.out.println(R1.getValue());
+        System.out.println(C.isZeroFlagSet());
+        System.out.println(C.isSignFlagSet());
+        System.out.println(C.isOverflowFlagSet());
+        
         
     }
     
+    public int getCurrentCommand()
+    {
+        return memory.getWord(IC.getValue());
+    }
+    
+    private void processCommand()
+    {
+        int command = getCurrentCommand();    
+    }
+    
+    public int getWord(int address)
+    {
+        return memory.getWord(address);
+    }
+    
+    //Aritmetinės komandos
+    public void A1(int xx)
+    {
+        int oldValue = R1.getValue();
+        R1.setValue(oldValue + getWord(xx));
+        arithmeticFlagSet(oldValue, getWord(xx), R1.getValue());
+    }
+    
+    public void A2(int xx)
+    {
+        int oldValue = R2.getValue();
+        R2.setValue(oldValue + getWord(xx));
+        arithmeticFlagSet(oldValue, getWord(xx), R2.getValue());
+    }
+    
+    public void B1(int xx)
+    {
+        int oldValue = R1.getValue();
+        R1.setValue(oldValue - getWord(xx));
+        arithmeticFlagSet(oldValue, getWord(xx), R1.getValue());
+    }   
+
+    public void B2(int xx)
+    {
+        int oldValue = R2.getValue();
+        R2.setValue(oldValue - getWord(xx));
+        arithmeticFlagSet(oldValue, getWord(xx), R2.getValue());
+    }   
+    
+    public void MU(int xx)
+    {
+        int oldValue = R1.getValue();
+        R1.setValue(oldValue * getWord(xx));
+        arithmeticFlagSet(oldValue, getWord(xx), R1.getValue());
+    }   
+    
+    public void DI(int xx)
+    {
+        R2.setValue(R1.getValue() % getWord(xx));
+        
+        int oldValue = R1.getValue();
+        R1.setValue(R1.getValue() / getWord(xx));
+        arithmeticFlagSet(oldValue, getWord(xx), R1.getValue());
+    }
+    //Logikos komandos
+    
+    //Palyginimo komandos
+    
+    //Darbo su duomenimis komandos
+    
+    //Valdymo perdavimo komandos
+    
+    //Įvedimo/išvedimo įrenginio komandos
+    
+    //Garsiakalbio komandos
+    
+    //Programos pabaigos komadna
+    
+    //Pagalbinės (ne virtualios mašinos)
+    
+    
+    private void arithmeticFlagSet(int oldValue, int operand, int newValue)
+    {
+        if (newValue == 0)
+        {
+            C.setZeroFlag();
+            C.unsetSignFlag();
+        }
+        else if (newValue > 0)
+        {
+            C.unsetZeroFlag();
+            C.unsetSignFlag();
+        }
+        else 
+        {
+            C.unsetZeroFlag();
+            C.setSignFlag();
+        }
+        
+        if (((Integer.signum(oldValue)) == Integer.signum(operand))
+            && (Integer.signum(oldValue) != Integer.signum(newValue)))
+            
+            C.setOverflowFlag();
+        else
+            C.unsetOverflowFlag();
+        
+    }
 }
