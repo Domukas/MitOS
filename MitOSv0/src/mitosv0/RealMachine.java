@@ -55,6 +55,7 @@ public class RealMachine {
         CH4 = new CHRegister();
         
         memory = new RealMemory(blocks);
+        CreateVirtualMachine();
         
     }
     
@@ -63,9 +64,12 @@ public class RealMachine {
         PLR.getValue();
         PLR.setA2(PLR_MIN_A2);
         PLR.setA3((byte) 0x00);
-        for (int i = 0; i < 0x100; i++)
+        
+        //Irasom belenkokiu skaiciu i atminti
+        for (int i = 0; i < PLR_MAX_BLOCK_INDEX*0x10; i++)
         {
-            memory.getBlock(PLR_MIN_A2*0x10+(i/0x10)).setWord(0, i);
+            MemoryBlock block = memory.getBlock(i/0x10);
+            block.setWord(i%0x10, i);
         }
         VM = new VirtualMachine(R1, R2, IC, C, new VirtualMemory(PLR, memory));
         

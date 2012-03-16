@@ -59,12 +59,13 @@ public class VirtualMachine {
         this.memory = memory;
    
         R1.setValue(2147483646);
-        memory.setWord(0, 501);
+        setWord(0, 501);
+        System.out.println(getWord(0));
         System.out.println("Memory dump:");
         for (int i = 0; i < 0x100; i++)
         {
-            System.out.print(i+" ");
-            if (i % 0x10 == 0)
+            System.out.print(getWord(i)+" ");
+            if (i % 0x10 == 0x0f)
                 System.out.println();
         }
         
