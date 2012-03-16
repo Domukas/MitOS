@@ -4,32 +4,45 @@
  */
 package mitosv0;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
-import javax.sound.midi.InvalidMidiDataException;
-import javax.sound.midi.MidiSystem;
-import javax.sound.midi.MidiUnavailableException;
-import javax.sound.midi.Sequencer;
+import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.SourceDataLine;
 
 /**
  *
  * @author Zory
  */
 public class Speaker {
-    private int volume;
+    private static int volume;
+    private static int length;
     public Speaker(){
-        
+        volume = 70;
+        length = 1000;
     }
     
-    public void play(int xx)throws LineUnavailableException{
-        try{
-            Sequencer sequencer = MidiSystem.getSequencer();
-            sequencer.start();
-        }catch(MidiUnavailableException e){
+    public void play(int xx) throws LineUnavailableException{
+        byte[] buf = new byte[1];
+        AudioFormat af = new AudioFormat((float)44100, 8, 1, true, false);
+        SourceDataLine sdl = AudioSystem.getSourceDataLine(af);
+        sdl = AudioSystem.getSourceDataLine(af);
+        sdl.open(af);
+        sdl.start();
+        for(int i = 0; i < length*(float)44100/1000; i++) {
+            double angle = i/((float)44100/xx)*2.0*Math.PI;
+            buf[0] = (byte)(Math.sin(angle)*volume);
+            sdl.write(buf, 0, 1);
         }
+        sdl.drain();
+        sdl.stop();
+        sdl.close();
     }
         
     public void setVolume(int xx){
+        volume = xx;
+    }
+    
+    public void setLength(int xx){
+        length = xx;
     }
 }
