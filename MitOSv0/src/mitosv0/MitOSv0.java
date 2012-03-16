@@ -24,7 +24,8 @@ public class MitOSv0 {
         // TODO code application logic here
         
         
-        RealMachine RM = new RealMachine(256);
+
+        RealMachine RM = new RealMachine(0x102);
         RealMachineGUI rmGUI = new RealMachineGUI(RM);
         /*
         try {
@@ -38,5 +39,6 @@ public class MitOSv0 {
         }
         * 
         */
+
     }
 }
