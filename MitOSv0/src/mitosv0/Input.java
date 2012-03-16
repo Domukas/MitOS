@@ -12,7 +12,7 @@ public class Input {
     public Input(){
         
     }
-    public int[] send(String text){ //kiekviena simboli kol kas talpina i atskira zodi
+    public int[] send(String text){
         int[] numberArray = new int[text.length()];
         for (int i = 0; i < text.length(); i++) {
             char symbol = text.charAt(i);
