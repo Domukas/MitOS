@@ -30,6 +30,6 @@ public class VirtualMemory {
     }
 
     private MemoryBlock getBlock(int index) {
-        return memory.getBlock(memory.getBlock(PLR.getA2()*0x10 + PLR.getA3()).getWord(index));
+        return memory.getBlock((PLR.getA2()*0x10 + PLR.getA3())*0x10 + index);
     }
 }
