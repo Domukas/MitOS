@@ -66,7 +66,6 @@ public class RealMachine {
         out = new Output();
         
         memory = new RealMemory(blocks);
-        
         //CreateVirtualMachine();
         
     }

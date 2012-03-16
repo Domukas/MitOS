@@ -26,16 +26,27 @@ public class RealMachineGUI extends javax.swing.JFrame {
     String[] colNames;
     Object [][] data;
     
+    MemoryTable memTable ;
+    
     public RealMachineGUI(RealMachine RM) {
         super("Real machine");
         initComponents();
         this.RM = RM;
-        
         this.setVisible(true);
+        
         updateRegisterFields();  
-        initializeMemoryTable();
+        updateFlagInfo();
+        memTable = new MemoryTable(RM.memory, memoryTable);
     }
     
+        public void updateAll()
+    {
+        updateRegisterFields();
+        updateFlagInfo();
+        memTable.updateMemoryTable();
+        //updateMemoryTable();
+    }
+        
     private void updateRegisterFields()
     {
         PLRTextField.setText(Integer.toHexString(RM.PLR.getValue()));
@@ -55,51 +66,12 @@ public class RealMachineGUI extends javax.swing.JFrame {
         CH4TextField.setText(CHStateToString(RM.CH4.isOpen()));
     }
     
-    public void updateAll()
-    {
-        updateRegisterFields();
-        updateMemoryTable();
-    }
     
-    private void initializeMemoryTable()
+    private void updateFlagInfo()
     {
-        int wordCount = RM.memory.MAX_MEMORY_BLOCKS * 16;
-            
-        colNames = new String[]{"Adress", "Data", "CharData"};
-        data = new Object[wordCount][3];
-        
-        for (int i = 0; i < wordCount; i++)
-        {
-            data[i][0] = Integer.toHexString(i).toUpperCase();
-        }
-        
-        updateTableData();
-        
-        tableModel = new DefaultTableModel(data, colNames);
-        memoryTable.setModel(tableModel);
-
-        
-    }
-    
-    private void updateMemoryTable()
-    {
-        updateTableData(); 
-        
-        tableModel = new DefaultTableModel(data, colNames);
-        memoryTable.setModel(tableModel);
-    }
-    
-    private void updateTableData()
-    {
-        for (int i = 0; i < RM.memory.MAX_MEMORY_BLOCKS; i++)
-        {
-            MemoryBlock b = RM.memory.getBlock(i);
-            for (int n = 0; n < 16; n++)
-            {
-                data[i*16+n][1] = b.getWord(n);
-                data[i*16+n][2] = (char)b.getWord(n);
-            }
-        }
+        ZFCheckBox.setSelected(RM.C.isZeroFlagSet());
+        SFCheckBox.setSelected(RM.C.isSignFlagSet());
+        OFCheckBox.setSelected(RM.C.isOverflowFlagSet());
     }
     
     private String CHStateToString(boolean state)
@@ -159,6 +131,12 @@ public class RealMachineGUI extends javax.swing.JFrame {
         CH4TextField = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         memoryTable = new javax.swing.JTable();
+        jPanel3 = new javax.swing.JPanel();
+        ZFCheckBox = new javax.swing.JCheckBox();
+        SFCheckBox = new javax.swing.JCheckBox();
+        OFCheckBox = new javax.swing.JCheckBox();
+        runButton = new javax.swing.JButton();
+        stepButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -359,17 +337,55 @@ public class RealMachineGUI extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(memoryTable);
 
+        ZFCheckBox.setText("ZF");
+
+        SFCheckBox.setText("SF");
+
+        OFCheckBox.setText("OF");
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(ZFCheckBox)
+                    .addComponent(SFCheckBox)
+                    .addComponent(OFCheckBox)))
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(ZFCheckBox)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(SFCheckBox)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(OFCheckBox))
+        );
+
+        runButton.setText("Run");
+
+        stepButton.setText("Step");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(38, 38, 38)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(runButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(stepButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 72, Short.MAX_VALUE)))
                 .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 226, Short.MAX_VALUE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 216, Short.MAX_VALUE)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -378,8 +394,17 @@ public class RealMachineGUI extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(stepButton)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(runButton))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(60, 60, 60)
+                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
 
@@ -394,13 +419,16 @@ public class RealMachineGUI extends javax.swing.JFrame {
     private javax.swing.JTextField CTextField;
     private javax.swing.JTextField ICTextField;
     private javax.swing.JTextField MODETextField;
+    private javax.swing.JCheckBox OFCheckBox;
     private javax.swing.JTextField PITextField;
     private javax.swing.JTextField PLRTextField;
     private javax.swing.JTextField R1TextField;
     private javax.swing.JTextField R2TextField;
+    private javax.swing.JCheckBox SFCheckBox;
     private javax.swing.JTextField SITextField;
     private javax.swing.JTextField STextField;
     private javax.swing.JTextField TimerTextField;
+    private javax.swing.JCheckBox ZFCheckBox;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -417,7 +445,10 @@ public class RealMachineGUI extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable memoryTable;
+    private javax.swing.JButton runButton;
+    private javax.swing.JButton stepButton;
     // End of variables declaration//GEN-END:variables
 }
