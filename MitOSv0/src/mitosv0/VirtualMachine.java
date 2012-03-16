@@ -4,6 +4,7 @@
  */
 package mitosv0;
 
+import javax.sound.sampled.LineUnavailableException;
 import mitosv0.registers.ICRegister;
 import mitosv0.registers.DataRegister;
 import mitosv0.registers.CRegister;
@@ -274,6 +275,26 @@ public class VirtualMachine {
     }    
     
     //Garsiakalbio komandos
+    
+    public void GGR1(){
+        int volume = RealMachine.R1.getValue();
+        RealMachine.speakers.setVolume(volume);
+    }
+    
+    public void GGR2(){
+        int volume = RealMachine.R2.getValue();
+        RealMachine.speakers.setVolume(volume);
+    }
+    
+    public void GNR1() throws LineUnavailableException{
+        int value = RealMachine.R1.getValue();
+        RealMachine.speakers.play(value);
+    }
+    
+    public void GNR2() throws LineUnavailableException{
+        int value = RealMachine.R2.getValue();
+        RealMachine.speakers.play(value);
+    }
     
     //Programos pabaigos komadna
     
