@@ -32,14 +32,19 @@ public class RealMachine {
     public static ModeRegister mode;
     public static INTRegister PI, SI;
     public static CHRegister CH1, CH2, CH3, CH4;
+    
     public static Speaker speakers;
     public static Input in;
     public static Output out;
+    
     public static VirtualMachine VM;
+    
     private static final int PLR_BLOCK_MEMORY_OFFSET = 0x100;
     private static final byte PLR_MIN_A2 = 0x10;
     private static final int PLR_MAX_BLOCK_INDEX = 0xEF;
-    private RealMemory memory;
+    
+    public static RealMemory memory;
+    
     public RealMachine(int blocks)
     {
         PLR = new PLRRegister();
@@ -61,7 +66,8 @@ public class RealMachine {
         out = new Output();
         
         memory = new RealMemory(blocks);
-        CreateVirtualMachine();
+        
+        //CreateVirtualMachine();
         
     }
     
