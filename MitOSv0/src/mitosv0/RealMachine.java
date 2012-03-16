@@ -19,16 +19,16 @@ import mitosv0.registers.CHRegister;
  * @author Tomas
  */
 public class RealMachine {
-    private PLRRegister PLR;
-    private DataRegister R1, R2;
-    private ICRegister IC;
-    private CRegister C;
-    private SemaphoreRegister S;
-    private TimerRegister timer; //Timer ir mode gal kazkaip kitaip pervadint
-    private ModeRegister mode;
-    private INTRegister PI, SI;
-    private CHRegister CH1, CH2, CH3, CH4;
-    private VirtualMachine VM;
+    public static PLRRegister PLR;
+    public static DataRegister R1, R2;
+    public static ICRegister IC;
+    public static CRegister C;
+    public static SemaphoreRegister S;
+    public static TimerRegister timer; //Timer ir mode gal kazkaip kitaip pervadint
+    public static ModeRegister mode;
+    public static INTRegister PI, SI;
+    public static CHRegister CH1, CH2, CH3, CH4;
+    public static VirtualMachine VM;
     private static final int PLR_BLOCK_MEMORY_OFFSET = 0x100;
     private MemoryBlock[] memory;
     public RealMachine(int blocks)

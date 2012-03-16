@@ -66,8 +66,7 @@ public class VirtualMachine {
         System.out.println(C.isZeroFlagSet());
         System.out.println(C.isSignFlagSet());
         System.out.println(C.isOverflowFlagSet());
-        
-        
+    
     }
     
     public int getCurrentCommand()
@@ -134,11 +133,94 @@ public class VirtualMachine {
         R1.setValue(R1.getValue() / getWord(xx));
         arithmeticFlagSet(oldValue, getWord(xx), R1.getValue());
     }
-    //Logikos komandos
+    
+    //Loginės komandos
+    public void XR (int xx)
+    {
+        R1.setValue(R1.getValue() ^ memory.getWord(xx));
+        setZfSf(R1.getValue());
+    }
+
+    public void AN (int xx)
+    {
+        R1.setValue(R1.getValue() & memory.getWord(xx));
+        setZfSf(R1.getValue());
+    }
+    
+    public void OR (int xx)
+    {
+        R1.setValue(R1.getValue() | memory.getWord(xx));
+        setZfSf(R1.getValue());
+    }    
     
     //Palyginimo komandos
+    public void C1 (int xx)
+    {
+        int oldValue = R1.getValue();
+        int tempValue = oldValue - getWord(xx);
+        arithmeticFlagSet(oldValue, getWord(xx), tempValue);
+    }
+    
+    public void C2 (int xx)
+    {
+        int oldValue = R2.getValue();
+        int tempValue = oldValue - getWord(xx);
+        arithmeticFlagSet(oldValue, getWord(xx), tempValue);
+    }
     
     //Darbo su duomenimis komandos
+    
+    public void L1 (int xx)
+    {
+        R1.setValue(memory.getWord(xx));
+    }
+
+    public void L2 (int xx)
+    {
+        R2.setValue(memory.getWord(xx));
+    }
+    
+    public void S1 (int xx)
+    {
+        memory.setWord(xx, R1.getValue());
+    }
+    
+    public void S2 (int xx)
+    {
+        memory.setWord(xx, R2.getValue());
+    }
+    
+    public void LCK (int x)
+    {
+       RealMachine.SI.setValue(4);
+       RealMachine.S.setBit(x);         //Šitą vėliau OS'as darys?
+    }
+    
+    public void X1 (int xx)
+    {
+        //TODO
+    }
+    
+    public void X2 (int xx)
+    {
+        //TODO
+    }
+    
+    public void Z1 (int xx)
+    {
+        //TODO (įrašymas į bendrą atmintį)
+    }
+
+    public void Z2 (int xx)
+    {
+        //TODO (įrašymas į bendrą atmintį)
+    }
+    
+    public void ULC (int x)
+    {
+       RealMachine.SI.setValue(4);
+       RealMachine.S.unsetBit(x);       //Sitą vėliau OS'as darys?
+    }    
     
     //Valdymo perdavimo komandos
     
@@ -149,9 +231,20 @@ public class VirtualMachine {
     //Programos pabaigos komadna
     
     //Pagalbinės (ne virtualios mašinos)
-    
-    
     private void arithmeticFlagSet(int oldValue, int operand, int newValue)
+    {       
+        setZfSf(newValue);
+        
+        if (((Integer.signum(oldValue)) == Integer.signum(operand))
+            && (Integer.signum(oldValue) != Integer.signum(newValue)))
+            
+            C.setOverflowFlag();
+        else
+            C.unsetOverflowFlag();
+        
+    }
+    
+    private void setZfSf(int newValue)
     {
         if (newValue == 0)
         {
@@ -168,13 +261,5 @@ public class VirtualMachine {
             C.unsetZeroFlag();
             C.setSignFlag();
         }
-        
-        if (((Integer.signum(oldValue)) == Integer.signum(operand))
-            && (Integer.signum(oldValue) != Integer.signum(newValue)))
-            
-            C.setOverflowFlag();
-        else
-            C.unsetOverflowFlag();
-        
     }
 }
