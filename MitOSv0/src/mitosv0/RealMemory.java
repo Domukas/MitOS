@@ -16,10 +16,8 @@ public class RealMemory {
     RealMemory(int blocks) {
         MAX_MEMORY_BLOCKS = blocks;
         memory = new MemoryBlock[blocks];
-        for (MemoryBlock block : memory)
-        {
-            block = new MemoryBlock();
-        }
+        for (int i = 0; i < blocks; i++)
+            memory[i] = new MemoryBlock();
     }
     
     public MemoryBlock getBlock(int index)
