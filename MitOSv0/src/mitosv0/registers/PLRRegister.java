@@ -12,6 +12,11 @@ public class PLRRegister extends Register {
 
     private int data;
     
+    public PLRRegister()
+    {
+        data = 0;
+    }
+    
     public void setValue(int value) {
         data = value;
     }

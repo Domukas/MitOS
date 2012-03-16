@@ -4,6 +4,7 @@
  */
 package mitosv0;
 
+import GUI.RealMachineGUI;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -24,6 +25,7 @@ public class MitOSv0 {
         
         
         RealMachine RM = new RealMachine(256);
+        RealMachineGUI rmGUI = new RealMachineGUI(RM);
         /*
         try {
             FileInputStream input = new FileInputStream("src/mitosv0/program1.mit");

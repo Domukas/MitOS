@@ -58,15 +58,6 @@ public class VirtualMachine {
         
         memory = new VirtualMemory(256);
    
-        R1.setValue(2147483646);
-        memory.setWord(0, 501);
-        
-        A1(0);
-        System.out.println(R1.getValue());
-        System.out.println(C.isZeroFlagSet());
-        System.out.println(C.isSignFlagSet());
-        System.out.println(C.isOverflowFlagSet());
-    
     }
     
     public int getCurrentCommand()
