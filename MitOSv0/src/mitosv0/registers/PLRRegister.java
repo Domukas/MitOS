@@ -27,45 +27,53 @@ public class PLRRegister extends Register {
     
     public byte getA0()
     {
-        return (byte)(data >>> 6);
+        return (byte)(data >>> 24);
     }
     
     public void setA0(byte value)
     {
         int intValue = (int) value & 0xff;
-        data = (data & 0x00FFFFFF) | (intValue << 6);
+        data = (data & 0x00FFFFFF) | (intValue << 24);
     }
     
     public int getA1()
     {
-        return (data / 0x10000) % 0x100;
+        return (data >>> 16) % 0x100;
     }
     
     public void setA1(byte value)
     {
         int intValue = (int) value & 0xff;
-        data = (data & 0xFF00FFFF) | (intValue << 4);
+        data = (data & 0xFF00FFFF) | (intValue << 16);
     }
     
     public int getA2()
     {
-        return (data / 0x100) % 0x10000;
+        return ((data / 0x100) % 0x100);
     }
     
     public void setA2(byte value)
     {
+        System.out.println(data);
         int intValue = (int) value & 0xff;
-        data = (data & 0xFFFF00FF) | (intValue << 2);
+        intValue = intValue << 10;
+        System.out.println(intValue);
+        data = ((data & 0xFFFF00FF) | intValue);
+        System.out.println(data);
     }
     
     public int getA3()
     {
-        return data % 0x1000000;
+        return data % 0x100;
     }
     
     public void setA3(byte value)
     {
         int intValue = (int) value & 0xff;
-        data = (data & 0xFFFFFF00) | intValue;
+        System.out.println("int value "+intValue+"data "+data);
+        int tempData = (data & 0xFFFFFF00);
+        System.out.println("tempdata " +tempData);
+        data = (tempData | intValue);
+        System.out.println(data);
     }
 }

@@ -11,7 +11,7 @@ package mitosv0;
 public class RealMemory {
 
     private MemoryBlock[] memory;
-    private final int MAX_MEMORY_BLOCKS;
+    public final int MAX_MEMORY_BLOCKS;
     
     RealMemory(int blocks) {
         MAX_MEMORY_BLOCKS = blocks;

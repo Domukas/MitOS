@@ -34,10 +34,7 @@ public class CRegister extends Register {
     
     public boolean isZeroFlagSet()
     {
-        if ((data & 1) == 1)
-            return true;
-        else 
-            return false;
+        return ((data & 1) == 1);
     }
     
     public void unsetZeroFlag()
@@ -52,10 +49,7 @@ public class CRegister extends Register {
     
     public boolean isSignFlagSet()
     {
-        if (((data >> 1) & 1) == 1)
-            return true;
-        else 
-            return false;
+        return (((data >> 1) & 1) == 1);
     }
     
     public void unsetSignFlag()
@@ -70,10 +64,7 @@ public class CRegister extends Register {
     
     public boolean isOverflowFlagSet()
     {
-        if (((data >> 2) & 1) == 1)
-            return true;
-        else 
-            return false;
+        return (((data >> 2) & 1) == 1);
     }
     
     public void unsetOverflowFlag()

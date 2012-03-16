@@ -60,21 +60,6 @@ public class VirtualMachine {
    
         R1.setValue(2147483646);
         setWord(0, 501);
-        System.out.println(getWord(0));
-        System.out.println("Memory dump:");
-        for (int i = 0; i < 0x100; i++)
-        {
-            System.out.print(getWord(i)+" ");
-            if (i % 0x10 == 0x0f)
-                System.out.println();
-        }
-        
-        A1(0);
-        System.out.println(R1.getValue());
-        System.out.println(C.isZeroFlagSet());
-        System.out.println(C.isSignFlagSet());
-        System.out.println(C.isOverflowFlagSet());
-    
     }
     
     public int getCurrentCommand()

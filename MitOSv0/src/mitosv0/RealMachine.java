@@ -60,20 +60,23 @@ public class RealMachine {
     }
     
     private void CreateVirtualMachine(){
+ 
         
-        PLR.getValue();
         PLR.setA2(PLR_MIN_A2);
-        PLR.setA3((byte) 0x00);
+        PLR.setA3((byte) 0x10);
         
-        //Irasom belenkokiu skaiciu i atminti
-        for (int i = 0; i < PLR_MAX_BLOCK_INDEX*0x10; i++)
+        //uzpildom lentele, kad rodytu i 0 1 2 ... 15 pirmuju bloku.
+        MemoryBlock block = memory.getBlock(PLR_MIN_A2*0x10);
+        for (int i = 0; i < 16; i++)
         {
-            MemoryBlock block = memory.getBlock(i/0x10);
-            block.setWord(i%0x10, i);
+            block.setWord(i, i);
         }
+        //DumpMemory();
+
         VM = new VirtualMachine(R1, R2, IC, C, new VirtualMemory(PLR, memory));
-        
+
         /*
+        //Nu cia tipo programa sitoj vietoj skaitysim gal, ania?
         try {
             FileInputStream input = new FileInputStream("src/mitosv0/program1.mit");
             int c;
@@ -86,5 +89,18 @@ public class RealMachine {
         * 
         */
     }
+    public void DumpMemory()
+    {
+        for (int i = 0; i < memory.MAX_MEMORY_BLOCKS; i++)
+        {
+            System.out.print(i+": ");
+            for (int j = 0; j < 16; j++)
+            {
+                System.out.print(memory.getBlock(i).getWord(j) + " ");
+            }
+            System.out.println();
+        }
+    }
+    
     
 }
