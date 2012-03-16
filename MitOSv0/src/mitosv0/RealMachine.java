@@ -30,7 +30,7 @@ public class RealMachine {
     private CHRegister CH1, CH2, CH3, CH4;
     private VirtualMachine VM;
     private static final int PLR_BLOCK_MEMORY_OFFSET = 0x100;
- 
+    private MemoryBlock[] memory;
     public RealMachine(int blocks)
     {
         PLR = new PLRRegister();
@@ -47,6 +47,12 @@ public class RealMachine {
         CH2 = new CHRegister();
         CH3 = new CHRegister();
         CH4 = new CHRegister();
+        
+        memory = new MemoryBlock[blocks];
+        for (MemoryBlock block : memory)
+        {
+            block = new MemoryBlock();
+        }
         
         VM = new VirtualMachine(R1, R2, IC, C);
     }
