@@ -4,6 +4,10 @@
  */
 package mitosv0;
 
+import mitosv0.registers.ICRegister;
+import mitosv0.registers.DataRegister;
+import mitosv0.registers.CRegister;
+
 /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
@@ -42,17 +46,15 @@ public class VirtualMachine {
     private DataRegister R1, R2;
     private ICRegister IC;
     private CRegister C;
-    private SemaphoreRegister S;
     
     private VirtualMemory memory;
     
-    public VirtualMachine()
+    public VirtualMachine(DataRegister R1, DataRegister R2, ICRegister IC, CRegister C)
     {
-        R1 = new DataRegister();
-        R2 = new DataRegister();
-        IC = new ICRegister();
-        C = new CRegister();
-        S = new SemaphoreRegister();
+        this.R1 = R1;
+        this.R2 = R2;
+        this.IC = IC;
+        this.C = C;
         
         memory = new VirtualMemory(256);
    
@@ -81,6 +83,11 @@ public class VirtualMachine {
     public int getWord(int address)
     {
         return memory.getWord(address);
+    }
+    
+    public void setWord(int address, int value)
+    {
+        memory.setWord(address, value);
     }
     
     //Aritmetinės komandos

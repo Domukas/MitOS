@@ -23,7 +23,7 @@ public class MitOSv0 {
         // TODO code application logic here
         
         
-        VirtualMachine VM = new VirtualMachine();
+        RealMachine RM = new RealMachine(256);
         /*
         try {
             FileInputStream input = new FileInputStream("src/mitosv0/program1.mit");

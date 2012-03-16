@@ -4,6 +4,16 @@
  */
 package mitosv0;
 
+import mitosv0.registers.TimerRegister;
+import mitosv0.registers.SemaphoreRegister;
+import mitosv0.registers.PLRRegister;
+import mitosv0.registers.ModeRegister;
+import mitosv0.registers.INTRegister;
+import mitosv0.registers.ICRegister;
+import mitosv0.registers.DataRegister;
+import mitosv0.registers.CRegister;
+import mitosv0.registers.CHRegister;
+
 /**
  *
  * @author Tomas
@@ -18,8 +28,10 @@ public class RealMachine {
     private ModeRegister mode;
     private INTRegister PI, SI;
     private CHRegister CH1, CH2, CH3, CH4;
+    private VirtualMachine VM;
+    private static final int PLR_BLOCK_MEMORY_OFFSET = 0x100;
  
-    public RealMachine()
+    public RealMachine(int blocks)
     {
         PLR = new PLRRegister();
         R1 = new DataRegister();
@@ -35,6 +47,8 @@ public class RealMachine {
         CH2 = new CHRegister();
         CH3 = new CHRegister();
         CH4 = new CHRegister();
+        
+        VM = new VirtualMachine(R1, R2, IC, C);
     }
     
 }
