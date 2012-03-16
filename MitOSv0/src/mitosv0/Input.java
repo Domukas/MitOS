@@ -12,22 +12,24 @@ public class Input {
     public Input(){
         
     }
-    public int[] send(String input){ //kiekviena simboli kol kas talpina i atskira zodi
-        int[] block = new int[input.length()];
-        for (int i = 0; i < input.length(); i++) {
-            char symbol = input.charAt(i);
+    public int[] send(String text){ //kiekviena simboli kol kas talpina i atskira zodi
+        int[] numberArray = new int[text.length()];
+        for (int i = 0; i < text.length(); i++) {
+            char symbol = text.charAt(i);
             if (isNumeric(symbol)){
-                block[i] = Character.digit(input.charAt(i), 10);
+                numberArray[i] = Character.digit(text.charAt(i), 10);
             }else{
-                block[i] = (int)symbol;
+                numberArray[i] = (int)symbol;
             }  
         }
-        return block;
+        return numberArray;
    }  
     
     private boolean isNumeric(char symbol){
         try{
-            Character.getNumericValue(symbol);
+            String number="";
+            number = Character.toString(symbol);
+            Integer.parseInt(number);
             return true;
         }catch(Exception e){
             return false;
