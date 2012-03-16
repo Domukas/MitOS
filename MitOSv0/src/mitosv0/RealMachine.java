@@ -4,6 +4,10 @@
  */
 package mitosv0;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import mitosv0.registers.TimerRegister;
 import mitosv0.registers.SemaphoreRegister;
 import mitosv0.registers.PLRRegister;
@@ -30,7 +34,9 @@ public class RealMachine {
     public static CHRegister CH1, CH2, CH3, CH4;
     public static VirtualMachine VM;
     private static final int PLR_BLOCK_MEMORY_OFFSET = 0x100;
-    private MemoryBlock[] memory;
+    private static final byte PLR_MIN_A2 = 0x10;
+    private static final int PLR_MAX_BLOCK_INDEX = 0xEF;
+    private RealMemory memory;
     public RealMachine(int blocks)
     {
         PLR = new PLRRegister();
@@ -48,13 +54,33 @@ public class RealMachine {
         CH3 = new CHRegister();
         CH4 = new CHRegister();
         
-        memory = new MemoryBlock[blocks];
-        for (MemoryBlock block : memory)
-        {
-            block = new MemoryBlock();
-        }
+        memory = new RealMemory(blocks);
         
-        VM = new VirtualMachine(R1, R2, IC, C);
+    }
+    
+    private void CreateVirtualMachine(){
+        
+        PLR.getValue();
+        PLR.setA2(PLR_MIN_A2);
+        PLR.setA3((byte) 0x00);
+        for (int i = 0; i < 0x100; i++)
+        {
+            memory.getBlock(PLR_MIN_A2*0x10+(i/0x10)).setWord(0, i);
+        }
+        VM = new VirtualMachine(R1, R2, IC, C, new VirtualMemory(PLR, memory));
+        
+        /*
+        try {
+            FileInputStream input = new FileInputStream("src/mitosv0/program1.mit");
+            int c;
+            while ((c = input.read()) != -1){
+                System.out.println(c);
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(MitOSv0.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        * 
+        */
     }
     
 }

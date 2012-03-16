@@ -15,7 +15,10 @@ public class MemoryBlock {
         data = new int[16];
     }
     
-    public int [] getData(){
-        return data;
+    public int getWord(int index){
+        return data[index];
+    }
+    public void setWord(int index, int value){
+        data[index] = value;
     }
 }

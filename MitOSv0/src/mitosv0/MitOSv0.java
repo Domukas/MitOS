@@ -23,18 +23,7 @@ public class MitOSv0 {
         // TODO code application logic here
         
         
-        RealMachine RM = new RealMachine(256);
-        /*
-        try {
-            FileInputStream input = new FileInputStream("src/mitosv0/program1.mit");
-            int c;
-            while ((c = input.read()) != -1){
-                System.out.println(c);
-            }
-        } catch (IOException ex) {
-            Logger.getLogger(MitOSv0.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        * 
-        */
+        RealMachine RM = new RealMachine(0x102);
+
     }
 }

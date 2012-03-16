@@ -49,17 +49,24 @@ public class VirtualMachine {
     
     private VirtualMemory memory;
     
-    public VirtualMachine(DataRegister R1, DataRegister R2, ICRegister IC, CRegister C)
+    public VirtualMachine(DataRegister R1, DataRegister R2, ICRegister IC, CRegister C, VirtualMemory memory)
     {
         this.R1 = R1;
         this.R2 = R2;
         this.IC = IC;
         this.C = C;
         
-        memory = new VirtualMemory(256);
+        this.memory = memory;
    
         R1.setValue(2147483646);
         memory.setWord(0, 501);
+        System.out.println("Memory dump:");
+        for (int i = 0; i < 0x100; i++)
+        {
+            System.out.print(i+" ");
+            if (i % 0x10 == 0)
+                System.out.println();
+        }
         
         A1(0);
         System.out.println(R1.getValue());
