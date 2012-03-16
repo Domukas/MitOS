@@ -286,13 +286,13 @@ public class VirtualMachine {
         RealMachine.speakers.setVolume(volume);
     }
     
-    public void GNR1() throws LineUnavailableException{
-        int value = RealMachine.R1.getValue();
-        RealMachine.speakers.play(value);
+    public void GLR2(){
+        int value = RealMachine.R2.getValue();
+        RealMachine.speakers.setLength(value);
     }
     
-    public void GNR2() throws LineUnavailableException{
-        int value = RealMachine.R2.getValue();
+    public void GNR1() throws LineUnavailableException{
+        int value = RealMachine.R1.getValue();
         RealMachine.speakers.play(value);
     }
     
