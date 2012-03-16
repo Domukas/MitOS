@@ -200,6 +200,7 @@ public class VirtualMachine {
     public void LCK (int x)
     {
        RealMachine.SI.setValue(4);
+       RealMachine.mode.SetSupervisor(); //?
        RealMachine.S.setBit(x);         //Šitą vėliau OS'as darys?
     }
     
@@ -226,16 +227,74 @@ public class VirtualMachine {
     public void ULC (int x)
     {
        RealMachine.SI.setValue(4);
+       RealMachine.mode.SetSupervisor(); //?
        RealMachine.S.unsetBit(x);       //Sitą vėliau OS'as darys?
     }    
     
     //Valdymo perdavimo komandos
     
+    public void JP (int xx)
+    {
+        IC.setValue(xx);
+    }
+    
+    public void JE (int xx)
+    {   
+        if (C.isZeroFlagSet())
+            IC.setValue(xx);
+    }
+
+    public void JG (int xx)
+    {   
+        if (C.isZeroFlagSet() && (C.isSignFlagSet() == C.isOverflowFlagSet()))
+            IC.setValue(xx);
+    }
+    
+    public void JL (int xx)
+    {   
+        if (C.isSignFlagSet() != C.isOverflowFlagSet())
+            IC.setValue(xx);
+    }
+    
+    public void JX (int xx)
+    {   
+        IC.setValue(memory.getWord(xx));
+    }    
+    
+    public void LO (int xx)
+    {   
+        R2.setValue(R2.getValue() - 1);
+        
+        if (R2.getValue() > 0)
+        {
+            IC.setValue(xx);
+        }    
+    }    
+    
     //Įvedimo/išvedimo įrenginio komandos
+    
+    public void DGT (int x)
+    {
+        //TODO
+        RealMachine.SI.setValue(1);
+        RealMachine.mode.SetSupervisor();
+    }
+    
+    public void DPT (int x)
+    {
+        //TODO
+        RealMachine.SI.setValue(2);
+        RealMachine.mode.SetSupervisor();
+    }    
     
     //Garsiakalbio komandos
     
     //Programos pabaigos komadna
+    
+    public void HALT ()
+    {
+        RealMachine.SI.setValue(4);
+    }
     
     //Pagalbinės (ne virtualios mašinos)
     private void arithmeticFlagSet(int oldValue, int operand, int newValue)
