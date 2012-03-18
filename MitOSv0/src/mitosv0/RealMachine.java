@@ -76,7 +76,6 @@ public class RealMachine {
         PLR.setA1((byte) 0x00);
         PLR.setA2(PLR_MIN_A2);
         PLR.setA3((byte) 0x00);
-        System.out.println(Integer.toString(PLR.getValue(), 16));
         
         //uzpildom lentele, kad rodytu i 0 1 2 ... 15 pirmuju bloku.
         MemoryBlock block = memory.getBlock(PLR_MIN_A2*0x10);

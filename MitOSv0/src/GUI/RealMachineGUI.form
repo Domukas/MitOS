@@ -27,12 +27,28 @@
   <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBoxLayout"/>
   <SubComponents>
     <Container class="javax.swing.JPanel" name="operationsPanel">
+      <Properties>
+        <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+          <Dimension value="[160, 420]"/>
+        </Property>
+        <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+          <Dimension value="[160, 400]"/>
+        </Property>
+      </Properties>
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBoxLayout">
         <Property name="axis" type="int" value="3"/>
       </Layout>
       <SubComponents>
         <Container class="javax.swing.JPanel" name="registerPanel1">
+          <Properties>
+            <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+              <Dimension value="[160, 420]"/>
+            </Property>
+            <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+              <Dimension value="[160, 400]"/>
+            </Property>
+          </Properties>
 
           <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
             <Property name="columns" type="int" value="2"/>
@@ -86,6 +102,14 @@
           </SubComponents>
         </Container>
         <Container class="javax.swing.JPanel" name="registerPanel2">
+          <Properties>
+            <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+              <Dimension value="[160, 420]"/>
+            </Property>
+            <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+              <Dimension value="[160, 400]"/>
+            </Property>
+          </Properties>
 
           <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
             <Property name="columns" type="int" value="2"/>
@@ -106,7 +130,13 @@
                 <Property name="text" type="java.lang.String" value="MODE"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JTextField" name="MODETextField">
+            <Component class="javax.swing.JToggleButton" name="MODEToggleButton">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="User"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="MODEToggleButtonActionPerformed"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel9">
               <Properties>
@@ -127,32 +157,64 @@
                 <Property name="text" type="java.lang.String" value="CH1"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JTextField" name="CH1TextField">
+            <Component class="javax.swing.JToggleButton" name="CH1ToggleButton">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Open"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="CH1ToggleButtonActionPerformed"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel12">
               <Properties>
                 <Property name="text" type="java.lang.String" value="CH2"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JTextField" name="CH2TextField">
+            <Component class="javax.swing.JToggleButton" name="CH2ToggleButton">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Open"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="CH2ToggleButtonActionPerformed"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel13">
               <Properties>
                 <Property name="text" type="java.lang.String" value="CH3"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JTextField" name="CH3TextField">
+            <Component class="javax.swing.JToggleButton" name="CH3ToggleButton">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Open"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="CH3ToggleButtonActionPerformed"/>
+              </Events>
             </Component>
             <Component class="javax.swing.JLabel" name="jLabel14">
               <Properties>
                 <Property name="text" type="java.lang.String" value="CH4"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JTextField" name="CH4TextField">
+            <Component class="javax.swing.JToggleButton" name="CH4ToggleButton">
+              <Properties>
+                <Property name="text" type="java.lang.String" value="Open"/>
+              </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="CH4ToggleButtonActionPerformed"/>
+              </Events>
             </Component>
           </SubComponents>
         </Container>
         <Container class="javax.swing.JPanel" name="statusFlagPanel">
+          <Properties>
+            <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+              <Dimension value="[160, 420]"/>
+            </Property>
+            <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+              <Dimension value="[160, 400]"/>
+            </Property>
+          </Properties>
 
           <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBoxLayout"/>
           <SubComponents>
@@ -174,6 +236,14 @@
           </SubComponents>
         </Container>
         <Container class="javax.swing.JPanel" name="buttonPanel">
+          <Properties>
+            <Property name="maximumSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+              <Dimension value="[160, 420]"/>
+            </Property>
+            <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
+              <Dimension value="[160, 400]"/>
+            </Property>
+          </Properties>
 
           <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
             <Property name="columns" type="int" value="0"/>
@@ -197,7 +267,7 @@
         </Container>
       </SubComponents>
     </Container>
-    <Container class="javax.swing.JPanel" name="jPanel1">
+    <Container class="javax.swing.JPanel" name="memoryPanel">
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBoxLayout">
         <Property name="axis" type="int" value="3"/>
