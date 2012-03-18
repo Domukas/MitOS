@@ -66,19 +66,21 @@ public class RealMachine {
         out = new Output();
         
         memory = new RealMemory(blocks);
-        //CreateVirtualMachine();
+        CreateVirtualMachine();
         
     }
     
     private void CreateVirtualMachine(){
  
-        
+        PLR.setA0((byte) 0x00);
+        PLR.setA1((byte) 0x00);
         PLR.setA2(PLR_MIN_A2);
-        PLR.setA3((byte) 0x10);
+        PLR.setA3((byte) 0x00);
+        System.out.println(Integer.toString(PLR.getValue(), 16));
         
         //uzpildom lentele, kad rodytu i 0 1 2 ... 15 pirmuju bloku.
         MemoryBlock block = memory.getBlock(PLR_MIN_A2*0x10);
-        for (int i = 0; i < 16; i++)
+        for (int i = 15; i > 0; i--)
         {
             block.setWord(i, i);
         }

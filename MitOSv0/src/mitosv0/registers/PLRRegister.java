@@ -54,12 +54,9 @@ public class PLRRegister extends Register {
     
     public void setA2(byte value)
     {
-        System.out.println(data);
         int intValue = (int) value & 0xff;
-        intValue = intValue << 10;
-        System.out.println(intValue);
+        intValue = intValue * 0x100;
         data = ((data & 0xFFFF00FF) | intValue);
-        System.out.println(data);
     }
     
     public int getA3()
@@ -70,10 +67,7 @@ public class PLRRegister extends Register {
     public void setA3(byte value)
     {
         int intValue = (int) value & 0xff;
-        System.out.println("int value "+intValue+"data "+data);
         int tempData = (data & 0xFFFFFF00);
-        System.out.println("tempdata " +tempData);
         data = (tempData | intValue);
-        System.out.println(data);
     }
 }
