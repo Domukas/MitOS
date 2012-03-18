@@ -39,6 +39,11 @@ public class RealMachineGUI extends javax.swing.JFrame {
         updateRegisterFields();  
         updateFlagInfo();
         memoryTable.getColumnModel().getColumn(0).setPreferredWidth(48);
+        MemoryTableRenderer cr=new MemoryTableRenderer();
+        for (int i=1;i < memoryTable.getColumnCount(); i++)
+        {
+            memoryTable.getColumn(memoryTable.getColumnName(i)).setCellRenderer(cr);
+        }
     }
     
         public void updateAll()

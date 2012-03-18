@@ -77,7 +77,7 @@ public class MemoryTableModel extends AbstractTableModel {
                 } catch (NumberFormatException e) {}
             } else {
                 intValue = 0;
-                for (int i = 0; stringValue.length() > 0 && i < 4; i++) {
+                for (int i = 0; stringValue.length()-1 > 0 && i < 4; i++) {
                     intValue += (((int) (stringValue.charAt(stringValue.length()-i-1) & 0xff)) << i*8);
                     stringValue.substring(stringValue.length() - i);
                 }
