@@ -29,7 +29,7 @@ public Component getTableCellRendererComponent(JTable table, Object value,boolea
         {
             setBackground(table.getBackground());
             setForeground(table.getForeground());
-            if (columnValue.equals("0") || columnValue.equals("\0\0\0\0")) setBackground(new Color(0xBFFFFF));
+            if (columnValue.equals("0") || columnValue.equals("\0\0\0\0") || columnValue.equals(0)) setBackground(new Color(0xBFFFFF));
         }
          return this;
      }
