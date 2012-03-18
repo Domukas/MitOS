@@ -39,9 +39,10 @@ public class RealMachine {
     
     public static VirtualMachine VM;
     
-    private static final int PLR_BLOCK_MEMORY_OFFSET = 0x100;
-    private static final byte PLR_MIN_A2 = 0x10;
-    private static final int PLR_MAX_BLOCK_INDEX = 0xEF;
+    public static final int PLR_BLOCK_MEMORY_OFFSET = 0x100;
+    public static final byte PLR_MIN_A2 = 0x10;
+    public static final int PLR_MAX_BLOCK_INDEX = 0xEF;
+    public static final int SHARED_MEMORY_BLOCK_OFFSET = 0xF0;
     
     public static RealMemory memory;
     

@@ -23,7 +23,7 @@ public class MitOSv0 {
     public static void main(String[] args) {
         // TODO code application logic here
 
-        RealMachine RM = new RealMachine(0x102);
+        RealMachine RM = new RealMachine(0x10F);
         RealMachineGUI rmGUI = new RealMachineGUI(RM);
         
         /*

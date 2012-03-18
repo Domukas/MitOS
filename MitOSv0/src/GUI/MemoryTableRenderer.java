@@ -6,6 +6,7 @@ package GUI;
 
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Font;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
 
@@ -19,6 +20,7 @@ public class MemoryTableRenderer extends DefaultTableCellRenderer {
 public Component getTableCellRendererComponent(JTable table, Object value,boolean isSelected, boolean hasFocus, int row, int column)
     {
         Object columnValue=table.getValueAt(row,column);
+        setFont(new Font(Font.SANS_SERIF, Font.PLAIN, this.getFont().getSize()));
         if (value != null) setText(value.toString());
         if(isSelected)
         {
