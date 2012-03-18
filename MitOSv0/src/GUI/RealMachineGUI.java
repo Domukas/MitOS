@@ -4,10 +4,7 @@
  */
 package GUI;
 
-import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
-import mitosv0.MemoryBlock;
 import mitosv0.RealMachine;
 
 /**
@@ -22,11 +19,16 @@ public class RealMachineGUI extends javax.swing.JFrame {
     
     RealMachine RM;
     
-    private DefaultTableModel tableModel;
-    //String[] colNames;
-    Object [][] data;
-    
-    MemoryTable memTable ;
+    //Reikalinga nusakyti lenteles reiksmiu tipui
+    TableDataTypes tableDataType = TableDataTypes.Hex;
+    public enum TableDataTypes {
+        Int,
+        Hex,
+        Char
+    }
+    public TableDataTypes getTableDataType(){
+        return tableDataType;
+    }
     
     public RealMachineGUI(RealMachine RM) {
         super("Real machine");
@@ -36,15 +38,12 @@ public class RealMachineGUI extends javax.swing.JFrame {
         
         updateRegisterFields();  
         updateFlagInfo();
-        //memTable = new MemoryTable(RM.memory, memoryTable);
     }
     
         public void updateAll()
     {
         updateRegisterFields();
         updateFlagInfo();
-        memTable.updateMemoryTable();
-        //updateMemoryTable();
     }
         
     private void updateRegisterFields()
@@ -99,6 +98,7 @@ public class RealMachineGUI extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        tableDataTypeButtonGroup = new javax.swing.ButtonGroup();
         operationsPanel = new javax.swing.JPanel();
         registerPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -137,8 +137,13 @@ public class RealMachineGUI extends javax.swing.JFrame {
         buttonPanel = new javax.swing.JPanel();
         runButton = new javax.swing.JButton();
         stepButton = new javax.swing.JButton();
+        jPanel1 = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        memoryTable = new javax.swing.JTable();
+        jPanel2 = new javax.swing.JPanel();
+        tableDataTypeIntegerToggleButton = new javax.swing.JToggleButton();
+        tableDataTypeHexToggleButton = new javax.swing.JToggleButton();
+        tableDataTypeCharToggleButton = new javax.swing.JToggleButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new javax.swing.BoxLayout(getContentPane(), javax.swing.BoxLayout.LINE_AXIS));
@@ -239,10 +244,54 @@ public class RealMachineGUI extends javax.swing.JFrame {
 
         getContentPane().add(operationsPanel);
 
-        jTable1.setModel(new MemoryTableModel(RM));
-        jScrollPane1.setViewportView(jTable1);
+        jPanel1.setLayout(new javax.swing.BoxLayout(jPanel1, javax.swing.BoxLayout.PAGE_AXIS));
 
-        getContentPane().add(jScrollPane1);
+        memoryTable.setModel(new MemoryTableModel(RM, this));
+        memoryTable.setColumnSelectionAllowed(true);
+        memoryTable.addInputMethodListener(new java.awt.event.InputMethodListener() {
+            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
+            }
+            public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
+                memoryTableInputMethodTextChanged(evt);
+            }
+        });
+        jScrollPane1.setViewportView(memoryTable);
+        memoryTable.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+
+        jPanel1.add(jScrollPane1);
+
+        jPanel2.setLayout(new javax.swing.BoxLayout(jPanel2, javax.swing.BoxLayout.LINE_AXIS));
+
+        tableDataTypeButtonGroup.add(tableDataTypeIntegerToggleButton);
+        tableDataTypeIntegerToggleButton.setText("Integer");
+        tableDataTypeIntegerToggleButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tableDataTypeIntegerToggleButtonActionPerformed(evt);
+            }
+        });
+        jPanel2.add(tableDataTypeIntegerToggleButton);
+
+        tableDataTypeButtonGroup.add(tableDataTypeHexToggleButton);
+        tableDataTypeHexToggleButton.setText("Hex");
+        tableDataTypeHexToggleButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tableDataTypeHexToggleButtonActionPerformed(evt);
+            }
+        });
+        jPanel2.add(tableDataTypeHexToggleButton);
+
+        tableDataTypeButtonGroup.add(tableDataTypeCharToggleButton);
+        tableDataTypeCharToggleButton.setText("Char");
+        tableDataTypeCharToggleButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                tableDataTypeCharToggleButtonActionPerformed(evt);
+            }
+        });
+        jPanel2.add(tableDataTypeCharToggleButton);
+
+        jPanel1.add(jPanel2);
+
+        getContentPane().add(jPanel1);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -250,6 +299,26 @@ public class RealMachineGUI extends javax.swing.JFrame {
     private void stepButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_stepButtonActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_stepButtonActionPerformed
+
+    private void memoryTableInputMethodTextChanged(java.awt.event.InputMethodEvent evt) {//GEN-FIRST:event_memoryTableInputMethodTextChanged
+
+    }//GEN-LAST:event_memoryTableInputMethodTextChanged
+
+    private void tableDataTypeIntegerToggleButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tableDataTypeIntegerToggleButtonActionPerformed
+        tableDataType = TableDataTypes.Int;
+        memoryTable.repaint();
+    }//GEN-LAST:event_tableDataTypeIntegerToggleButtonActionPerformed
+
+    private void tableDataTypeCharToggleButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tableDataTypeCharToggleButtonActionPerformed
+        tableDataType = TableDataTypes.Char;
+        memoryTable.repaint();
+    }//GEN-LAST:event_tableDataTypeCharToggleButtonActionPerformed
+
+    private void tableDataTypeHexToggleButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tableDataTypeHexToggleButtonActionPerformed
+        tableDataType = TableDataTypes.Hex;
+        memoryTable.repaint();
+        
+    }//GEN-LAST:event_tableDataTypeHexToggleButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField CH1TextField;
@@ -284,13 +353,19 @@ public class RealMachineGUI extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
+    private javax.swing.JTable memoryTable;
     private javax.swing.JPanel operationsPanel;
     private javax.swing.JPanel registerPanel1;
     private javax.swing.JPanel registerPanel2;
     private javax.swing.JButton runButton;
     private javax.swing.JPanel statusFlagPanel;
     private javax.swing.JButton stepButton;
+    private javax.swing.ButtonGroup tableDataTypeButtonGroup;
+    private javax.swing.JToggleButton tableDataTypeCharToggleButton;
+    private javax.swing.JToggleButton tableDataTypeHexToggleButton;
+    private javax.swing.JToggleButton tableDataTypeIntegerToggleButton;
     // End of variables declaration//GEN-END:variables
 }
