@@ -38,7 +38,9 @@ public class RealMachineGUI extends javax.swing.JFrame {
         
         updateRegisterFields();  
         updateFlagInfo();
-        memoryTable.getColumnModel().getColumn(0).setPreferredWidth(48);
+        //Norim, kad adreso stulpelio dydis nesikeistu - vietos butu tiek, kiek uztenka
+        memoryTable.getColumnModel().getColumn(0).setMaxWidth(32);
+        memoryTable.getColumnModel().getColumn(0).setMinWidth(32);
         MemoryTableRenderer cr=new MemoryTableRenderer();
         MemoryTableFirstColumnRenderer cfr = new MemoryTableFirstColumnRenderer(RM);
         memoryTable.getColumn(memoryTable.getColumnName(0)).setCellRenderer(cfr);
@@ -331,6 +333,7 @@ public class RealMachineGUI extends javax.swing.JFrame {
         jPanel2.add(tableDataTypeIntegerToggleButton);
 
         tableDataTypeButtonGroup.add(tableDataTypeHexToggleButton);
+        tableDataTypeHexToggleButton.setSelected(true);
         tableDataTypeHexToggleButton.setText("Hex");
         tableDataTypeHexToggleButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
