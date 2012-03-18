@@ -42,7 +42,7 @@ public Component getTableCellRendererComponent(JTable table, Object value,boolea
                 if (row == rm.memory.getBlock(rm.PLR.getA2()*0x10 + rm.PLR.getA3()).getWord(i))
                 {
                     setBackground(new Color(0xFFFF00));
-                    setToolTipText("Virtualios masinos atmintis");
+                    setToolTipText("Virtualios masinos "+(i+1)+" blokas");
                 }
             }
             //Spalvinam bendros atminties blokus zaliai
