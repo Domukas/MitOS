@@ -6,6 +6,7 @@ package mitosv0;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -69,7 +70,6 @@ public class RealMachine {
         
         memory = new RealMemory(blocks);
         CreateVirtualMachine();
-        
     }
     
     private void CreateVirtualMachine(){
@@ -95,22 +95,30 @@ public class RealMachine {
             block.setWord(i,rnd.nextInt(PLR_MAX_BLOCK_INDEX));
         }
 
-        VM = new VirtualMachine(R1, R2, IC, C, new VirtualMemory(PLR, memory));
-
-        /*
+        VirtualMemory virtualMemory = new VirtualMemory(PLR, memory);
+        
         //Nu cia tipo programa sitoj vietoj skaitysim gal, ania?
+        loadProgram(virtualMemory, "src/mitosv0/program.mit");
+        
+        
+        VM = new VirtualMachine(R1, R2, IC, C, virtualMemory);
+    }
+    public void loadProgram(VirtualMemory memory, String fileName)
+    {
         try {
-            FileInputStream input = new FileInputStream("src/mitosv0/program1.mit");
-            int c;
-            while ((c = input.read()) != -1){
-                System.out.println(c);
+            FileInputStream input = new FileInputStream(fileName);
+            int i = 0;
+            byte[] buffer = new byte[4];
+            
+            while ((input.read(buffer)) != -1){
+                memory.setWord(i, byteBufferToInt(buffer));
+                i++;
             }
         } catch (IOException ex) {
             Logger.getLogger(MitOSv0.class.getName()).log(Level.SEVERE, null, ex);
         }
-        * 
-        */
     }
+    
     public void DumpMemory()
     {
         for (int i = 0; i < memory.MAX_MEMORY_BLOCKS; i++)
@@ -122,6 +130,18 @@ public class RealMachine {
             }
             System.out.println();
         }
+    }
+    
+        
+    private int byteBufferToInt(byte[] buf)
+    {
+        int newInt = 0;
+        
+        for (int i = 3; i >= 0; i--)
+        {
+            newInt += ((int)buf[3-i]) << 8*i;
+        }
+        return newInt;  
     }
     
     

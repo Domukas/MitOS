@@ -4,6 +4,8 @@
  */
 package mitosv0;
 
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.sound.sampled.LineUnavailableException;
@@ -60,32 +62,33 @@ public class VirtualMachine {
         this.C = C;
         
         this.memory = memory;
-   
-        R1.setValue(2147483646);
-        //setWord(0, 501);
-        setWord(0, 0x4C310000);
-        processCommand();
         
-        setWord(1, 1279478529);
-        IC.setValue(1);
-        processCommand();
-        
-        setWord(2, 1212238932);
-        IC.setValue(2);
-        processCommand();
+        step();
+        step();
+        step();
+        step();
+        step();
         
 
     }
+    
+    public void step()
+    {    
+        processCommand(getCurrentCommand());
+        goToNextCommand();      
+    }
+    
     
     public int getCurrentCommand()
     {
         return memory.getWord(IC.getValue());
     }
     
-    public int getNextCommand(int currentCommand)
+    public void goToNextCommand()
     {
-        IC.setValue(++currentCommand);
-        return memory.getWord(IC.getValue());
+        int val = IC.getValue();
+        val++;
+        IC.setValue(val);
     }
     
     private String encodeBytes3and2(int word)
@@ -107,10 +110,9 @@ public class VirtualMachine {
     }
     
     
-    private void processCommand()
+    private void processCommand(int currentWord)
     {
         String OPC="";
-        int currentWord = getCurrentCommand();
         int xx;
         
         OPC = encodeBytes3and2(currentWord);
@@ -407,7 +409,7 @@ public class VirtualMachine {
     public void C1 (int xx)
     {
         int oldValue = R1.getValue();
-        int tempValue = oldValue - getWord(xx);
+        int tempValue = oldValue - getWord(xx);        
         arithmeticFlagSet(oldValue, getWord(xx), tempValue);
     }
     
@@ -573,9 +575,9 @@ public class VirtualMachine {
     private void arithmeticFlagSet(int oldValue, int operand, int newValue)
     {       
         setZfSf(newValue);
-        
-        if (((Integer.signum(oldValue)) == Integer.signum(operand))
-            && (Integer.signum(oldValue) != Integer.signum(newValue)))
+            
+        if (((getSign(oldValue)) == getSign(operand))
+            && (getSign(oldValue) != getSign(newValue)))
             
             C.setOverflowFlag();
         else
@@ -600,5 +602,13 @@ public class VirtualMachine {
             C.unsetZeroFlag();
             C.setSignFlag();
         }
+    }
+    
+    private int getSign(int value)
+    {
+        if (Integer.signum(value) == -1)
+            return  1;
+        else
+            return 0;
     }
 }
