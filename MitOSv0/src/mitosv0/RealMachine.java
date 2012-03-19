@@ -6,6 +6,7 @@ package mitosv0;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import mitosv0.registers.TimerRegister;
@@ -73,18 +74,26 @@ public class RealMachine {
     
     private void CreateVirtualMachine(){
  
+        
+        //Nustatome PLR registro reiksmes skirtas vienai virtualiai masinai
         PLR.setA0((byte) 0x00);
         PLR.setA1((byte) 0x00);
         PLR.setA2(PLR_MIN_A2);
         PLR.setA3((byte) 0x00);
         
-        //uzpildom lentele, kad rodytu i 0 1 2 ... 15 pirmuju bloku.
+        //uzpildom lentele, kad rodytu i atsitiktines vietas
         MemoryBlock block = memory.getBlock(PLR_MIN_A2*0x10);
-        for (int i = 15; i > 0; i--)
-        {
-            block.setWord(i, i);
+        Random rnd = new Random();
+        for (int i = 0; i < 16; i++){
+            int blockIndex = rnd.nextInt(PLR_MAX_BLOCK_INDEX);
+            for (int j = 0; j < i; j++){
+                if (blockIndex == block.getWord(j)){
+                    blockIndex = rnd.nextInt(PLR_MAX_BLOCK_INDEX);
+                    j = 0;
+                }
+            }
+            block.setWord(i,rnd.nextInt(PLR_MAX_BLOCK_INDEX));
         }
-        //DumpMemory();
 
         VM = new VirtualMachine(R1, R2, IC, C, new VirtualMemory(PLR, memory));
 
