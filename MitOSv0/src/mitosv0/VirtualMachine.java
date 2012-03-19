@@ -68,10 +68,312 @@ public class VirtualMachine {
         return memory.getWord(IC.getValue());
     }
     
-    private void processCommand()
+    public int getNextCommand(int currentCommand)
     {
-        int command = getCurrentCommand();    
+        IC.setValue(++currentCommand);
+        return memory.getWord(IC.getValue());
     }
+    
+    private void processCommand() throws LineUnavailableException
+    {
+        String OPC="";
+        int currentWord;
+        int xx;
+        currentWord = getCurrentCommand();
+        
+        if(currentWord>=65 && currentWord<=122)
+        {//pirmas baitas?
+            OPC=OPC+(char)currentWord;
+            int currentIC = IC.getValue();
+            IC.setValue(++currentIC);
+            currentWord = getCurrentCommand();
+            if(currentWord>=65 && currentWord<=122)
+            {//antras baitas?
+                OPC=OPC+(char)currentWord;
+                switch(OPC)
+                {
+                    case "MU":
+                    {
+                        xx = XXAdres();
+                        MU(xx);
+                        break;
+                    }
+                    case "DI":
+                    {
+                        xx = XXAdres();
+                        DI(xx);
+                        break;
+                    }
+                    case "XR":
+                    {
+                        xx = XXAdres();
+                        XR(xx);
+                        break;
+                    }
+                    case "AN":
+                    {
+                        xx = XXAdres();
+                        AN(xx);
+                        break;
+                    }
+                    case "OR":
+                    {
+                        xx = XXAdres();
+                        OR(xx);
+                        break;
+                    }
+                    case "JP":
+                    {
+                        xx = XXAdres();
+                        JP(xx);
+                        break;
+                    }
+                    case "JE":
+                    {
+                        xx = XXAdres();
+                        JE(xx);
+                        break;
+                    }
+                    case "JG":
+                    {
+                        xx = XXAdres();
+                        JG(xx);
+                        break;
+                    }
+                    case "JL":
+                    {
+                        xx = XXAdres();
+                        JL(xx);
+                        break;
+                    }
+                    case "JX":
+                    {
+                        xx = XXAdres();
+                        JX(xx);
+                        break;
+                    }
+                    case "LO":
+                    {
+                        xx = XXAdres();
+                        LO(xx);
+                        break;
+                    }
+                    default:
+                    {
+                        currentIC = IC.getValue();
+                        IC.setValue(++currentIC);
+                        currentWord = getCurrentCommand();  
+                        if(currentWord>=65 && currentWord<=122)
+                        {//trecias baitas?
+                            OPC=OPC+(char)currentWord;
+                            int x;
+                            switch(OPC)
+                            {
+                                case "LCK":
+                                {
+                                    currentIC = IC.getValue();
+                                    IC.setValue(++currentIC);
+                                    x = getCurrentCommand();
+                                    LCK(x);
+                                    break;
+                                }
+                                case "ULC":
+                                {
+                                    currentIC = IC.getValue();
+                                    IC.setValue(++currentIC);
+                                    x = getCurrentCommand();
+                                    ULC(x);
+                                    break;
+                                }
+                                case "DGT":
+                                {
+                                    currentIC = IC.getValue();
+                                    IC.setValue(++currentIC);
+                                    x = getCurrentCommand();
+                                    DGT(x);
+                                    break;
+                                }
+                                case "DPT":
+                                {
+                                    currentIC = IC.getValue();
+                                    IC.setValue(++currentIC);
+                                    x = getCurrentCommand();
+                                    DPT(x);
+                                    break;
+                                }
+                                default:
+                                {//ketvirtas baitas?
+                                    currentIC = IC.getValue();
+                                    IC.setValue(++currentIC);
+                                    currentWord = getCurrentCommand();
+                                    if(currentWord>=65 && currentWord<=122)
+                                    {
+                                        OPC=OPC+(char)currentWord;
+                                        switch(OPC){
+                                            case "HALT":
+                                            {
+                                                HALT();
+                                                break;
+                                            }
+                                            default:
+                                            {
+                                                //Kas jei ne komanda??
+                                                break;
+                                            }
+                                        }
+                                    }else
+                                    {
+                                        OPC=OPC+currentWord;
+                                        switch(OPC)
+                                        {
+                                            case "GGR1":
+                                            {
+                                                GGR1();
+                                                break;
+                                            }
+                                            case "GGR2":
+                                            {
+                                                GGR2();
+                                                break;
+                                            }
+                                            case "GNR1":
+                                            {
+                                                GNR1();
+                                                break;
+                                            }
+                                            case "GNR2":
+                                            {
+                                                GNR2();
+                                                break;
+                                            }
+                                            default:
+                                            {
+                                                //Kas jei ne komanda??
+                                                break;
+                                            }
+                                        }
+                                    }
+                                    break;
+                                }
+                            }
+                        }else
+                        {
+                            //Kas jei ne komanda??
+                        }
+                        break;
+                    }
+                }   
+            }else
+            {//Jei antras baitas ne
+                OPC=OPC+currentWord;
+                switch(OPC)
+                {
+                    case "A1":
+                    {
+                        xx = XXAdres();
+                        A1(xx);
+                        break;
+                    }
+                    case "A2":
+                    {
+                        xx = XXAdres();
+                        A2(xx); 
+                        break;
+                    }
+                    case "B1":
+                    {
+                        xx = XXAdres();
+                        B1(xx);
+                        break;
+                    }
+                    case "B2":
+                    {
+                        xx = XXAdres();
+                        B2(xx); 
+                        break;
+                    }
+                    case "C1":
+                    {
+                        xx = XXAdres();
+                        C1(xx); 
+                        break;
+                    }
+                    case "C2":
+                    {
+                        xx = XXAdres();
+                        C2(xx);  
+                        break;
+                    }
+                    case "L1":
+                    {
+                        xx = XXAdres();
+                        L1(xx);
+                        break;
+                    }
+                    case "L2":
+                    {
+                        xx = XXAdres();
+                        L2(xx);
+                        break;
+                    }
+                    case "S1":
+                    {
+                        xx = XXAdres();
+                        S1(xx);
+                        break;
+                    }
+                    case "S2":
+                    {
+                        xx = XXAdres();
+                        S2(xx);
+                        break;
+                    }
+                    case "X1":
+                    {
+                        xx = XXAdres();
+                        X1(xx);
+                        break;
+                    }
+                    case "X2":
+                    {
+                        xx = XXAdres();
+                        X2(xx);
+                        break;
+                    }
+                    case "Z1":
+                    {
+                        xx = XXAdres();
+                        Z1(xx);
+                        break;
+                    }
+                    case "Z2":
+                    {
+                        xx = XXAdres();
+                        Z2(xx);
+                        break;
+                    }
+                    default:
+                    {
+                        //Kas jei ne komanda??
+                        break;
+                    }
+                }
+            }
+        }else
+        {
+            //Kas jei ne komanda??
+        }  
+    }   
+        
+    private int XXAdres(){
+        int currentIC = IC.getValue();
+        IC.setValue(++currentIC);
+        int x1 = getCurrentCommand();
+        currentIC = IC.getValue();
+        IC.setValue(++currentIC);
+        int x2 = getCurrentCommand();
+        return getWord(x1*100+x2);
+    }  
     
     public int getWord(int address)
     {
