@@ -21,21 +21,28 @@ public class Speaker {
         length = 1000;
     }
     
-    public void play(int xx) throws LineUnavailableException{
+    public void play(int xx){
         byte[] buf = new byte[1];
         AudioFormat af = new AudioFormat((float)44100, 8, 1, true, false);
-        SourceDataLine sdl = AudioSystem.getSourceDataLine(af);
-        sdl = AudioSystem.getSourceDataLine(af);
-        sdl.open(af);
-        sdl.start();
-        for(int i = 0; i < length*(float)44100/1000; i++) {
-            double angle = i/((float)44100/xx)*2.0*Math.PI;
-            buf[0] = (byte)(Math.sin(angle)*volume);
-            sdl.write(buf, 0, 1);
+        SourceDataLine sdl;
+        try
+        {
+            sdl = AudioSystem.getSourceDataLine(af);
+            sdl = AudioSystem.getSourceDataLine(af);
+            sdl.open(af);
+            sdl.start();
+            for(int i = 0; i < length*(float)44100/1000; i++) {
+                double angle = i/((float)44100/xx)*2.0*Math.PI;
+                buf[0] = (byte)(Math.sin(angle)*volume);
+                sdl.write(buf, 0, 1);
+            }
+            sdl.drain();
+            sdl.stop();
+            sdl.close();
+        } catch (LineUnavailableException e)
+        {
+            System.out.println("Speker error!");
         }
-        sdl.drain();
-        sdl.stop();
-        sdl.close();
     }
         
     public void setVolume(int xx){

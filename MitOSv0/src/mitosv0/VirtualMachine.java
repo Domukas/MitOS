@@ -4,6 +4,8 @@
  */
 package mitosv0;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.sound.sampled.LineUnavailableException;
 import mitosv0.registers.ICRegister;
 import mitosv0.registers.DataRegister;
@@ -60,7 +62,19 @@ public class VirtualMachine {
         this.memory = memory;
    
         R1.setValue(2147483646);
-        setWord(0, 501);
+        //setWord(0, 501);
+        setWord(0, 0x4C310000);
+        processCommand();
+        
+        setWord(1, 1279478529);
+        IC.setValue(1);
+        processCommand();
+        
+        setWord(2, 1212238932);
+        IC.setValue(2);
+        processCommand();
+        
+
     }
     
     public int getCurrentCommand()
@@ -74,306 +88,246 @@ public class VirtualMachine {
         return memory.getWord(IC.getValue());
     }
     
-    private void processCommand() throws LineUnavailableException
+    private String encodeBytes3and2(int word)
+    {
+        String OPC = "";
+        OPC += (char)((byte)(word >>> 24));
+        OPC += (char)((word >>> 16) % 0x100);
+        return OPC;
+    }
+    
+    private char encodeByte1(int word)
+    {
+        return (char)((word / 0x100) % 0x100);
+    }
+    
+    private char encodeByte0(int word)
+    {
+        return (char)(word % 0x100);
+    }
+    
+    
+    private void processCommand()
     {
         String OPC="";
-        int currentWord;
+        int currentWord = getCurrentCommand();
         int xx;
-        currentWord = getCurrentCommand();
         
-        if(currentWord>=65 && currentWord<=122)
-        {//pirmas baitas?
-            OPC=OPC+(char)currentWord;
-            int currentIC = IC.getValue();
-            IC.setValue(++currentIC);
-            currentWord = getCurrentCommand();
-            if(currentWord>=65 && currentWord<=122)
-            {//antras baitas?
-                OPC=OPC+(char)currentWord;
-                switch(OPC)
-                {
-                    case "MU":
-                    {
-                        xx = XXAdres();
-                        MU(xx);
-                        break;
-                    }
-                    case "DI":
-                    {
-                        xx = XXAdres();
-                        DI(xx);
-                        break;
-                    }
-                    case "XR":
-                    {
-                        xx = XXAdres();
-                        XR(xx);
-                        break;
-                    }
-                    case "AN":
-                    {
-                        xx = XXAdres();
-                        AN(xx);
-                        break;
-                    }
-                    case "OR":
-                    {
-                        xx = XXAdres();
-                        OR(xx);
-                        break;
-                    }
-                    case "JP":
-                    {
-                        xx = XXAdres();
-                        JP(xx);
-                        break;
-                    }
-                    case "JE":
-                    {
-                        xx = XXAdres();
-                        JE(xx);
-                        break;
-                    }
-                    case "JG":
-                    {
-                        xx = XXAdres();
-                        JG(xx);
-                        break;
-                    }
-                    case "JL":
-                    {
-                        xx = XXAdres();
-                        JL(xx);
-                        break;
-                    }
-                    case "JX":
-                    {
-                        xx = XXAdres();
-                        JX(xx);
-                        break;
-                    }
-                    case "LO":
-                    {
-                        xx = XXAdres();
-                        LO(xx);
-                        break;
-                    }
-                    default:
-                    {
-                        currentIC = IC.getValue();
-                        IC.setValue(++currentIC);
-                        currentWord = getCurrentCommand();  
-                        if(currentWord>=65 && currentWord<=122)
-                        {//trecias baitas?
-                            OPC=OPC+(char)currentWord;
-                            int x;
-                            switch(OPC)
-                            {
-                                case "LCK":
-                                {
-                                    currentIC = IC.getValue();
-                                    IC.setValue(++currentIC);
-                                    x = getCurrentCommand();
-                                    LCK(x);
-                                    break;
-                                }
-                                case "ULC":
-                                {
-                                    currentIC = IC.getValue();
-                                    IC.setValue(++currentIC);
-                                    x = getCurrentCommand();
-                                    ULC(x);
-                                    break;
-                                }
-                                case "DGT":
-                                {
-                                    currentIC = IC.getValue();
-                                    IC.setValue(++currentIC);
-                                    x = getCurrentCommand();
-                                    DGT(x);
-                                    break;
-                                }
-                                case "DPT":
-                                {
-                                    currentIC = IC.getValue();
-                                    IC.setValue(++currentIC);
-                                    x = getCurrentCommand();
-                                    DPT(x);
-                                    break;
-                                }
-                                default:
-                                {//ketvirtas baitas?
-                                    currentIC = IC.getValue();
-                                    IC.setValue(++currentIC);
-                                    currentWord = getCurrentCommand();
-                                    if(currentWord>=65 && currentWord<=122)
-                                    {
-                                        OPC=OPC+(char)currentWord;
-                                        switch(OPC){
-                                            case "HALT":
-                                            {
-                                                HALT();
-                                                break;
-                                            }
-                                            default:
-                                            {
-                                                //Kas jei ne komanda??
-                                                break;
-                                            }
-                                        }
-                                    }else
-                                    {
-                                        OPC=OPC+currentWord;
-                                        switch(OPC)
-                                        {
-                                            case "GGR1":
-                                            {
-                                                GGR1();
-                                                break;
-                                            }
-                                            case "GGR2":
-                                            {
-                                                GGR2();
-                                                break;
-                                            }
-                                            case "GNR1":
-                                            {
-                                                GNR1();
-                                                break;
-                                            }
-                                            case "GNR2":
-                                            {
-                                                GNR2();
-                                                break;
-                                            }
-                                            default:
-                                            {
-                                                //Kas jei ne komanda??
-                                                break;
-                                            }
-                                        }
-                                    }
-                                    break;
-                                }
-                            }
-                        }else
-                        {
-                            //Kas jei ne komanda??
-                        }
-                        break;
-                    }
-                }   
-            }else
-            {//Jei antras baitas ne
-                OPC=OPC+currentWord;
-                switch(OPC)
-                {
-                    case "A1":
-                    {
-                        xx = XXAdres();
-                        A1(xx);
-                        break;
-                    }
-                    case "A2":
-                    {
-                        xx = XXAdres();
-                        A2(xx); 
-                        break;
-                    }
-                    case "B1":
-                    {
-                        xx = XXAdres();
-                        B1(xx);
-                        break;
-                    }
-                    case "B2":
-                    {
-                        xx = XXAdres();
-                        B2(xx); 
-                        break;
-                    }
-                    case "C1":
-                    {
-                        xx = XXAdres();
-                        C1(xx); 
-                        break;
-                    }
-                    case "C2":
-                    {
-                        xx = XXAdres();
-                        C2(xx);  
-                        break;
-                    }
-                    case "L1":
-                    {
-                        xx = XXAdres();
-                        L1(xx);
-                        break;
-                    }
-                    case "L2":
-                    {
-                        xx = XXAdres();
-                        L2(xx);
-                        break;
-                    }
-                    case "S1":
-                    {
-                        xx = XXAdres();
-                        S1(xx);
-                        break;
-                    }
-                    case "S2":
-                    {
-                        xx = XXAdres();
-                        S2(xx);
-                        break;
-                    }
-                    case "X1":
-                    {
-                        xx = XXAdres();
-                        X1(xx);
-                        break;
-                    }
-                    case "X2":
-                    {
-                        xx = XXAdres();
-                        X2(xx);
-                        break;
-                    }
-                    case "Z1":
-                    {
-                        xx = XXAdres();
-                        Z1(xx);
-                        break;
-                    }
-                    case "Z2":
-                    {
-                        xx = XXAdres();
-                        Z2(xx);
-                        break;
-                    }
-                    default:
-                    {
-                        //Kas jei ne komanda??
-                        break;
-                    }
-                }
-            }
-        }else
+        OPC = encodeBytes3and2(currentWord);
+        xx = XXAdres(currentWord);
+        
+        switch(OPC)
         {
-            //Kas jei ne komanda??
-        }  
+            case "A1":
+            {
+                A1(xx);
+                break;
+            }
+            case "A2":
+            {
+                A2(xx); 
+                break;
+            }
+            case "B1":
+            {
+                B1(xx);
+                break;
+            }
+            case "B2":
+            {
+                B2(xx); 
+                break;
+            }
+            case "C1":
+            {
+                C1(xx); 
+                break;
+            }
+            case "C2":
+            {
+                C2(xx);  
+                break;
+            }
+            case "L1":
+            {             
+                L1(xx);
+                break;
+            }
+            case "L2":
+            {
+                L2(xx);
+                break;
+            }
+            case "S1":
+            {
+                S1(xx);
+                break;
+            }
+            case "S2":
+            {
+                S2(xx);
+                break;
+            }
+            case "X1":
+            {
+                X1(xx);
+                break;
+            }
+            case "X2":
+            {
+                X2(xx);
+                break;
+            }
+            case "Z1":
+            {
+                Z1(xx);
+                break;
+            }
+            case "Z2":
+            {
+                Z2(xx);
+                break;
+            }
+            case "MU":
+            {
+                MU(xx);
+                break;
+            }
+            case "DI":
+            {
+                DI(xx);
+                break;
+            }
+            case "XR":
+            {
+                XR(xx);
+                break;
+            }
+            case "AN":
+            {
+                AN(xx);
+                break;
+            }
+            case "OR":
+            {
+                OR(xx);
+                break;
+            }
+            case "JP":
+            {
+                JP(xx);
+                break;
+            }
+            case "JE":
+            {
+                JE(xx);
+                break;
+            }
+            case "JG":
+            {
+                JG(xx);
+                break;
+            }
+            case "JL":
+            {
+                JL(xx);
+                break;
+            }
+            case "JX":
+            {
+                JX(xx);
+                break;
+            }
+            case "LO":
+            {
+                LO(xx);
+                break;
+            }
+            default:
+            {
+                OPC += encodeByte1(currentWord);
+                int x = XAdress(currentWord);
+                switch (OPC)
+                {
+                    case "LCK":
+                    {
+                        x = getCurrentCommand();
+                        LCK(x);
+                        break;
+                    }
+                    case "ULC":
+                    {
+                        x = getCurrentCommand();
+                        ULC(x);
+                        break;
+                    }
+                    case "DGT":
+                    {
+                        x = getCurrentCommand();
+                        DGT(x);
+                        break;
+                    }
+                    case "DPT":
+                    {
+                        x = getCurrentCommand();
+                        DPT(x);
+                        break;
+                    }
+                    default:
+                    {
+                        OPC += encodeByte0(currentWord);
+                        switch(OPC)
+                        {
+                            case "GGR1":
+                            {
+                                GGR1();
+                                break;
+                            }
+                            case "GGR2":
+                            {
+                                GGR2();
+                                break;
+                            }
+                            case "GNR1":
+                            {
+                                GNR1();
+                                break;
+                            }
+                            case "GNR2":
+                            {
+                                GNR2();
+                                break;
+                            }
+                            case "HALT":
+                            {
+                                HALT();
+                                break;
+                            }
+                            default:
+                            {
+                                //Opkodas neegzistuoja
+                                RealMachine.PI.setValue(2);
+                            }
+                        }
+                    }
+                } 
+            }   
+        }
+        System.out.println("Code:" + OPC);  
     }   
         
-    private int XXAdres(){
-        int currentIC = IC.getValue();
-        IC.setValue(++currentIC);
-        int x1 = getCurrentCommand();
-        currentIC = IC.getValue();
-        IC.setValue(++currentIC);
-        int x2 = getCurrentCommand();
-        return getWord(x1*100+x2);
+    private int XXAdres(int word)
+    {
+        int xx;
+        xx = ((word / 0x100) % 0x100) * 0x10 + (word % 0x100);
+        return xx;
     }  
+    
+    private int XAdress(int word)
+    {
+        return word % 0x100;
+        
+    }
     
     public int getWord(int address)
     {
@@ -598,12 +552,12 @@ public class VirtualMachine {
         RealMachine.speakers.setLength(volume);
     }
     
-    public void GNR1() throws LineUnavailableException{
+    public void GNR1(){
         int value = RealMachine.R1.getValue();
         RealMachine.speakers.play(value);
     }
     
-    public void GNR2() throws LineUnavailableException{
+    public void GNR2(){
         int value = RealMachine.R2.getValue();
         RealMachine.speakers.play(value);
     }
@@ -612,7 +566,7 @@ public class VirtualMachine {
     
     public void HALT ()
     {
-        RealMachine.SI.setValue(4);
+        RealMachine.SI.setValue(5);
     }
     
     //Pagalbinės (ne virtualios mašinos)
