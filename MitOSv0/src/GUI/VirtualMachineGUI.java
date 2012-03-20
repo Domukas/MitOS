@@ -18,6 +18,7 @@ public class VirtualMachineGUI extends javax.swing.JFrame {
      */
     
     VirtualMachine VM;
+    RealMachineGUI RMgui;
     
     //Reikalinga nusakyti lenteles reiksmiu tipui
     TableDataTypes tableDataType = TableDataTypes.Hex;
@@ -30,9 +31,11 @@ public class VirtualMachineGUI extends javax.swing.JFrame {
         return tableDataType;
     }
     
-    public VirtualMachineGUI(VirtualMachine VM) {
+    public VirtualMachineGUI(VirtualMachine VM, RealMachineGUI RMgui) {
         super("Virtual machine");
         this.VM = VM;
+        this.RMgui = RMgui;
+        
         initComponents();
         this.setVisible(true);
         
@@ -54,6 +57,7 @@ public class VirtualMachineGUI extends javax.swing.JFrame {
     {
         updateRegisterFields();
         updateFlagInfo();
+        memoryTable.repaint();
     }
         
     private void updateRegisterFields()
@@ -155,6 +159,11 @@ public class VirtualMachineGUI extends javax.swing.JFrame {
         buttonPanel.setLayout(new java.awt.GridLayout(1, 0));
 
         runButton.setText("Run");
+        runButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                runButtonActionPerformed(evt);
+            }
+        });
         buttonPanel.add(runButton);
 
         stepButton.setText("Step");
@@ -174,10 +183,10 @@ public class VirtualMachineGUI extends javax.swing.JFrame {
         memoryTable.setModel(new VirtualMemoryTableModel(VM, this));
         memoryTable.setColumnSelectionAllowed(true);
         memoryTable.addInputMethodListener(new java.awt.event.InputMethodListener() {
+            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
+            }
             public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
                 memoryTableInputMethodTextChanged(evt);
-            }
-            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
             }
         });
         jScrollPane1.setViewportView(memoryTable);
@@ -223,7 +232,9 @@ public class VirtualMachineGUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void stepButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_stepButtonActionPerformed
-        // TODO add your handling code here:
+        VM.step();
+        updateAll();
+        RMgui.updateAll();
     }//GEN-LAST:event_stepButtonActionPerformed
 
     private void memoryTableInputMethodTextChanged(java.awt.event.InputMethodEvent evt) {//GEN-FIRST:event_memoryTableInputMethodTextChanged
@@ -245,6 +256,12 @@ public class VirtualMachineGUI extends javax.swing.JFrame {
         memoryTable.repaint();
         
     }//GEN-LAST:event_tableDataTypeHexToggleButtonActionPerformed
+
+    private void runButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_runButtonActionPerformed
+        VM.run();
+        updateAll();
+        RMgui.updateAll();
+    }//GEN-LAST:event_runButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField CTextField;

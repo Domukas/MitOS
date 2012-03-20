@@ -28,8 +28,23 @@ public class VirtualMemory {
     {
         getBlock(index / 0x10).setWord(index % 0x10, value);
     }
+    
+    public int getSharedMemoryWord(int index)
+    {
+        return getSharedMemoryBlock((index / 0x10)).getWord(index % 0x10);
+    }
+    
+    public void setSharedMemoryWord(int index, int value)
+    {
+        getSharedMemoryBlock((index / 0x10)).setWord(index % 0x10, value);
+    }
 
     public MemoryBlock getBlock(int index) {
         return memory.getBlock(memory.getBlock(PLR.getA2()*0x10 + PLR.getA3()).getWord(index));
+    }
+    
+    public MemoryBlock getSharedMemoryBlock(int index)
+    {
+        return memory.getBlock(RealMachine.SHARED_MEMORY_BLOCK_OFFSET + index);
     }
 }

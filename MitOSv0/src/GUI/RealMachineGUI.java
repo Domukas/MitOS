@@ -4,6 +4,7 @@
  */
 package GUI;
 
+import java.util.LinkedList;
 import javax.swing.table.DefaultTableModel;
 import mitosv0.RealMachine;
 
@@ -51,9 +52,10 @@ public class RealMachineGUI extends javax.swing.JFrame {
     }
     
         public void updateAll()
-    {
+        {
         updateRegisterFields();
         updateFlagInfo();
+        memoryTable.repaint();
     }
         
     private void updateRegisterFields()
@@ -291,6 +293,11 @@ public class RealMachineGUI extends javax.swing.JFrame {
         buttonPanel.setLayout(new java.awt.GridLayout(1, 0));
 
         runButton.setText("Run");
+        runButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                runButtonActionPerformed(evt);
+            }
+        });
         buttonPanel.add(runButton);
 
         stepButton.setText("Step");
@@ -359,7 +366,8 @@ public class RealMachineGUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void stepButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_stepButtonActionPerformed
-        // TODO add your handling code here:
+        RM.VM.step();
+        updateAll();
     }//GEN-LAST:event_stepButtonActionPerformed
 
     private void memoryTableInputMethodTextChanged(java.awt.event.InputMethodEvent evt) {//GEN-FIRST:event_memoryTableInputMethodTextChanged
@@ -421,6 +429,11 @@ public class RealMachineGUI extends javax.swing.JFrame {
             RM.mode.setUser();
         MODEToggleButton.setText(modeToString(RM.mode.isSupervisor()));
     }//GEN-LAST:event_MODEToggleButtonActionPerformed
+
+    private void runButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_runButtonActionPerformed
+        RM.VM.run();
+        updateAll();
+    }//GEN-LAST:event_runButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JToggleButton CH1ToggleButton;

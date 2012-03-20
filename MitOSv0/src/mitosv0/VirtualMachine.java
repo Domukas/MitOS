@@ -59,15 +59,9 @@ public class VirtualMachine {
         this.R2 = R2;
         this.IC = IC;
         this.C = C;
-        
         this.memory = memory;
         
-        step();
-        step();
-        step();
-        step();
-        step();
-
+        //run();
     }
     
     public void run()
@@ -118,11 +112,11 @@ public class VirtualMachine {
     
     private void processCommand(int currentWord)
     {
-        String OPC="";
+        String OPC = "";
         int xx;
         
         OPC = encodeBytes3and2(currentWord);
-        xx = XXAdres(currentWord);
+        xx = XXAdress(currentWord);
         
         switch(OPC)
         {
@@ -321,32 +315,9 @@ public class VirtualMachine {
                 } 
             }   
         }
-        System.out.println("Code:" + OPC);  
+        System.out.println(" -- > Code:" + OPC);  
     }   
         
-    private int XXAdres(int word)
-    {
-        int xx;
-        xx = ((word / 0x100) % 0x100) * 0x10 + (word % 0x100);
-        return xx;
-    }  
-    
-    private int XAdress(int word)
-    {
-        return word % 0x100;
-        
-    }
-    
-    public int getWord(int address)
-    {
-        return memory.getWord(address);
-    }
-    
-    public void setWord(int address, int value)
-    {
-        memory.setWord(address, value);
-    }
-    
     //Aritmetinės komandos
     public void A1(int xx)
     {
@@ -457,22 +428,22 @@ public class VirtualMachine {
     
     public void X1 (int xx)
     {
-        //TODO
+        R1.setValue(memory.getSharedMemoryWord(xx));
     }
     
     public void X2 (int xx)
     {
-        //TODO
+        R2.setValue(memory.getSharedMemoryWord(xx));
     }
     
     public void Z1 (int xx)
     {
-        //TODO (įrašymas į bendrą atmintį)
+        memory.setSharedMemoryWord(xx, R1.getValue());
     }
 
     public void Z2 (int xx)
     {
-        //TODO (įrašymas į bendrą atmintį)
+        memory.setSharedMemoryWord(xx, R2.getValue());
     }
     
     public void ULC (int x)
@@ -616,5 +587,29 @@ public class VirtualMachine {
             return  1;
         else
             return 0;
+    }
+    
+    
+    private int XXAdress(int word)
+    {
+        int xx;
+        xx = ((word / 0x100) % 0x100) * 0x10 + (word % 0x100);
+        return xx;
+    }  
+    
+    private int XAdress(int word)
+    {
+        return word % 0x100;
+        
+    }
+    
+    public int getWord(int address)
+    {
+        return memory.getWord(address);
+    }
+    
+    public void setWord(int address, int value)
+    {
+        memory.setWord(address, value);
     }
 }

@@ -4,6 +4,7 @@
  */
 package mitosv0;
 
+import GUI.RealMachineGUI;
 import GUI.VirtualMachineGUI;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -70,6 +71,7 @@ public class RealMachine {
         out = new Output();
         
         memory = new RealMemory(blocks);
+        
         CreateVirtualMachine();
     }
     
@@ -100,7 +102,6 @@ public class RealMachine {
         
         //Nu cia tipo programa sitoj vietoj skaitysim gal, ania?
         loadProgram(virtualMemory, "src/mitosv0/program.mit");
-        
         
         VM = new VirtualMachine(R1, R2, IC, C, virtualMemory);
     }
