@@ -68,8 +68,15 @@ public class VirtualMachine {
         step();
         step();
         step();
-        
 
+    }
+    
+    public void run()
+    {
+        do
+        {
+            step();
+        } while ((RealMachine.SI.getValue() != 5) && (RealMachine.PI.getValue() != 2));
     }
     
     public void step()
