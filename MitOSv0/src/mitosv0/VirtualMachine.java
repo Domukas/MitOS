@@ -45,14 +45,13 @@ OF = 1 – priešingu atveju.
  */
 
 
-
 public class VirtualMachine {
     
-    private DataRegister R1, R2;
-    private ICRegister IC;
-    private CRegister C;
+    public DataRegister R1, R2;
+    public ICRegister IC;
+    public CRegister C;
     
-    private VirtualMemory memory;
+    public VirtualMemory memory;
     
     public VirtualMachine(DataRegister R1, DataRegister R2, ICRegister IC, CRegister C, VirtualMemory memory)
     {

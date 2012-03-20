@@ -4,6 +4,7 @@
  */
 package mitosv0;
 
+import GUI.VirtualMachineGUI;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -102,6 +103,7 @@ public class RealMachine {
         
         
         VM = new VirtualMachine(R1, R2, IC, C, virtualMemory);
+        VirtualMachineGUI vmGUI = new VirtualMachineGUI(VM);
     }
     public void loadProgram(VirtualMemory memory, String fileName)
     {
