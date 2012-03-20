@@ -19,6 +19,7 @@ public class VirtualMachineGUI extends javax.swing.JFrame {
     
     VirtualMachine VM;
     RealMachineGUI RMgui;
+    int focusGained;
     
     //Reikalinga nusakyti lenteles reiksmiu tipui
     TableDataTypes tableDataType = TableDataTypes.Hex;
@@ -123,18 +124,54 @@ public class VirtualMachineGUI extends javax.swing.JFrame {
 
         jLabel2.setText("R1");
         registerPanel1.add(jLabel2);
+
+        R1TextField.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                R1TextFieldFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                R1TextFieldFocusLost(evt);
+            }
+        });
         registerPanel1.add(R1TextField);
 
         jLabel3.setText("R2");
         registerPanel1.add(jLabel3);
+
+        R2TextField.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                R2TextFieldFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                R2TextFieldFocusLost(evt);
+            }
+        });
         registerPanel1.add(R2TextField);
 
         jLabel4.setText("IC");
         registerPanel1.add(jLabel4);
+
+        ICTextField.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                ICTextFieldFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                ICTextFieldFocusLost(evt);
+            }
+        });
         registerPanel1.add(ICTextField);
 
         jLabel5.setText("C");
         registerPanel1.add(jLabel5);
+
+        CTextField.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                CTextFieldFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                CTextFieldFocusLost(evt);
+            }
+        });
         registerPanel1.add(CTextField);
 
         operationsPanel.add(registerPanel1);
@@ -263,6 +300,70 @@ public class VirtualMachineGUI extends javax.swing.JFrame {
         RMgui.updateAll();
         // TODO add your handling code here:
     }//GEN-LAST:event_runButtonActionPerformed
+
+    private void R1TextFieldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_R1TextFieldFocusGained
+        focusGained = Integer.valueOf(R1TextField.getText(), 16).intValue();
+    }//GEN-LAST:event_R1TextFieldFocusGained
+
+    private void R2TextFieldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_R2TextFieldFocusGained
+        focusGained = Integer.valueOf(R2TextField.getText(), 16).intValue();
+    }//GEN-LAST:event_R2TextFieldFocusGained
+
+    private void ICTextFieldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_ICTextFieldFocusGained
+        focusGained = Integer.valueOf(ICTextField.getText(), 16).intValue();
+    }//GEN-LAST:event_ICTextFieldFocusGained
+
+    private void CTextFieldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_CTextFieldFocusGained
+        focusGained = Integer.valueOf(CTextField.getText(), 16).intValue();
+    }//GEN-LAST:event_CTextFieldFocusGained
+
+    private void R1TextFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_R1TextFieldFocusLost
+        try
+        {
+            int newValue = Integer.valueOf(R1TextField.getText(), 16).intValue();
+            VM.R1.setValue(newValue);
+            RMgui.updateAll();
+        }catch(Exception e)
+        {
+            R1TextField.setText(Integer.toHexString(focusGained));
+        }
+    }//GEN-LAST:event_R1TextFieldFocusLost
+
+    private void R2TextFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_R2TextFieldFocusLost
+        try
+        {
+            int newValue = Integer.valueOf(R2TextField.getText(), 16).intValue();
+            VM.R2.setValue(newValue);
+            RMgui.updateAll();
+        }catch(Exception e)
+        {
+            R2TextField.setText(Integer.toHexString(focusGained));
+        }
+    }//GEN-LAST:event_R2TextFieldFocusLost
+
+    private void ICTextFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_ICTextFieldFocusLost
+        try
+        {
+            int newValue = Integer.valueOf(ICTextField.getText(), 16).intValue();
+            VM.IC.setValue(newValue);
+            RMgui.updateAll();
+        }catch(Exception e)
+        {
+            ICTextField.setText(Integer.toHexString(focusGained));
+        }
+    }//GEN-LAST:event_ICTextFieldFocusLost
+
+    private void CTextFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_CTextFieldFocusLost
+        try
+        {
+            int newValue = Integer.valueOf(CTextField.getText(), 16).intValue();
+            VM.C.setValue(newValue);
+            RMgui.updateAll();
+        }catch(Exception e)
+        {
+            CTextField.setText(Integer.toHexString(focusGained));
+        }
+    }//GEN-LAST:event_CTextFieldFocusLost
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTextField CTextField;
