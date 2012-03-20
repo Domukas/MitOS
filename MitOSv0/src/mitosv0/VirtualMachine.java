@@ -253,25 +253,21 @@ public class VirtualMachine {
                 {
                     case "LCK":
                     {
-                        x = getCurrentCommand();
                         LCK(x);
                         break;
                     }
                     case "ULC":
                     {
-                        x = getCurrentCommand();
                         ULC(x);
                         break;
                     }
                     case "DGT":
                     {
-                        x = getCurrentCommand();
                         DGT(x);
                         break;
                     }
                     case "DPT":
                     {
-                        x = getCurrentCommand();
                         DPT(x);
                         break;
                     }
@@ -366,19 +362,19 @@ public class VirtualMachine {
     //Loginės komandos
     public void XR (int xx)
     {
-        R1.setValue(R1.getValue() ^ memory.getWord(xx));
+        R1.setValue(R1.getValue() ^ getWord(xx));
         setZfSf(R1.getValue());
     }
 
     public void AN (int xx)
     {
-        R1.setValue(R1.getValue() & memory.getWord(xx));
+        R1.setValue(R1.getValue() & getWord(xx));
         setZfSf(R1.getValue());
     }
     
     public void OR (int xx)
     {
-        R1.setValue(R1.getValue() | memory.getWord(xx));
+        R1.setValue(R1.getValue() | getWord(xx));
         setZfSf(R1.getValue());
     }    
     
@@ -401,22 +397,22 @@ public class VirtualMachine {
     
     public void L1 (int xx)
     {
-        R1.setValue(memory.getWord(xx));
+        R1.setValue(getWord(xx));
     }
 
     public void L2 (int xx)
     {
-        R2.setValue(memory.getWord(xx));
+        R2.setValue(getWord(xx));
     }
     
     public void S1 (int xx)
     {
-        memory.setWord(xx, R1.getValue());
+        setWord(xx, R1.getValue());
     }
     
     public void S2 (int xx)
     {
-        memory.setWord(xx, R2.getValue());
+        setWord(xx, R2.getValue());
     }
     
     public void LCK (int x)
@@ -480,7 +476,7 @@ public class VirtualMachine {
     
     public void JX (int xx)
     {   
-        IC.setValue(memory.getWord(xx));
+        IC.setValue(getWord(xx));
     }    
     
     public void LO (int xx)
@@ -500,13 +496,34 @@ public class VirtualMachine {
         //TODO
         RealMachine.SI.setValue(1);
         RealMachine.mode.SetSupervisor();
+        
+        int[] temp = RealMachine.in.get();
+        for (int i = 0; i < 16; i++)
+        {
+           setWord(x * 0x10 + i, temp[i]);
+        }
+        
+        RealMachine.SI.setValue(0);
+        RealMachine.mode.setUser();
     }
     
     public void DPT (int x)
     {
         //TODO
-        RealMachine.SI.setValue(2);
+        RealMachine.SI.setValue(2);  
         RealMachine.mode.SetSupervisor();
+        
+        int[] temp = new int[16];
+        for (int i = 0; i < 16; i++)
+        {
+            temp[i] = getWord(x * 0x10 + i);
+        }
+        
+        RealMachine.out.send(temp);
+        
+        RealMachine.SI.setValue(0);
+        RealMachine.mode.setUser();
+        
     }    
     
     //Garsiakalbio komandos

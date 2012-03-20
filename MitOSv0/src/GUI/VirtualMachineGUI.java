@@ -261,6 +261,7 @@ public class VirtualMachineGUI extends javax.swing.JFrame {
         VM.run();
         updateAll();
         RMgui.updateAll();
+        // TODO add your handling code here:
     }//GEN-LAST:event_runButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

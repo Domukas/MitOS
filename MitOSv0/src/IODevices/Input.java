@@ -2,25 +2,38 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package mitosv0;
+package IODevices;
 
 /**
  *
  * @author Zory
  */
 public class Input {
-    public Input(){
-        
+    
+    InputWindow inputWindow;
+    
+    public Input()
+    {
+       inputWindow =  new InputWindow();
+       inputWindow.setVisible(true);
+       
     }
-    public int[] send(String text){
-        int[] numberArray = new int[text.length()];
-        for (int i = 0; i < text.length(); i++) {
+    public int[] get()
+    {
+        String text = inputWindow.getText();
+        int[] numberArray = new int[16];
+        int maxLen = 16;
+        
+        if (text.length() < maxLen)
+            maxLen = text.length();
+        
+        for (int i = 0; i < maxLen; i++)
+        {
             char symbol = text.charAt(i);
-            if (isNumeric(symbol)){
+            if (isNumeric(symbol))
                 numberArray[i] = Character.digit(text.charAt(i), 10);
-            }else{
-                numberArray[i] = (int)symbol;
-            }  
+            else
+                numberArray[i] = (int)symbol;  
         }
         return numberArray;
    }  
