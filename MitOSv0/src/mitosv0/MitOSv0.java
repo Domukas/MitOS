@@ -5,6 +5,7 @@
 package mitosv0;
 
 import GUI.RealMachineGUI;
+import GUI.VirtualMachineGUI;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -25,6 +26,7 @@ public class MitOSv0 {
 
         RealMachine RM = new RealMachine(0x10F);
         RealMachineGUI rmGUI = new RealMachineGUI(RM);
+        VirtualMachineGUI vmGUI = new VirtualMachineGUI(RM.VM);
         
         /*
         try {

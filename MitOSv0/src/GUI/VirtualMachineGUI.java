@@ -32,8 +32,8 @@ public class VirtualMachineGUI extends javax.swing.JFrame {
     
     public VirtualMachineGUI(VirtualMachine VM) {
         super("Virtual machine");
-        initComponents();
         this.VM = VM;
+        initComponents();
         this.setVisible(true);
         
         updateRegisterFields();  

@@ -18,6 +18,7 @@ public class VirtualMemoryTableModel extends TableModel {
     VirtualMachineGUI ownerGUI;
     
 	public VirtualMemoryTableModel(VirtualMachine virtualMachine, VirtualMachineGUI ownerGUI){
+            virtualMachine.C.getValue();
             memory = virtualMachine.memory;
             this.ownerGUI = ownerGUI;
 	}

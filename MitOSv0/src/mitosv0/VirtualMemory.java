@@ -29,7 +29,7 @@ public class VirtualMemory {
         getBlock(index / 0x10).setWord(index % 0x10, value);
     }
 
-    private MemoryBlock getBlock(int index) {
+    public MemoryBlock getBlock(int index) {
         return memory.getBlock(memory.getBlock(PLR.getA2()*0x10 + PLR.getA3()).getWord(index));
     }
 }

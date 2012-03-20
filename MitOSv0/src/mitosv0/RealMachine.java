@@ -103,7 +103,6 @@ public class RealMachine {
         
         
         VM = new VirtualMachine(R1, R2, IC, C, virtualMemory);
-        VirtualMachineGUI vmGUI = new VirtualMachineGUI(VM);
     }
     public void loadProgram(VirtualMemory memory, String fileName)
     {
