@@ -10,12 +10,13 @@ import mitosv0.registers.PLRRegister;
  *
  * @author Domukas
  */
-public class VirtualMemory {
+public class VirtualMemory extends Memory{
     
     private RealMemory memory;
     private PLRRegister PLR;
     
     public VirtualMemory(PLRRegister PLR, RealMemory memory){
+        super(16);
         this.memory = memory;
         this.PLR = PLR;
     }

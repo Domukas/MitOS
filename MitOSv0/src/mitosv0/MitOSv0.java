@@ -26,7 +26,7 @@ public class MitOSv0 {
 
         RealMachine RM = new RealMachine(0x10F);
         RealMachineGUI rmGUI = new RealMachineGUI(RM);
-        VirtualMachineGUI vmGUI = new VirtualMachineGUI(RM.VM, rmGUI);
+        //VirtualMachineGUI vmGUI = new VirtualMachineGUI(RM.VM, rmGUI);
         /*
         try {
             FileInputStream input = new FileInputStream("src/mitosv0/program1.mit");

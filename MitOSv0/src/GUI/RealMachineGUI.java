@@ -5,6 +5,8 @@
 package GUI;
 
 import java.util.LinkedList;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import mitosv0.RealMachine;
 
@@ -19,6 +21,7 @@ public class RealMachineGUI extends javax.swing.JFrame {
      */
     
     RealMachine RM;
+    JTable vm1MemoryTable;
     
     //Reikalinga nusakyti lenteles reiksmiu tipui
     TableDataTypes tableDataType = TableDataTypes.Hex;
@@ -36,6 +39,12 @@ public class RealMachineGUI extends javax.swing.JFrame {
         initComponents();
         this.RM = RM;
         this.setVisible(true);
+        vm1MemoryTable = new JTable();
+        vm1MemoryTable.setModel(new VirtualMemoryTableModel(RM,this));
+        memoryTabbedPane.add("VM1", new JScrollPane(vm1MemoryTable));
+        vm1MemoryTable.setColumnSelectionAllowed(true);
+        vm1MemoryTable.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+
         
         updateRegisterFields();  
         updateFlagInfo();
@@ -156,6 +165,7 @@ public class RealMachineGUI extends javax.swing.JFrame {
         runButton = new javax.swing.JButton();
         stepButton = new javax.swing.JButton();
         memoryPanel = new javax.swing.JPanel();
+        memoryTabbedPane = new javax.swing.JTabbedPane();
         jScrollPane1 = new javax.swing.JScrollPane();
         memoryTable = new javax.swing.JTable();
         jPanel2 = new javax.swing.JPanel();
@@ -326,7 +336,9 @@ public class RealMachineGUI extends javax.swing.JFrame {
         jScrollPane1.setViewportView(memoryTable);
         memoryTable.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
 
-        memoryPanel.add(jScrollPane1);
+        memoryTabbedPane.addTab("RM", jScrollPane1);
+
+        memoryPanel.add(memoryTabbedPane);
 
         jPanel2.setLayout(new javax.swing.BoxLayout(jPanel2, javax.swing.BoxLayout.LINE_AXIS));
 
@@ -471,6 +483,7 @@ public class RealMachineGUI extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JPanel memoryPanel;
+    private javax.swing.JTabbedPane memoryTabbedPane;
     private javax.swing.JTable memoryTable;
     private javax.swing.JPanel operationsPanel;
     private javax.swing.JPanel registerPanel1;

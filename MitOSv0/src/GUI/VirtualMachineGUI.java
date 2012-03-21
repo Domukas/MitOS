@@ -217,7 +217,14 @@ public class VirtualMachineGUI extends javax.swing.JFrame {
 
         memoryPanel.setLayout(new javax.swing.BoxLayout(memoryPanel, javax.swing.BoxLayout.PAGE_AXIS));
 
-        memoryTable.setModel(new VirtualMemoryTableModel(VM, this));
+        memoryTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+
+            }
+        ));
         memoryTable.setColumnSelectionAllowed(true);
         memoryTable.addInputMethodListener(new java.awt.event.InputMethodListener() {
             public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {

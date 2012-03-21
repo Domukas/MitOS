@@ -5,6 +5,7 @@
 package GUI;
 
 import mitosv0.MemoryBlock;
+import mitosv0.RealMachine;
 import mitosv0.VirtualMachine;
 import mitosv0.VirtualMemory;
 
@@ -12,21 +13,18 @@ import mitosv0.VirtualMemory;
  *
  * @author Domukas
  */
-public class VirtualMemoryTableModel extends TableModel {
+public class VirtualMemoryTableModel extends MemoryTableModel {
 	
     VirtualMemory memory;
-    VirtualMachineGUI ownerGUI;
+    RealMachineGUI ownerGUI;
     
-	public VirtualMemoryTableModel(VirtualMachine virtualMachine, VirtualMachineGUI ownerGUI){
-            memory = virtualMachine.memory;
+	public VirtualMemoryTableModel(RealMachine realMachine, RealMachineGUI ownerGUI){
+            super(realMachine, ownerGUI);
+            memory = realMachine.VM.memory;
             this.ownerGUI = ownerGUI;
 	}
 
-    @Override
-	public int getRowCount() {
-            return 16;//laikinai
-	}
-        
+    /*   
     @Override
         public void setValueAt(Object value, int row, int col) {
             String stringValue = (String) value;
@@ -79,5 +77,5 @@ public class VirtualMemoryTableModel extends TableModel {
             }
 	}
 	
-
+*/
 }
