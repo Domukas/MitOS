@@ -61,7 +61,6 @@ public class VirtualMachine {
         this.C = C;
         this.memory = memory;
         
-        //run();
     }
     
     public void run()
@@ -74,8 +73,11 @@ public class VirtualMachine {
     
     public void step()
     {    
-        processCommand(getCurrentCommand());
-        goToNextCommand();      
+        if ((RealMachine.SI.getValue() != 5) && (RealMachine.PI.getValue() != 2))
+        {
+            processCommand(getCurrentCommand());
+            goToNextCommand();      
+        }
     }
     
     

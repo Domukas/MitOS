@@ -27,18 +27,6 @@ public class MitOSv0 {
         RealMachine RM = new RealMachine(0x10F);
         RealMachineGUI rmGUI = new RealMachineGUI(RM);
  
-        /*
-        try {
-            FileInputStream input = new FileInputStream("src/mitosv0/program1.mit");
-            int c;
-            while ((c = input.read()) != -1){
-                System.out.println(c);
-            }
-        } catch (IOException ex) {
-            Logger.getLogger(MitOSv0.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        * 
-        */
 
     }
 }
