@@ -34,7 +34,7 @@ public class Input {
             else
                 byteArray[i] = (byte)symbol;
         }
-        return byteToInt(byteArray);
+        return byteArrayToIntArry(byteArray);
    }  
     
     private boolean isNumeric(char symbol){
@@ -48,10 +48,10 @@ public class Input {
         }
     }
     
-    private int[] byteToInt(byte[] buf)
+    private int[] byteArrayToIntArry(byte[] buf)
     {
         int[] newInt = new int [16];
-        byte[] bytebuf = new byte[4];
+        byte[] bytebuf;
         
         for (int i = 0; i < 8; i++)
         {

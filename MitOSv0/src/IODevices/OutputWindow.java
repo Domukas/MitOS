@@ -39,6 +39,7 @@ public class OutputWindow extends javax.swing.JFrame {
         setResizable(false);
 
         textArea.setColumns(20);
+        textArea.setLineWrap(true);
         textArea.setRows(5);
         jScrollPane1.setViewportView(textArea);
 

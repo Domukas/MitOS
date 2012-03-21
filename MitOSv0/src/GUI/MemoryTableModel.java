@@ -6,6 +6,7 @@ package GUI;
 
 import javax.swing.JFrame;
 import javax.swing.table.AbstractTableModel;
+import mitosv0.Memory;
 import mitosv0.MemoryBlock;
 import mitosv0.RealMachine;
 import mitosv0.RealMemory;
@@ -16,7 +17,7 @@ import mitosv0.RealMemory;
  */
 public class MemoryTableModel extends TableModel {
 	
-    RealMemory memory;
+    Memory memory;
     RealMachineGUI ownerGUI;
     
 	public MemoryTableModel(RealMachine realMachine, RealMachineGUI ownerGUI){
@@ -47,12 +48,6 @@ public class MemoryTableModel extends TableModel {
                     intValue += (((int) (stringValue.charAt(stringValue.length()-i-1) & 0xff)) << i*8);
                     stringValue.substring(stringValue.length() - i);
                 }
-                /*
-                for (int i = Math.min(stringValue.length(), 4); i > 0; i--)
-                {
-                    System.out.println(stringValue.charAt(stringValue.length()-i));
-                    intValue += (((int) (stringValue.charAt(stringValue.length()-i) & 0xff)) << i*8);
-                }*/
                 memory.getBlock(row).setWord(col-1, intValue);
             }
             fireTableCellUpdated(row, col);
