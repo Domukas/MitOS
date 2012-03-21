@@ -286,6 +286,16 @@ public class VirtualMachine {
                                 GGR2();
                                 break;
                             }
+                            case "GLR1":
+                            {
+                                GLR1();
+                                break;
+                            }
+                            case "GLR2":
+                            {
+                                GLR2();
+                                break;
+                            }
                             case "GNR1":
                             {
                                 GNR1();
