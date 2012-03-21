@@ -50,13 +50,16 @@ public class RealMachineGUI extends javax.swing.JFrame {
         updateFlagInfo();
         //Norim, kad adreso stulpelio dydis nesikeistu - vietos butu tiek, kiek uztenka
         memoryTable.getColumnModel().getColumn(0).setMaxWidth(32);
-        memoryTable.getColumnModel().getColumn(0).setMinWidth(32);
+        memoryTable.getColumnModel().getColumn(0).setMinWidth(32);       
+        vm1MemoryTable.getColumnModel().getColumn(0).setMaxWidth(32);
+        vm1MemoryTable.getColumnModel().getColumn(0).setMinWidth(32);
         MemoryTableRenderer cr=new MemoryTableRenderer();
         MemoryTableFirstColumnRenderer cfr = new MemoryTableFirstColumnRenderer(RM);
         memoryTable.getColumn(memoryTable.getColumnName(0)).setCellRenderer(cfr);
         for (int i=1;i < memoryTable.getColumnCount(); i++)
         {
             memoryTable.getColumn(memoryTable.getColumnName(i)).setCellRenderer(cr);
+            vm1MemoryTable.getColumn(memoryTable.getColumnName(i)).setCellRenderer(cr);
         }
     }
     
