@@ -75,8 +75,8 @@ public class VirtualMachine {
     {    
         if ((RealMachine.SI.getValue() != 5) && (RealMachine.PI.getValue() != 2))
         {
-            processCommand(getCurrentCommand());
-            goToNextCommand();      
+            if (processCommand(getCurrentCommand()) == 0)
+                goToNextCommand();      
         }
     }
     
@@ -112,13 +112,14 @@ public class VirtualMachine {
     }
     
     
-    private void processCommand(int currentWord)
+    private int processCommand(int currentWord)
     {
         String OPC = "";
         int xx;
         
         OPC = encodeBytes3and2(currentWord);
         xx = XXAdress(currentWord);
+        
         
         switch(OPC)
         {
@@ -323,7 +324,14 @@ public class VirtualMachine {
                 } 
             }   
         }
+
         System.out.println(" -- > Code:" + OPC);  
+        if (OPC == "JP" || OPC == "JE" || OPC == "JG"
+                || OPC == "JL" || OPC == "JX" || OPC == "LO")
+            return 1;
+        else
+            return 0;
+
     }   
         
     //Aritmetinės komandos
