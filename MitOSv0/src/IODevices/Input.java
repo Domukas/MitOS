@@ -16,13 +16,12 @@ public class Input {
     {
        inputWindow =  new InputWindow();
        inputWindow.setVisible(true);
-       
     }
     public int[] get()
     {
         String text = inputWindow.getText();
-        int[] numberArray = new int[16];
-        int maxLen = 16;
+        byte[] byteArray = new byte[64];
+        int maxLen = 64;
         
         if (text.length() < maxLen)
             maxLen = text.length();
@@ -31,11 +30,11 @@ public class Input {
         {
             char symbol = text.charAt(i);
             if (isNumeric(symbol))
-                numberArray[i] = Character.digit(text.charAt(i), 10);
+                byteArray[i] = (byte)Character.digit(text.charAt(i), 10);
             else
-                numberArray[i] = (int)symbol;  
+                byteArray[i] = (byte)symbol;
         }
-        return numberArray;
+        return byteToInt(byteArray);
    }  
     
     private boolean isNumeric(char symbol){
@@ -47,6 +46,29 @@ public class Input {
         }catch(Exception e){
             return false;
         }
+    }
+    
+    private int[] byteToInt(byte[] buf)
+    {
+        int[] newInt = new int [16];
+        byte[] bytebuf = new byte[4];
+        
+        for (int i = 0; i < 8; i++)
+        {
+            bytebuf = new byte[4];
+            int z = 0;
+            for (int m = i*4; m < i*4 + 4; m++)
+            {
+             bytebuf[z] = buf[m];
+             z++;
+            }
+            
+            for (int n = 3; n >= 0; n--)
+            {
+                newInt[i] += ((int)bytebuf[3-n]) << 8*n;
+            }
+        }
+        return newInt;  
     }
 
     
