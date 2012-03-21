@@ -102,7 +102,7 @@ public class RealMachine {
 
         VirtualMemory virtualMemory = new VirtualMemory(PLR, memory);
         
-        loadProgram(virtualMemory, "src/mitosv0/program.mit");
+        loadProgram(virtualMemory, "src/mitosv0/program2.mit");
         
         VM = new VirtualMachine(R1, R2, IC, C, virtualMemory);
     }
@@ -117,6 +117,16 @@ public class RealMachine {
                 memory.setWord(i, byteBufferToInt(buffer));
                 i++;
             }
+            
+            if (i >= 256)
+            {
+                System.out.println("Nėra laisvos vietos");
+            }
+            else
+            {
+                RealMachine.IC.setValue(0);
+            }
+            
         } catch (IOException ex) {
             Logger.getLogger(MitOSv0.class.getName()).log(Level.SEVERE, null, ex);
         }
