@@ -22,6 +22,7 @@ public class RealMachineGUI extends javax.swing.JFrame {
     
     RealMachine RM;
     JTable vm1MemoryTable;
+    int focusGained;
     
     //Reikalinga nusakyti lenteles reiksmiu tipui
     TableDataTypes tableDataType = TableDataTypes.Hex;
@@ -189,26 +190,80 @@ public class RealMachineGUI extends javax.swing.JFrame {
 
         jLabel1.setText("PLR");
         registerPanel1.add(jLabel1);
+
+        PLRTextField.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                PLRTextFieldFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                PLRTextFieldFocusLost(evt);
+            }
+        });
         registerPanel1.add(PLRTextField);
 
         jLabel2.setText("R1");
         registerPanel1.add(jLabel2);
+
+        R1TextField.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                R1TextFieldFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                R1TextFieldFocusLost(evt);
+            }
+        });
         registerPanel1.add(R1TextField);
 
         jLabel3.setText("R2");
         registerPanel1.add(jLabel3);
+
+        R2TextField.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                R2TextFieldFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                R2TextFieldFocusLost(evt);
+            }
+        });
         registerPanel1.add(R2TextField);
 
         jLabel4.setText("IC");
         registerPanel1.add(jLabel4);
+
+        ICTextField.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                ICTextFieldFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                ICTextFieldFocusLost(evt);
+            }
+        });
         registerPanel1.add(ICTextField);
 
         jLabel5.setText("C");
         registerPanel1.add(jLabel5);
+
+        CTextField.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                CTextFieldFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                CTextFieldFocusLost(evt);
+            }
+        });
         registerPanel1.add(CTextField);
 
         jLabel6.setText("S");
         registerPanel1.add(jLabel6);
+
+        STextField.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                STextFieldFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                STextFieldFocusLost(evt);
+            }
+        });
         registerPanel1.add(STextField);
 
         operationsPanel.add(registerPanel1);
@@ -219,6 +274,15 @@ public class RealMachineGUI extends javax.swing.JFrame {
 
         jLabel7.setText("TIMER");
         registerPanel2.add(jLabel7);
+
+        TimerTextField.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                TimerTextFieldFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                TimerTextFieldFocusLost(evt);
+            }
+        });
         registerPanel2.add(TimerTextField);
 
         jLabel8.setText("MODE");
@@ -234,10 +298,28 @@ public class RealMachineGUI extends javax.swing.JFrame {
 
         jLabel9.setText("PI");
         registerPanel2.add(jLabel9);
+
+        PITextField.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                PITextFieldFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                PITextFieldFocusLost(evt);
+            }
+        });
         registerPanel2.add(PITextField);
 
         jLabel10.setText("SI");
         registerPanel2.add(jLabel10);
+
+        SITextField.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                SITextFieldFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                SITextFieldFocusLost(evt);
+            }
+        });
         registerPanel2.add(SITextField);
 
         jLabel11.setText("CH1");
@@ -339,7 +421,7 @@ public class RealMachineGUI extends javax.swing.JFrame {
         jScrollPane1.setViewportView(memoryTable);
         memoryTable.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
 
-        memoryTabbedPane.addTab("RM", jScrollPane1);
+        memoryTabbedPane.addTab("tab1", jScrollPane1);
 
         memoryPanel.add(memoryTabbedPane);
 
@@ -449,6 +531,132 @@ public class RealMachineGUI extends javax.swing.JFrame {
         RM.VM.run();
         updateAll();
     }//GEN-LAST:event_runButtonActionPerformed
+
+    private void R1TextFieldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_R1TextFieldFocusGained
+        focusGained = Integer.valueOf(R1TextField.getText(), 16).intValue();
+    }//GEN-LAST:event_R1TextFieldFocusGained
+
+    private void R2TextFieldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_R2TextFieldFocusGained
+        focusGained = Integer.valueOf(R2TextField.getText(), 16).intValue();
+    }//GEN-LAST:event_R2TextFieldFocusGained
+
+    private void ICTextFieldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_ICTextFieldFocusGained
+        focusGained = Integer.valueOf(ICTextField.getText(), 16).intValue();
+    }//GEN-LAST:event_ICTextFieldFocusGained
+
+    private void CTextFieldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_CTextFieldFocusGained
+        focusGained = Integer.valueOf(CTextField.getText(), 16).intValue();
+    }//GEN-LAST:event_CTextFieldFocusGained
+
+    private void STextFieldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_STextFieldFocusGained
+        focusGained = Integer.valueOf(STextField.getText(), 16).intValue();
+    }//GEN-LAST:event_STextFieldFocusGained
+
+    private void PLRTextFieldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_PLRTextFieldFocusGained
+        focusGained = Integer.valueOf(PLRTextField.getText(), 16).intValue();
+    }//GEN-LAST:event_PLRTextFieldFocusGained
+
+    private void PITextFieldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_PITextFieldFocusGained
+        focusGained = Integer.valueOf(PITextField.getText(), 16).intValue();
+    }//GEN-LAST:event_PITextFieldFocusGained
+
+    private void SITextFieldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_SITextFieldFocusGained
+        focusGained = Integer.valueOf(SITextField.getText(), 16).intValue();
+    }//GEN-LAST:event_SITextFieldFocusGained
+
+    private void PLRTextFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_PLRTextFieldFocusLost
+        try
+        {
+            RM.PLR.setValue(Integer.valueOf(PLRTextField.getText(), 16).intValue());
+        }catch(Exception e)
+        {
+            PLRTextField.setText(Integer.toHexString(focusGained));
+        }
+    }//GEN-LAST:event_PLRTextFieldFocusLost
+
+    private void R1TextFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_R1TextFieldFocusLost
+        try
+        {
+            RM.R1.setValue(Integer.valueOf(R1TextField.getText(), 16).intValue());
+        }catch(Exception e)
+        {
+            R1TextField.setText(Integer.toHexString(focusGained));
+        }
+    }//GEN-LAST:event_R1TextFieldFocusLost
+
+    private void R2TextFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_R2TextFieldFocusLost
+        try
+        {
+            RM.R2.setValue(Integer.valueOf(R2TextField.getText(), 16).intValue());
+        }catch(Exception e)
+        {
+            R2TextField.setText(Integer.toHexString(focusGained));
+        }
+    }//GEN-LAST:event_R2TextFieldFocusLost
+
+    private void ICTextFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_ICTextFieldFocusLost
+        try
+        {
+            RM.IC.setValue(Integer.valueOf(ICTextField.getText(), 16).intValue());
+        }catch(Exception e)
+        {
+            ICTextField.setText(Integer.toHexString(focusGained));
+        }
+    }//GEN-LAST:event_ICTextFieldFocusLost
+
+    private void CTextFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_CTextFieldFocusLost
+        try
+        {
+            RM.C.setValue(Integer.valueOf(CTextField.getText(), 16).intValue());
+        }catch(Exception e)
+        {
+            CTextField.setText(Integer.toHexString(focusGained));
+        }
+    }//GEN-LAST:event_CTextFieldFocusLost
+
+    private void STextFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_STextFieldFocusLost
+        try
+        {
+            RM.S.setValue(Integer.valueOf(STextField.getText(), 16).intValue());
+        }catch(Exception e)
+        {
+            STextField.setText(Integer.toHexString(focusGained));
+        }
+    }//GEN-LAST:event_STextFieldFocusLost
+
+    private void TimerTextFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_TimerTextFieldFocusLost
+        try
+        {
+            RM.timer.setValue(Integer.valueOf(TimerTextField.getText(), 16).intValue());
+        }catch(Exception e)
+        {
+            TimerTextField.setText(Integer.toHexString(focusGained));
+        }
+    }//GEN-LAST:event_TimerTextFieldFocusLost
+
+    private void TimerTextFieldFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_TimerTextFieldFocusGained
+        focusGained = Integer.valueOf(TimerTextField.getText(), 16).intValue();
+    }//GEN-LAST:event_TimerTextFieldFocusGained
+
+    private void PITextFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_PITextFieldFocusLost
+        try
+        {
+            RM.PI.setValue(Integer.valueOf(PITextField.getText(), 16).intValue());
+        }catch(Exception e)
+        {
+            PITextField.setText(Integer.toHexString(focusGained));
+        }
+    }//GEN-LAST:event_PITextFieldFocusLost
+
+    private void SITextFieldFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_SITextFieldFocusLost
+        try
+        {
+            RM.SI.setValue(Integer.valueOf(SITextField.getText(), 16).intValue());
+        }catch(Exception e)
+        {
+            SITextField.setText(Integer.toHexString(focusGained));
+        }
+    }//GEN-LAST:event_SITextFieldFocusLost
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JToggleButton CH1ToggleButton;
