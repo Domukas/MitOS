@@ -4,6 +4,11 @@
  */
 package mitosv0;
 
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.sound.sampled.LineUnavailableException;
 import mitosv0.registers.ICRegister;
 import mitosv0.registers.DataRegister;
 import mitosv0.registers.CRegister;
@@ -109,7 +114,7 @@ public class VirtualMachine {
     
     private int processCommand(int currentWord)
     {
-        String OPC;
+        String OPC = "";
         int xx;
         
         OPC = encodeBytes3and2(currentWord);
@@ -544,69 +549,33 @@ public class VirtualMachine {
     //Garsiakalbio komandos
     
     public void GGR1(){
-        RealMachine.SI.setValue(3);
-        RealMachine.mode.SetSupervisor();
-        
-                //reikia kad gui'ui rodytu kai keiciasi mode
         int volume = RealMachine.R1.getValue();
         RealMachine.speakers.setVolume(volume);
-        RealMachine.SI.setValue(0);
-        RealMachine.mode.setUser();     
     }
     
     public void GGR2(){
-        RealMachine.SI.setValue(3);
-        RealMachine.mode.SetSupervisor();
-        
-                //reikia kad gui'ui rodytu kai keiciasi mode
         int volume = RealMachine.R2.getValue();
         RealMachine.speakers.setVolume(volume);
-        RealMachine.SI.setValue(0);
-        RealMachine.mode.setUser();  
     }
     
     public void GLR1(){
-        RealMachine.SI.setValue(3);
-        RealMachine.mode.SetSupervisor();
-        
-                //reikia kad gui'ui rodytu kai keiciasi mode
         int volume = RealMachine.R1.getValue();
         RealMachine.speakers.setLength(volume);
-        RealMachine.SI.setValue(0);
-        RealMachine.mode.setUser();
     }
     
     public void GLR2(){
-        RealMachine.SI.setValue(3);
-        RealMachine.mode.SetSupervisor();
-        
-                //reikia kad gui'ui rodytu kai keiciasi mode
         int volume = RealMachine.R2.getValue();
         RealMachine.speakers.setLength(volume);
-        RealMachine.SI.setValue(0);
-        RealMachine.mode.setUser();
     }
     
     public void GNR1(){
-        RealMachine.SI.setValue(3);
-        RealMachine.mode.SetSupervisor();
-        
-                //reikia kad gui'ui rodytu kai keiciasi mode
         int value = RealMachine.R1.getValue();
         RealMachine.speakers.play(value);
-        RealMachine.SI.setValue(0);
-        RealMachine.mode.setUser();
     }
     
     public void GNR2(){
-        RealMachine.SI.setValue(3);
-        RealMachine.mode.SetSupervisor();
-        
-                //reikia kad gui'ui rodytu kai keiciasi mode
         int value = RealMachine.R2.getValue();
         RealMachine.speakers.play(value);
-        RealMachine.SI.setValue(0);
-        RealMachine.mode.setUser();
     }
     
     //Programos pabaigos komadna
