@@ -91,7 +91,7 @@ public class RealMachine {
         Random rnd = new Random();
         for (int i = 0; i < 16; i++){
             int blockIndex = rnd.nextInt(PLR_MAX_BLOCK_INDEX);
-            for (int j = 0; j < i; j++){
+            for (int j = 0; j <= i; j++){
                 if (blockIndex == block.getWord(j)){
                     blockIndex = rnd.nextInt(PLR_MAX_BLOCK_INDEX);
                     j = 0;
@@ -117,6 +117,16 @@ public class RealMachine {
                 memory.setWord(i, byteBufferToInt(buffer));
                 i++;
             }
+            
+            if (i >= 256)
+            {
+                System.out.println("Nėra laisvos vietos");
+            }
+            else
+            {
+                RealMachine.IC.setValue(0);
+            }
+            
         } catch (IOException ex) {
             Logger.getLogger(MitOSv0.class.getName()).log(Level.SEVERE, null, ex);
         }

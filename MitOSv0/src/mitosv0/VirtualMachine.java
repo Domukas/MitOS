@@ -549,31 +549,38 @@ public class VirtualMachine {
     //Garsiakalbio komandos
     
     public void GGR1(){
+        RealMachine.SI.setValue(3);
+        
         int volume = RealMachine.R1.getValue();
         RealMachine.speakers.setVolume(volume);
     }
     
     public void GGR2(){
+        RealMachine.SI.setValue(3);
         int volume = RealMachine.R2.getValue();
         RealMachine.speakers.setVolume(volume);
     }
     
     public void GLR1(){
+        RealMachine.SI.setValue(3);
         int volume = RealMachine.R1.getValue();
         RealMachine.speakers.setLength(volume);
     }
     
     public void GLR2(){
+        RealMachine.SI.setValue(3);
         int volume = RealMachine.R2.getValue();
         RealMachine.speakers.setLength(volume);
     }
     
     public void GNR1(){
+        RealMachine.SI.setValue(3);
         int value = RealMachine.R1.getValue();
         RealMachine.speakers.play(value);
     }
     
     public void GNR2(){
+        RealMachine.SI.setValue(3);
         int value = RealMachine.R2.getValue();
         RealMachine.speakers.play(value);
     }
