@@ -68,6 +68,7 @@ public class RealMachineGUI extends javax.swing.JFrame {
         updateRegisterFields();
         updateFlagInfo();
         memoryTable.repaint();
+        vm1MemoryTable.repaint();
     }
         
     private void updateRegisterFields()
@@ -392,16 +393,19 @@ public class RealMachineGUI extends javax.swing.JFrame {
     private void tableDataTypeIntegerToggleButtonActionPerformed(java.awt.event.ActionEvent evt) {                                                                 
         tableDataType = TableDataTypes.Int;
         memoryTable.repaint();
+        vm1MemoryTable.repaint();
     }                                                                
 
     private void tableDataTypeCharToggleButtonActionPerformed(java.awt.event.ActionEvent evt) {                                                              
         tableDataType = TableDataTypes.Char;
         memoryTable.repaint();
+        vm1MemoryTable.repaint();
     }                                                             
 
     private void tableDataTypeHexToggleButtonActionPerformed(java.awt.event.ActionEvent evt) {                                                             
         tableDataType = TableDataTypes.Hex;
         memoryTable.repaint();
+        vm1MemoryTable.repaint();
         
     }                                                            
 

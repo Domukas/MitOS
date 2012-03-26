@@ -91,7 +91,7 @@ public class RealMachine {
         Random rnd = new Random();
         for (int i = 0; i < 16; i++){
             int blockIndex = rnd.nextInt(PLR_MAX_BLOCK_INDEX);
-            for (int j = 0; j < i; j++){
+            for (int j = 0; j <= i; j++){
                 if (blockIndex == block.getWord(j)){
                     blockIndex = rnd.nextInt(PLR_MAX_BLOCK_INDEX);
                     j = 0;
@@ -102,7 +102,7 @@ public class RealMachine {
 
         VirtualMemory virtualMemory = new VirtualMemory(PLR, memory);
         
-        loadProgram(virtualMemory, "src/mitosv0/program2.mit");
+        loadProgram(virtualMemory, "src/mitosv0/program.mit");
         
         VM = new VirtualMachine(R1, R2, IC, C, virtualMemory);
     }
