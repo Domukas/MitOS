@@ -11,8 +11,6 @@ package mitosv0.registers;
 public class INTRegister{
     
     private byte data;
-    // 	1 – Jei suveikė atminties apsauga.
-    //	2 – Jei operacijos kodas neegzistuoja.
 
 
     public INTRegister()

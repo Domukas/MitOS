@@ -4,11 +4,17 @@
  */
 package GUI;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.LinkedList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
 import mitosv0.RealMachine;
+import mitosv0.VirtualMachine;
 import mitosv0.Word;
 
 /**
@@ -65,16 +71,19 @@ public class RealMachineGUI extends javax.swing.JFrame {
         }
     }
     
-        public void updateAll()
-        {
+    public void updateAll()
+    {
         updateRegisterFields();
         updateFlagInfo();
+        this.requestFocus();
+        this.repaint();
         memoryTable.repaint();
         vm1MemoryTable.repaint();
     }
         
     private void updateRegisterFields()
     {
+        repaint();
         PLRTextField.setText(Integer.toHexString(RM.PLR.getValue()));
         R1TextField.setText(RM.R1.getValue().getValue());
         R2TextField.setText(RM.R2.getValue().getValue());
@@ -83,11 +92,13 @@ public class RealMachineGUI extends javax.swing.JFrame {
         STextField.setText(Integer.toHexString(RM.S.getValue()));
         
         TimerTextField.setText(Integer.toHexString(RM.timer.getValue()));
+        
         MODEToggleButton.setText(modeToString(RM.mode.isSupervisor()));
         MODEToggleButton.setSelected(RM.mode.isSupervisor());
+        
         PITextField.setText(Integer.toHexString(RM.PI.getValue()));
-        SITextField.setText(Integer.toHexString(RM.SI.getValue()));
-
+        SITextField.setText(Integer.toString(RM.SI.getValue()));
+        
         CH1ToggleButton.setText(CHStateToString(RM.CH1.isOpen()));
         CH1ToggleButton.setSelected(RM.CH1.isOpen());
         CH2ToggleButton.setText(CHStateToString(RM.CH2.isOpen()));
@@ -116,10 +127,20 @@ public class RealMachineGUI extends javax.swing.JFrame {
 
     private String modeToString(boolean mode)
     {
-        if (!mode)
+        if (mode)
             return new String ("Superv.");
         else 
             return new String ("User");
+    }
+    
+    public void showMessage(String text)
+    {
+        JOptionPane.showMessageDialog(this, text);
+    }
+    
+    public String showInputMessageBox(String message)
+    {
+        return JOptionPane.showInputDialog(this, message);
     }
     
     /**
@@ -465,12 +486,12 @@ public class RealMachineGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_runButtonActionPerformed
 
     private void R2TextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_R2TextFieldActionPerformed
-        RM.R2.setValue(new Word(Short.parseShort(R2TextField.getText(), 16)));
+        RM.R2.setValue(new Word(Integer.parseInt(R2TextField.getText(), 16)));
         updateAll();
     }//GEN-LAST:event_R2TextFieldActionPerformed
 
     private void R1TextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_R1TextFieldActionPerformed
-        RM.R1.setValue(new Word(Short.parseShort(R2TextField.getText(), 16)));
+        RM.R1.setValue(new Word(Integer.parseInt(R1TextField.getText(), 16)));
         updateAll();
     }//GEN-LAST:event_R1TextFieldActionPerformed
 

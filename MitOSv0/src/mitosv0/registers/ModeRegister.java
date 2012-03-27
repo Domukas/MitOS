@@ -16,7 +16,7 @@ public class ModeRegister {
     
     public ModeRegister()
     {
-        state = true;
+        state = false;
     }
     
     public void SetSupervisor()

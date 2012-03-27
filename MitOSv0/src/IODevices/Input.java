@@ -4,6 +4,7 @@
  */
 package IODevices;
 
+import mitosv0.RealMachine;
 import mitosv0.TypeConversion;
 
 /**
@@ -12,17 +13,9 @@ import mitosv0.TypeConversion;
  */
 public class Input {
     
-    InputWindow inputWindow;
-    
-    public Input()
-    {
-       inputWindow =  new InputWindow();
-       inputWindow.setVisible(true);
-    }
     public String get()
     {
-        String text = inputWindow.getText();
-
+        String text = RealMachine.gui.showInputMessageBox("Input");
        
         if (text.length() > 64)
             text = text.substring(0, 64);

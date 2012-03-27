@@ -25,7 +25,6 @@ public class MitOSv0 {
 
         RealMachine RM = new RealMachine(0x10F);
         RealMachineGUI rmGUI = new RealMachineGUI(RM);
- 
-
+        RM.addGui(rmGUI);
     }
 }

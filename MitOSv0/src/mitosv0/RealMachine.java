@@ -28,6 +28,9 @@ import mitosv0.registers.CHRegister;
  * @author Tomas
  */
 public class RealMachine {
+    
+    public static RealMachineGUI gui;
+    
     public static PLRRegister PLR;
     public static DataRegister R1, R2;
     public static ICRegister IC;
@@ -59,7 +62,7 @@ public class RealMachine {
         IC = new ICRegister();
         C = new CRegister();
         S = new SemaphoreRegister();
-        timer = new TimerRegister(3); //Skaicius???
+        timer = new TimerRegister(50); 
         mode  = new ModeRegister();
         PI = new INTRegister();
         SI = new INTRegister();
@@ -145,6 +148,10 @@ public class RealMachine {
     }
     
         
+    public void addGui(RealMachineGUI g)
+    {
+        gui = g;
+    }
 
     
     

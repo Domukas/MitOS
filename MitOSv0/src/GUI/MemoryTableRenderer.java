@@ -42,7 +42,7 @@ public Component getTableCellRendererComponent(JTable table, Object value,boolea
             {
                 for (int i = 0; i < 15; i++)
                 {
-                    if (column == RealMachine.IC.getValue()-1 % 16 && RealMachine.IC.getValue()-1 / 16 == row &&
+                    if (column == RealMachine.IC.getValue()+1 % 16 && RealMachine.IC.getValue()+1 / 16 == row &&
                             row == RealMachine.memory.getBlock(RealMachine.PLR.getA2()*0x10 + RealMachine.PLR.getA3()).getWord(i).getIntValue())
                 {
                     setBackground(new Color(0xFFFF00));

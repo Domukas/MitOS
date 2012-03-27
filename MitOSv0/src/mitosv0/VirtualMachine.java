@@ -4,6 +4,10 @@
  */
 package mitosv0;
 
+import java.lang.reflect.InvocationTargetException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.SwingUtilities;
 import mitosv0.registers.ICRegister;
 import mitosv0.registers.DataRegister;
 import mitosv0.registers.CRegister;
@@ -87,6 +91,8 @@ public class VirtualMachine {
         int val = IC.getValue();
         val++;
         IC.setValue(val);
+        
+        RealMachine.timer.timePass(1);
     }
        
     private void processCommand(Word currentWord)
@@ -409,35 +415,79 @@ public class VirtualMachine {
     public void LCK (int x)
     {
        RealMachine.SI.setValue(4);
-       RealMachine.mode.SetSupervisor(); //?
-       RealMachine.S.setBit(x);         //Šitą vėliau OS'as darys?
+       RealMachine.mode.SetSupervisor();
+       RealMachine.S.setBit(x);         
+       
+       RealMachine.gui.updateAll();
+       pause(1000);
+       
+       RealMachine.SI.setValue(0);
+       RealMachine.mode.setUser(); 
+       
+       RealMachine.gui.updateAll();
     }
     
     public void X1 (int xx)
     {
-        R1.setValue(memory.getSharedMemoryWord(xx));
+        int x = xx/0x10;
+        if (!RealMachine.S.isBitSet(x))
+        {
+            RealMachine.PI.setValue(1); //TODO
+            RealMachine.gui.showMessage("Accessing unavailable memory!");
+        }
+        else 
+            R1.setValue(memory.getSharedMemoryWord(xx));
     }
     
     public void X2 (int xx)
     {
-        R2.setValue(memory.getSharedMemoryWord(xx));
+        int x = xx/0x10;
+        if (!RealMachine.S.isBitSet(x))
+        {
+            RealMachine.PI.setValue(1); //TODO
+            RealMachine.gui.showMessage("Accessing unavailable memory!");
+        }
+        else 
+             R2.setValue(memory.getSharedMemoryWord(xx));
     }
     
     public void Z1 (int xx)
     {
-        memory.setSharedMemoryWord(xx, R1.getValue());
+        int x = xx/0x10;
+        if (!RealMachine.S.isBitSet(x))
+        {
+            RealMachine.PI.setValue(1); //TODO
+            RealMachine.gui.showMessage("Accessing unavailable memory!");
+        }
+        else 
+            memory.setSharedMemoryWord(xx, R1.getValue());
     }
 
     public void Z2 (int xx)
     {
-        memory.setSharedMemoryWord(xx, R2.getValue());
+        int x = xx/0x10;
+        if (!RealMachine.S.isBitSet(x))
+        {
+            RealMachine.PI.setValue(1); //TODO
+            RealMachine.gui.showMessage("Accessing unavailable memory!");
+        }
+        else 
+            memory.setSharedMemoryWord(xx, R2.getValue());
     }
     
     public void ULC (int x)
     {
        RealMachine.SI.setValue(4);
-       RealMachine.mode.SetSupervisor(); //?
-       RealMachine.S.unsetBit(x);       //Sitą vėliau OS'as darys?
+       RealMachine.mode.SetSupervisor(); 
+       RealMachine.S.unsetBit(x);   
+       
+       RealMachine.gui.updateAll();
+       pause(1000);
+       
+       RealMachine.SI.setValue(0);
+       RealMachine.mode.setUser();
+       
+       RealMachine.gui.updateAll();
     }    
     
     //Valdymo perdavimo komandos
@@ -485,9 +535,14 @@ public class VirtualMachine {
     
     public void DGT (int x)
     {
-
         RealMachine.SI.setValue(1);
         RealMachine.mode.SetSupervisor();
+        RealMachine.CH2.setClosed();
+        
+        RealMachine.gui.updateAll();
+        pause(1000);
+                
+        RealMachine.timer.timePass(2);
         
         String temp = RealMachine.in.get();
         for (int i = 0; i < temp.length() / 4 + 1; i++)
@@ -498,15 +553,22 @@ public class VirtualMachine {
             
            setWord(x * 0x10 + i, new Word(temp.substring(i*4, end)));
         }
-    
+        
+        RealMachine.CH2.setOpen();
         RealMachine.SI.setValue(0);
         RealMachine.mode.setUser();
     }
     
     public void DPT (int x)
     {
-        RealMachine.SI.setValue(2);  
+        RealMachine.SI.setValue(2);      
         RealMachine.mode.SetSupervisor();
+        RealMachine.CH1.setClosed();
+        
+        RealMachine.gui.updateAll();
+        pause(1000);
+
+        RealMachine.timer.timePass(2);
         
         
         String temp = "";
@@ -520,8 +582,10 @@ public class VirtualMachine {
         
         RealMachine.out.send(temp);
         
-        RealMachine.SI.setValue(0);
+        RealMachine.CH1.setOpen();
         RealMachine.mode.setUser();
+        RealMachine.SI.setValue(0);
+           
         
 
     }    
@@ -700,5 +764,14 @@ public class VirtualMachine {
     public void setWord(int address, Word value)
     {
         memory.setWord(address, value);
+    }
+    
+    private void pause(int mils)
+    {
+         try
+         {
+            Thread.sleep(mils);
+         } 
+         catch (InterruptedException ex) {}
     }
 }

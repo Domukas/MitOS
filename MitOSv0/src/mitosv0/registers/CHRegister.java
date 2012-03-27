@@ -12,6 +12,11 @@ public class CHRegister {
     
     private boolean open;
     
+    public CHRegister()
+    {
+        open = true;
+    }
+    
     public void setClosed()
     {
         open = false;

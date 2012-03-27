@@ -6,10 +6,7 @@ package GUI;
 
 import javax.swing.JFrame;
 import javax.swing.table.AbstractTableModel;
-import mitosv0.Memory;
-import mitosv0.MemoryBlock;
-import mitosv0.RealMachine;
-import mitosv0.RealMemory;
+import mitosv0.*;
 
 /**
  *
@@ -31,7 +28,9 @@ public class MemoryTableModel extends TableModel {
         
         public void setValueAt(Object value, int row, int col) {
             String stringValue = (String) value;
-            int intValue;
+            
+            memory.getBlock(row).setWord(col-1, new Word(stringValue));
+            
             /*
             if (ownerGUI.getTableDataType() == RealMachineGUI.TableDataTypes.Int) {
                 try {
