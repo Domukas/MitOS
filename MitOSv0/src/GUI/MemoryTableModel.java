@@ -32,6 +32,7 @@ public class MemoryTableModel extends TableModel {
         public void setValueAt(Object value, int row, int col) {
             String stringValue = (String) value;
             int intValue;
+            /*
             if (ownerGUI.getTableDataType() == RealMachineGUI.TableDataTypes.Int) {
                 try {
                   intValue = Integer.parseInt(stringValue); 
@@ -50,24 +51,33 @@ public class MemoryTableModel extends TableModel {
                 }
                 memory.getBlock(row).setWord(col-1, intValue);
             }
+            * */
             fireTableCellUpdated(row, col);
         }
         
 	public Object getValueAt(int rowIndex, int columnIndex) {
             MemoryBlock memoryBlock;
             memoryBlock = memory.getBlock(rowIndex);
+            
+            if (columnIndex == 0) 
+                return Integer.toHexString(rowIndex);
+                else
+                return memoryBlock.getWord(columnIndex-1).getValue();
+            
+           
+            /*
             if (columnIndex == 0) {
                 return Integer.toHexString(rowIndex);
             } else if (ownerGUI.getTableDataType() == RealMachineGUI.TableDataTypes.Hex)
             {
-                return Integer.toHexString(memoryBlock.getWord(columnIndex-1));
+                return Integer.toHexString(memoryBlock.getWord(columnIndex-1).getShort());
             } else if (ownerGUI.getTableDataType() == RealMachineGUI.TableDataTypes.Int)
             {
                 return memoryBlock.getWord(columnIndex-1);
             } else 
             {
                 String str = "";
-                int value = memoryBlock.getWord(columnIndex-1);
+                int value = memoryBlock.getWord(columnIndex-1).getShort();
                 str = (char)(value % 0x100) + str; 
                 value /= 0x100; 
                 str = (char)(value % 0x100) + str; 
@@ -77,6 +87,8 @@ public class MemoryTableModel extends TableModel {
                 str = (char)(value % 0x100) + str; 
                 return str;
             }
+            * 
+            */
 	}
 	
 

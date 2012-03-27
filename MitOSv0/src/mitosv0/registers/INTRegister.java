@@ -8,7 +8,7 @@ package mitosv0.registers;
  *
  * @author Tomas
  */
-public class INTRegister extends Register{
+public class INTRegister{
     
     private byte data;
     // 	1 – Jei suveikė atminties apsauga.

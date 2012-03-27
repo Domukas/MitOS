@@ -4,24 +4,29 @@
  */
 package mitosv0.registers;
 
+import mitosv0.TypeConversion;
+import mitosv0.Word;
+
 /**
  *
  * @author Tomas
  */
-public class DataRegister extends Register {
+public class DataRegister {
 
-    private int data;
+    private Word data;
     
     public DataRegister()
     {
-        data = 0;
+        data = new Word();
     }
     
-    public void setValue(int value) {
+    public void setValue(Word value)
+    {
         data = value;
     }
     
-    public int getValue() {
+    public Word getValue()
+    {
         return data;
     }
     

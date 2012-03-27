@@ -9,17 +9,20 @@ package mitosv0;
  * @author Domukas
  */
 public class MemoryBlock {
-    private int [] data;
+    private Word [] data;
     public final int MEMORY_BLOCK_SIZE = 16;
     
     MemoryBlock(){
-        data = new int[MEMORY_BLOCK_SIZE];
+        data = new Word[MEMORY_BLOCK_SIZE];
+        
+        for (int i = 0; i < data.length; i++)
+            data[i] = new Word();
     }
     
-    public int getWord(int index){
+    public Word getWord(int index){
         return data[index];
     }
-    public void setWord(int index, int value){
+    public void setWord(int index, Word value){
         data[index] = value;
     }
     public int getBlockSize(){

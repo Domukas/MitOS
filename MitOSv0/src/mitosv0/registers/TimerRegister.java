@@ -8,7 +8,7 @@ package mitosv0.registers;
  *
  * @author Tomas
  */
-public class TimerRegister extends Register {
+public class TimerRegister{
    
     private byte interval;
     private byte time;

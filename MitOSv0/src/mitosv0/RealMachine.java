@@ -91,12 +91,12 @@ public class RealMachine {
         for (int i = 0; i < 16; i++){
             int blockIndex = rnd.nextInt(PLR_MAX_BLOCK_INDEX);
             for (int j = 0; j <= i; j++){
-                if (blockIndex == block.getWord(j)){
+                if (blockIndex == block.getWord(j).getIntValue()){
                     blockIndex = rnd.nextInt(PLR_MAX_BLOCK_INDEX);
                     j = 0;
                 }
             }
-            block.setWord(i,rnd.nextInt(PLR_MAX_BLOCK_INDEX));
+            block.setWord(i,new Word((short)rnd.nextInt(PLR_MAX_BLOCK_INDEX)));
         }
 
         VirtualMemory virtualMemory = new VirtualMemory(PLR, memory);
@@ -113,7 +113,7 @@ public class RealMachine {
             byte[] buffer = new byte[4];
             
             while ((input.read(buffer)) != -1){
-                memory.setWord(i, byteBufferToInt(buffer));
+                memory.setWord(i, new Word(TypeConversion.byteArrayToString(buffer)));
                 i++;
             }
             
@@ -145,16 +145,7 @@ public class RealMachine {
     }
     
         
-    private int byteBufferToInt(byte[] buf)
-    {
-        int newInt = 0;
-        
-        for (int i = 3; i >= 0; i--)
-        {
-            newInt += ((int)buf[3-i]) << 8*i;
-        }
-        return newInt;  
-    }
+
     
     
 }

@@ -9,6 +9,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import mitosv0.RealMachine;
+import mitosv0.Word;
 
 /**
  *
@@ -41,6 +42,7 @@ public class RealMachineGUI extends javax.swing.JFrame {
         this.setVisible(true);
         vm1MemoryTable = new JTable();
         vm1MemoryTable.setModel(new VirtualMemoryTableModel(RM,this));
+        
         memoryTabbedPane.add("VM1", new JScrollPane(vm1MemoryTable));
         vm1MemoryTable.setColumnSelectionAllowed(true);
         vm1MemoryTable.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
@@ -68,13 +70,14 @@ public class RealMachineGUI extends javax.swing.JFrame {
         updateRegisterFields();
         updateFlagInfo();
         memoryTable.repaint();
+        vm1MemoryTable.repaint();
     }
         
     private void updateRegisterFields()
     {
         PLRTextField.setText(Integer.toHexString(RM.PLR.getValue()));
-        R1TextField.setText(Integer.toHexString(RM.R1.getValue()));
-        R2TextField.setText(Integer.toHexString(RM.R2.getValue()));
+        R1TextField.setText(RM.R1.getValue().getValue());
+        R2TextField.setText(RM.R2.getValue().getValue());
         ICTextField.setText(Integer.toHexString(RM.IC.getValue()));
         CTextField.setText(Integer.toHexString(RM.C.getValue()));
         STextField.setText(Integer.toHexString(RM.S.getValue()));
@@ -167,14 +170,10 @@ public class RealMachineGUI extends javax.swing.JFrame {
         buttonPanel = new javax.swing.JPanel();
         runButton = new javax.swing.JButton();
         stepButton = new javax.swing.JButton();
-        memoryPanel = new javax.swing.JPanel();
         memoryTabbedPane = new javax.swing.JTabbedPane();
+        memoryPanel = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         memoryTable = new javax.swing.JTable();
-        jPanel2 = new javax.swing.JPanel();
-        tableDataTypeIntegerToggleButton = new javax.swing.JToggleButton();
-        tableDataTypeHexToggleButton = new javax.swing.JToggleButton();
-        tableDataTypeCharToggleButton = new javax.swing.JToggleButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         getContentPane().setLayout(new javax.swing.BoxLayout(getContentPane(), javax.swing.BoxLayout.LINE_AXIS));
@@ -193,22 +192,52 @@ public class RealMachineGUI extends javax.swing.JFrame {
 
         jLabel2.setText("R1");
         registerPanel1.add(jLabel2);
+
+        R1TextField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                R1TextFieldActionPerformed(evt);
+            }
+        });
         registerPanel1.add(R1TextField);
 
         jLabel3.setText("R2");
         registerPanel1.add(jLabel3);
+
+        R2TextField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                R2TextFieldActionPerformed(evt);
+            }
+        });
         registerPanel1.add(R2TextField);
 
         jLabel4.setText("IC");
         registerPanel1.add(jLabel4);
+
+        ICTextField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ICTextFieldActionPerformed(evt);
+            }
+        });
         registerPanel1.add(ICTextField);
 
         jLabel5.setText("C");
         registerPanel1.add(jLabel5);
+
+        CTextField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CTextFieldActionPerformed(evt);
+            }
+        });
         registerPanel1.add(CTextField);
 
         jLabel6.setText("S");
         registerPanel1.add(jLabel6);
+
+        STextField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                STextFieldActionPerformed(evt);
+            }
+        });
         registerPanel1.add(STextField);
 
         operationsPanel.add(registerPanel1);
@@ -219,6 +248,12 @@ public class RealMachineGUI extends javax.swing.JFrame {
 
         jLabel7.setText("TIMER");
         registerPanel2.add(jLabel7);
+
+        TimerTextField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                TimerTextFieldActionPerformed(evt);
+            }
+        });
         registerPanel2.add(TimerTextField);
 
         jLabel8.setText("MODE");
@@ -234,10 +269,22 @@ public class RealMachineGUI extends javax.swing.JFrame {
 
         jLabel9.setText("PI");
         registerPanel2.add(jLabel9);
+
+        PITextField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                PITextFieldActionPerformed(evt);
+            }
+        });
         registerPanel2.add(PITextField);
 
         jLabel10.setText("SI");
         registerPanel2.add(jLabel10);
+
+        SITextField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                SITextFieldActionPerformed(evt);
+            }
+        });
         registerPanel2.add(SITextField);
 
         jLabel11.setText("CH1");
@@ -291,12 +338,27 @@ public class RealMachineGUI extends javax.swing.JFrame {
         statusFlagPanel.setLayout(new javax.swing.BoxLayout(statusFlagPanel, javax.swing.BoxLayout.LINE_AXIS));
 
         ZFCheckBox.setText("ZF");
+        ZFCheckBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ZFCheckBoxActionPerformed(evt);
+            }
+        });
         statusFlagPanel.add(ZFCheckBox);
 
         SFCheckBox.setText("SF");
+        SFCheckBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                SFCheckBoxActionPerformed(evt);
+            }
+        });
         statusFlagPanel.add(SFCheckBox);
 
         OFCheckBox.setText("OF");
+        OFCheckBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                OFCheckBoxActionPerformed(evt);
+            }
+        });
         statusFlagPanel.add(OFCheckBox);
 
         operationsPanel.add(statusFlagPanel);
@@ -339,43 +401,11 @@ public class RealMachineGUI extends javax.swing.JFrame {
         jScrollPane1.setViewportView(memoryTable);
         memoryTable.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
 
-        memoryTabbedPane.addTab("RM", jScrollPane1);
+        memoryPanel.add(jScrollPane1);
 
-        memoryPanel.add(memoryTabbedPane);
+        memoryTabbedPane.addTab("tab1", memoryPanel);
 
-        jPanel2.setLayout(new javax.swing.BoxLayout(jPanel2, javax.swing.BoxLayout.LINE_AXIS));
-
-        tableDataTypeButtonGroup.add(tableDataTypeIntegerToggleButton);
-        tableDataTypeIntegerToggleButton.setText("Integer");
-        tableDataTypeIntegerToggleButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                tableDataTypeIntegerToggleButtonActionPerformed(evt);
-            }
-        });
-        jPanel2.add(tableDataTypeIntegerToggleButton);
-
-        tableDataTypeButtonGroup.add(tableDataTypeHexToggleButton);
-        tableDataTypeHexToggleButton.setSelected(true);
-        tableDataTypeHexToggleButton.setText("Hex");
-        tableDataTypeHexToggleButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                tableDataTypeHexToggleButtonActionPerformed(evt);
-            }
-        });
-        jPanel2.add(tableDataTypeHexToggleButton);
-
-        tableDataTypeButtonGroup.add(tableDataTypeCharToggleButton);
-        tableDataTypeCharToggleButton.setText("Char");
-        tableDataTypeCharToggleButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                tableDataTypeCharToggleButtonActionPerformed(evt);
-            }
-        });
-        jPanel2.add(tableDataTypeCharToggleButton);
-
-        memoryPanel.add(jPanel2);
-
-        getContentPane().add(memoryPanel);
+        getContentPane().add(memoryTabbedPane);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -388,22 +418,6 @@ public class RealMachineGUI extends javax.swing.JFrame {
     private void memoryTableInputMethodTextChanged(java.awt.event.InputMethodEvent evt) {//GEN-FIRST:event_memoryTableInputMethodTextChanged
 
     }//GEN-LAST:event_memoryTableInputMethodTextChanged
-
-    private void tableDataTypeIntegerToggleButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tableDataTypeIntegerToggleButtonActionPerformed
-        tableDataType = TableDataTypes.Int;
-        memoryTable.repaint();
-    }//GEN-LAST:event_tableDataTypeIntegerToggleButtonActionPerformed
-
-    private void tableDataTypeCharToggleButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tableDataTypeCharToggleButtonActionPerformed
-        tableDataType = TableDataTypes.Char;
-        memoryTable.repaint();
-    }//GEN-LAST:event_tableDataTypeCharToggleButtonActionPerformed
-
-    private void tableDataTypeHexToggleButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tableDataTypeHexToggleButtonActionPerformed
-        tableDataType = TableDataTypes.Hex;
-        memoryTable.repaint();
-        
-    }//GEN-LAST:event_tableDataTypeHexToggleButtonActionPerformed
 
     private void CH2ToggleButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CH2ToggleButtonActionPerformed
         if (CH2ToggleButton.isSelected())
@@ -450,6 +464,70 @@ public class RealMachineGUI extends javax.swing.JFrame {
         updateAll();
     }//GEN-LAST:event_runButtonActionPerformed
 
+    private void R2TextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_R2TextFieldActionPerformed
+        RM.R2.setValue(new Word(Short.parseShort(R2TextField.getText(), 16)));
+        updateAll();
+    }//GEN-LAST:event_R2TextFieldActionPerformed
+
+    private void R1TextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_R1TextFieldActionPerformed
+        RM.R1.setValue(new Word(Short.parseShort(R2TextField.getText(), 16)));
+        updateAll();
+    }//GEN-LAST:event_R1TextFieldActionPerformed
+
+    private void ICTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ICTextFieldActionPerformed
+        RM.IC.setValue(Integer.parseInt(ICTextField.getText(), 16));
+        updateAll();
+    }//GEN-LAST:event_ICTextFieldActionPerformed
+
+    private void CTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CTextFieldActionPerformed
+        RM.C.setValue(Integer.parseInt(CTextField.getText(), 16));
+        updateAll();        
+    }//GEN-LAST:event_CTextFieldActionPerformed
+
+    private void STextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_STextFieldActionPerformed
+        RM.S.setValue(Integer.parseInt(STextField.getText(), 16));
+        updateAll();
+    }//GEN-LAST:event_STextFieldActionPerformed
+
+    private void TimerTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TimerTextFieldActionPerformed
+        RM.timer.setValue(Integer.parseInt(TimerTextField.getText(), 16));
+        updateAll();
+    }//GEN-LAST:event_TimerTextFieldActionPerformed
+
+    private void PITextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PITextFieldActionPerformed
+        RM.PI.setValue(Integer.parseInt(PITextField.getText(), 16));
+        updateAll();
+    }//GEN-LAST:event_PITextFieldActionPerformed
+
+    private void SITextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SITextFieldActionPerformed
+        RM.SI.setValue(Integer.parseInt(SITextField.getText(), 16));
+        updateAll();
+    }//GEN-LAST:event_SITextFieldActionPerformed
+
+    private void ZFCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ZFCheckBoxActionPerformed
+        if (ZFCheckBox.isSelected())
+            RM.C.setZeroFlag();
+        else 
+            RM.C.unsetZeroFlag();
+        updateAll();
+    }//GEN-LAST:event_ZFCheckBoxActionPerformed
+
+    private void SFCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SFCheckBoxActionPerformed
+        if (SFCheckBox.isSelected())
+            RM.C.setSignFlag();
+        else 
+            RM.C.unsetSignFlag();
+        updateAll();
+    }//GEN-LAST:event_SFCheckBoxActionPerformed
+
+    private void OFCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OFCheckBoxActionPerformed
+        if (OFCheckBox.isSelected())
+            RM.C.setOverflowFlag();
+        else 
+            RM.C.unsetOverflowFlag();
+        updateAll();
+    }//GEN-LAST:event_OFCheckBoxActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JToggleButton CH1ToggleButton;
     private javax.swing.JToggleButton CH2ToggleButton;
@@ -483,7 +561,6 @@ public class RealMachineGUI extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JPanel memoryPanel;
     private javax.swing.JTabbedPane memoryTabbedPane;
@@ -495,8 +572,5 @@ public class RealMachineGUI extends javax.swing.JFrame {
     private javax.swing.JPanel statusFlagPanel;
     private javax.swing.JButton stepButton;
     private javax.swing.ButtonGroup tableDataTypeButtonGroup;
-    private javax.swing.JToggleButton tableDataTypeCharToggleButton;
-    private javax.swing.JToggleButton tableDataTypeHexToggleButton;
-    private javax.swing.JToggleButton tableDataTypeIntegerToggleButton;
     // End of variables declaration//GEN-END:variables
 }

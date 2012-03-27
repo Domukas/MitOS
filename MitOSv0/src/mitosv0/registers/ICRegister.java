@@ -8,7 +8,7 @@ package mitosv0.registers;
  *
  * @author Tomas
  */
-public class ICRegister extends Register {
+public class ICRegister{
 
     private short data; 
     

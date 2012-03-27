@@ -8,7 +8,7 @@ package mitosv0.registers;
  *
  * @author Tomas
  */
-public class CRegister extends Register {
+public class CRegister {
 
     private byte data;
     

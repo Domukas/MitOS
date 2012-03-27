@@ -70,13 +70,14 @@ public class VirtualMachine {
     {    
         if ((RealMachine.SI.getValue() != 5) && (RealMachine.PI.getValue() != 2))
         {
-            if (processCommand(getCurrentCommand()) == 0)
-                goToNextCommand();      
+            Word currentCommand = getCurrentCommand();
+            goToNextCommand();
+            processCommand(currentCommand);          
         }
     }
     
     
-    public int getCurrentCommand()
+    public Word getCurrentCommand()
     {
         return memory.getWord(IC.getValue());
     }
@@ -88,7 +89,7 @@ public class VirtualMachine {
         IC.setValue(val);
     }
        
-    private int processCommand(int currentWord)
+    private void processCommand(Word currentWord)
     {
         String OPC = "";
         int xx;
@@ -301,91 +302,86 @@ public class VirtualMachine {
         }
 
         System.out.println(" -- > Code:" + OPC);  
-        if (OPC == "JP" || OPC == "JE" || OPC == "JG"
-                || OPC == "JL" || OPC == "JX" || OPC == "LO")
-            return 1;
-        else
-            return 0;
-
     }   
         
     //Aritmetinės komandos
     public void A1(int xx)
     {
-        int oldValue = R1.getValue();
-        R1.setValue(oldValue + getWord(xx));
-        arithmeticFlagSet(oldValue, getWord(xx), R1.getValue());
+        int oldValue = R1.getValue().getIntValue();
+        R1.setValue(new Word ((oldValue + getWord(xx).getIntValue())));
+        arithmeticFlagSet(oldValue, getWord(xx).getIntValue(), R1.getValue().getIntValue());
     }
     
     public void A2(int xx)
     {
-        int oldValue = R2.getValue();
-        R2.setValue(oldValue + getWord(xx));
-        arithmeticFlagSet(oldValue, getWord(xx), R2.getValue());
+        int oldValue = R2.getValue().getIntValue();
+        R2.setValue(new Word ((oldValue + getWord(xx).getIntValue())));
+        arithmeticFlagSet(oldValue, getWord(xx).getIntValue(), R2.getValue().getIntValue());
     }
     
     public void B1(int xx)
-    {
-        int oldValue = R1.getValue();
-        R1.setValue(oldValue - getWord(xx));
-        arithmeticFlagSet(oldValue, getWord(xx), R1.getValue());
+    {        
+        int oldValue = R1.getValue().getIntValue();
+        R1.setValue(new Word ((oldValue - getWord(xx).getIntValue())));
+        System.out.println(oldValue - getWord(xx).getIntValue());
+        arithmeticFlagSet(oldValue, getWord(xx).getIntValue(), R1.getValue().getIntValue());
     }   
 
     public void B2(int xx)
     {
-        int oldValue = R2.getValue();
-        R2.setValue(oldValue - getWord(xx));
-        arithmeticFlagSet(oldValue, getWord(xx), R2.getValue());
+        int oldValue = R2.getValue().getIntValue();
+        R2.setValue(new Word ((oldValue - getWord(xx).getIntValue())));
+        arithmeticFlagSet(oldValue, getWord(xx).getIntValue(), R2.getValue().getIntValue());
     }   
     
     public void MU(int xx)
     {
-        int oldValue = R1.getValue();
-        R1.setValue(oldValue * getWord(xx));
-        arithmeticFlagSet(oldValue, getWord(xx), R1.getValue());
+        int oldValue = R1.getValue().getIntValue();
+        R1.setValue(new Word ((oldValue * getWord(xx).getIntValue())));
+        arithmeticFlagSet(oldValue, getWord(xx).getIntValue(), R1.getValue().getIntValue());
     }   
     
     public void DI(int xx)
     {
-        R2.setValue(R1.getValue() % getWord(xx));
+        R2.setValue(new Word ((R1.getValue().getIntValue() % getWord(xx).getIntValue())));
         
-        int oldValue = R1.getValue();
-        R1.setValue(R1.getValue() / getWord(xx));
-        arithmeticFlagSet(oldValue, getWord(xx), R1.getValue());
+        int oldValue = R1.getValue().getIntValue();
+        R1.setValue(new Word ((oldValue / getWord(xx).getIntValue())));
+        arithmeticFlagSet(oldValue, getWord(xx).getIntValue(), R1.getValue().getIntValue());
     }
     
     //Loginės komandos
     public void XR (int xx)
     {
-        R1.setValue(R1.getValue() ^ getWord(xx));
-        setZfSf(R1.getValue());
+        R1.setValue(new Word ((R1.getValue().getIntValue() ^ getWord(xx).getIntValue())));
+        setZfSf(R1.getValue().getIntValue());
     }
 
     public void AN (int xx)
     {
-        R1.setValue(R1.getValue() & getWord(xx));
-        setZfSf(R1.getValue());
+        R1.setValue(new Word ((R1.getValue().getIntValue() & getWord(xx).getIntValue())));
+        setZfSf(R1.getValue().getIntValue());
     }
     
     public void OR (int xx)
     {
-        R1.setValue(R1.getValue() | getWord(xx));
-        setZfSf(R1.getValue());
+        R1.setValue(new Word ((R1.getValue().getIntValue() | getWord(xx).getIntValue())));
+        setZfSf(R1.getValue().getIntValue());
     }    
     
     //Palyginimo komandos
     public void C1 (int xx)
     {
-        int oldValue = R1.getValue();
-        int tempValue = oldValue - getWord(xx);        
-        arithmeticFlagSet(oldValue, getWord(xx), tempValue);
+        int oldValue = R1.getValue().getIntValue();
+        int tempValue = (oldValue - getWord(xx).getIntValue());        
+        arithmeticFlagSet(oldValue, getWord(xx).getIntValue(), tempValue);
     }
     
     public void C2 (int xx)
     {
-        int oldValue = R2.getValue();
-        int tempValue = oldValue - getWord(xx);
-        arithmeticFlagSet(oldValue, getWord(xx), tempValue);
+        int oldValue = R2.getValue().getIntValue();
+        int tempValue = (oldValue - getWord(xx).getIntValue());        
+        arithmeticFlagSet(oldValue, getWord(xx).getIntValue(), tempValue);
     }
     
     //Darbo su duomenimis komandos
@@ -448,6 +444,7 @@ public class VirtualMachine {
     
     public void JP (int xx)
     {
+        System.out.println(xx);
         IC.setValue(xx);
     }
     
@@ -471,14 +468,14 @@ public class VirtualMachine {
     
     public void JX (int xx)
     {   
-        IC.setValue(getWord(xx));
+        IC.setValue(getWord(xx).getIntValue());
     }    
     
     public void LO (int xx)
     {   
-        R2.setValue(R2.getValue() - 1);
+        R2.setValue(new Word ((R2.getValue().getIntValue() - 1)));
         
-        if (R2.getValue() > 0)
+        if (R2.getValue().getIntValue() > 0)
         {
             IC.setValue(xx);
         }    
@@ -488,30 +485,37 @@ public class VirtualMachine {
     
     public void DGT (int x)
     {
-        //TODO
+
         RealMachine.SI.setValue(1);
         RealMachine.mode.SetSupervisor();
         
-        int[] temp = RealMachine.in.get();
-        for (int i = 0; i < 16; i++)
+        String temp = RealMachine.in.get();
+        for (int i = 0; i < temp.length() / 4 + 1; i++)
         {
-           setWord(x * 0x10 + i, temp[i]);
+            int end = i*4+4;
+            if (end > temp.length())
+                end = temp.length();
+            
+           setWord(x * 0x10 + i, new Word(temp.substring(i*4, end)));
         }
-        
+    
         RealMachine.SI.setValue(0);
         RealMachine.mode.setUser();
     }
     
     public void DPT (int x)
     {
-        //TODO
         RealMachine.SI.setValue(2);  
         RealMachine.mode.SetSupervisor();
         
-        int[] temp = new int[16];
+        
+        String temp = "";
+        
         for (int i = 0; i < 16; i++)
         {
-            temp[i] = getWord(x * 0x10 + i);
+            String s = getWord(x * 0x10 + i).getValue();
+            if (!s.equals("0"))
+                temp = temp.concat(s);   
         }
         
         RealMachine.out.send(temp);
@@ -519,6 +523,7 @@ public class VirtualMachine {
         RealMachine.SI.setValue(0);
         RealMachine.mode.setUser();
         
+
     }    
     
     //Garsiakalbio komandos
@@ -528,7 +533,7 @@ public class VirtualMachine {
         RealMachine.mode.SetSupervisor();
         
             //reikia kad po puses komandos GUI atvaizduotu kad pasikeitineja modas ir SI
-        int volume = RealMachine.R1.getValue();
+        int volume = RealMachine.R1.getValue().getIntValue();
         RealMachine.speakers.setVolume(volume);
         RealMachine.SI.setValue(0);
         RealMachine.mode.setUser();       
@@ -539,7 +544,7 @@ public class VirtualMachine {
         RealMachine.mode.SetSupervisor();
         
             //reikia kad po puses komandos GUI atvaizduotu kad pasikeitineja modas ir SI
-        int volume = RealMachine.R2.getValue();
+        int volume = RealMachine.R2.getValue().getIntValue();
         RealMachine.speakers.setVolume(volume);
         RealMachine.SI.setValue(0);
         RealMachine.mode.setUser();
@@ -550,7 +555,7 @@ public class VirtualMachine {
         RealMachine.mode.SetSupervisor();
         
             //reikia kad po puses komandos GUI atvaizduotu kad pasikeitineja modas ir SI
-        int volume = RealMachine.R1.getValue();
+        int volume = RealMachine.R1.getValue().getIntValue();
         RealMachine.speakers.setLength(volume);
         RealMachine.SI.setValue(0);
         RealMachine.mode.setUser();
@@ -561,7 +566,7 @@ public class VirtualMachine {
         RealMachine.mode.SetSupervisor();
         
             //reikia kad po puses komandos GUI atvaizduotu kad pasikeitineja modas ir SI
-        int volume = RealMachine.R2.getValue();
+        int volume = RealMachine.R2.getValue().getIntValue();
         RealMachine.speakers.setLength(volume);
         RealMachine.SI.setValue(0);
         RealMachine.mode.setUser();
@@ -569,7 +574,7 @@ public class VirtualMachine {
     
     public void GNR1(){
         RealMachine.SI.setValue(3);
-        int value = RealMachine.R1.getValue();
+        int value = RealMachine.R1.getValue().getIntValue();
         RealMachine.speakers.play(value);
         RealMachine.SI.setValue(0);
         RealMachine.mode.setUser();
@@ -580,7 +585,7 @@ public class VirtualMachine {
         RealMachine.mode.SetSupervisor();
         
             //reikia kad po puses komandos GUI atvaizduotu kad pasikeitineja modas ir SI
-        int value = RealMachine.R2.getValue();
+        int value = RealMachine.R2.getValue().getIntValue();
         RealMachine.speakers.play(value);
         RealMachine.SI.setValue(0);
         RealMachine.mode.setUser();
@@ -635,30 +640,32 @@ public class VirtualMachine {
     }
     
     
-    private String encodeBytes3and2(int word)
+    private String encodeBytes3and2(Word word)
     {
         String OPC = "";
-        OPC += (char)((byte)(word >>> 24));
-        OPC += (char)((word >>> 16) % 0x100);
+        OPC += word.getValue().charAt(0);
+        OPC += word.getValue().charAt(1);
         return OPC;
     }
     
-    private char encodeByte1(int word)
+    private char encodeByte1(Word word)
     {
-        return (char)((word / 0x100) % 0x100);
+        return word.getValue().charAt(2);
     }
     
-    private char encodeByte0(int word)
+    private char encodeByte0(Word word)
     {
-        return (char)(word % 0x100);
+        return word.getValue().charAt(3);
     }
     
-    private int XXAdress(int word)
+    private int XXAdress(Word word)
     {
         String address = "";
         
-        address += encodeByte0(word);
-        address += encodeByte1(word);
+        address += word.getValue().charAt(2);
+        address += word.getValue().charAt(3);
+        
+        System.out.println("XXaddress ->" + address);
                
         try 
         {
@@ -670,7 +677,7 @@ public class VirtualMachine {
         }
     }  
     
-    private int XAdress(int word)
+    private int XAdress(Word word)
     {
         String address = "";
         address += encodeByte0(word);
@@ -685,12 +692,12 @@ public class VirtualMachine {
         }
     }
     
-    public int getWord(int address)
+    public Word getWord(int address)
     {
         return memory.getWord(address);
     }
     
-    public void setWord(int address, int value)
+    public void setWord(int address, Word value)
     {
         memory.setWord(address, value);
     }

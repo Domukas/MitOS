@@ -8,7 +8,7 @@ package mitosv0.registers;
  *
  * @author Tomas
  */
-public class SemaphoreRegister extends Register {
+public class SemaphoreRegister{
 
     private short data;
     

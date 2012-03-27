@@ -39,7 +39,7 @@ public Component getTableCellRendererComponent(JTable table, Object value,boolea
             setForeground(table.getForeground());
             //Spalvinam virtualios masinos atminties blokus geltonai
             for (int i = 0; i < 15; i++){
-                if (row == rm.memory.getBlock(rm.PLR.getA2()*0x10 + rm.PLR.getA3()).getWord(i))
+                if (row == rm.memory.getBlock(rm.PLR.getA2()*0x10 + rm.PLR.getA3()).getWord(i).getIntValue())
                 {
                     setBackground(new Color(0xFFFF00));
                     setToolTipText("Virtualios masinos "+(i+1)+" blokas");

@@ -8,7 +8,7 @@ package mitosv0.registers;
  *
  * @author Tomas
  */
-public class PLRRegister extends Register {
+public class PLRRegister{
 
     private int data;
     
