@@ -1,4 +1,5 @@
-L100
+L1ff
+L1FF
 DGT1
 DPT1
 HALT

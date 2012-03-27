@@ -659,10 +659,10 @@ public class VirtualMachine {
         
         address += encodeByte0(word);
         address += encodeByte1(word);
-        
+               
         try 
         {
-            return Integer.decode(address);
+            return Integer.parseInt(address, 16);
         } 
         catch (NumberFormatException e)
         {
@@ -677,7 +677,7 @@ public class VirtualMachine {
         
         try 
         {
-            return Integer.decode(address);
+            return Integer.parseInt(address, 16);
         } 
         catch (NumberFormatException e)
         {
