@@ -5,7 +5,6 @@
 package mitosv0;
 
 import GUI.RealMachineGUI;
-import GUI.VirtualMachineGUI;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;

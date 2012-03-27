@@ -7,7 +7,6 @@ package mitosv0;
 import IODevices.Output;
 import IODevices.Input;
 import GUI.RealMachineGUI;
-import GUI.VirtualMachineGUI;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;

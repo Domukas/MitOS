@@ -87,26 +87,7 @@ public class VirtualMachine {
         val++;
         IC.setValue(val);
     }
-    
-    private String encodeBytes3and2(int word)
-    {
-        String OPC = "";
-        OPC += (char)((byte)(word >>> 24));
-        OPC += (char)((word >>> 16) % 0x100);
-        return OPC;
-    }
-    
-    private char encodeByte1(int word)
-    {
-        return (char)((word / 0x100) % 0x100);
-    }
-    
-    private char encodeByte0(int word)
-    {
-        return (char)(word % 0x100);
-    }
-    
-    
+       
     private int processCommand(int currentWord)
     {
         String OPC = "";
@@ -114,8 +95,7 @@ public class VirtualMachine {
         
         OPC = encodeBytes3and2(currentWord);
         xx = XXAdress(currentWord);
-        
-        
+         
         switch(OPC)
         {
             case "A1":
@@ -655,17 +635,54 @@ public class VirtualMachine {
     }
     
     
+    private String encodeBytes3and2(int word)
+    {
+        String OPC = "";
+        OPC += (char)((byte)(word >>> 24));
+        OPC += (char)((word >>> 16) % 0x100);
+        return OPC;
+    }
+    
+    private char encodeByte1(int word)
+    {
+        return (char)((word / 0x100) % 0x100);
+    }
+    
+    private char encodeByte0(int word)
+    {
+        return (char)(word % 0x100);
+    }
+    
     private int XXAdress(int word)
     {
-        int xx;
-        xx = ((word / 0x100) % 0x100) * 0x10 + (word % 0x100);
-        return xx;
+        String address = "";
+        
+        address += encodeByte0(word);
+        address += encodeByte1(word);
+        
+        try 
+        {
+            return Integer.decode(address);
+        } 
+        catch (NumberFormatException e)
+        {
+            return 0;
+        }
     }  
     
     private int XAdress(int word)
     {
-        return word % 0x100;
+        String address = "";
+        address += encodeByte0(word);
         
+        try 
+        {
+            return Integer.decode(address);
+        } 
+        catch (NumberFormatException e)
+        {
+            return 0;
+        }
     }
     
     public int getWord(int address)

@@ -29,26 +29,12 @@ public class Input {
         for (int i = 0; i < maxLen; i++)
         {
             char symbol = text.charAt(i);
-            if (isNumeric(symbol))
-                byteArray[i] = (byte)Character.digit(text.charAt(i), 10);
-            else
-                byteArray[i] = (byte)symbol;
+           byteArray[i] = (byte)symbol;
         }
-        return byteArrayToIntArry(byteArray);
+        return byteArrayToIntArray(byteArray);
    }  
     
-    private boolean isNumeric(char symbol){
-        try{
-            String number="";
-            number = Character.toString(symbol);
-            Integer.parseInt(number);
-            return true;
-        }catch(Exception e){
-            return false;
-        }
-    }
-    
-    private int[] byteArrayToIntArry(byte[] buf)
+    private int[] byteArrayToIntArray(byte[] buf)
     {
         int[] newInt = new int [16];
         byte[] bytebuf;

@@ -20,12 +20,9 @@ public class Output {
     public void send(int[] numberArray){
         byte[] data = intArrayToByteArray(numberArray);
         String text = "";
-        for(int i=0; i<data.length; i++){
-            if(data[i]<=9){
-                text = text + data[i];
-            }else{
-                text = text + (char)data[i];
-            }
+        for(int i=0; i<data.length; i++)
+        {
+            text = text + (char)data[i];
         }
         outputWindow.setText(text);
     }
