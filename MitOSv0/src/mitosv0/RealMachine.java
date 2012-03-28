@@ -76,11 +76,11 @@ public class RealMachine {
         out = new Output();
         
         memory = new RealMemory(blocks);
-        
-        CreateVirtualMachine();
+        String taskName = "program";
+        CreateVirtualMachine(taskName);
     }
     
-    private void CreateVirtualMachine(){
+    public void CreateVirtualMachine(String taskName){
  
         Random rnd = new Random();
         //Nustatome PLR registro reiksmes skirtas vienai virtualiai masinai
@@ -98,7 +98,7 @@ public class RealMachine {
         for (int i = 0; i < 16; i++){
             int blockIndex = rnd.nextInt(PLR_MAX_BLOCK_INDEX);
             for (int j = 0; j <= i; j++){
-                if (blockIndex == block.getWord(j).getIntValue()){
+                if (blockIndex == block.getWord(j).getIntValue()){//TODO
                     blockIndex = rnd.nextInt(PLR_MAX_BLOCK_INDEX);
                     j = 0;
                 }
@@ -107,13 +107,13 @@ public class RealMachine {
         }
 
         VirtualMemory virtualMemory = new VirtualMemory(PLR, memory);
-        
-        loadProgram(virtualMemory, "src/mitosv0/program.mit");
+        loadProgram(virtualMemory, "src/mitosv0/"+taskName+".mit");
         
         VM = new VirtualMachine(R1, R2, IC, C, virtualMemory);
     }
     public void loadProgram(VirtualMemory memory, String fileName)
     {
+        VirtualMemory tmpMemory = memory;
         try {
             FileInputStream input = new FileInputStream(fileName);
             int i = 0;
@@ -134,7 +134,8 @@ public class RealMachine {
             }
             
         } catch (IOException ex) {
-            Logger.getLogger(MitOSv0.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("File not found");
+            //Logger.getLogger(MitOSv0.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     

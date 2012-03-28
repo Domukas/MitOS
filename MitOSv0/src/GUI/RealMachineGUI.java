@@ -4,6 +4,7 @@
  */
 package GUI;
 
+import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.util.LinkedList;
 import java.util.logging.Level;
@@ -190,15 +191,21 @@ public class RealMachineGUI extends javax.swing.JFrame {
         buttonPanel = new javax.swing.JPanel();
         runButton = new javax.swing.JButton();
         stepButton = new javax.swing.JButton();
+        jPanel1 = new javax.swing.JPanel();
+        TaskNameField = new javax.swing.JTextField();
+        TaskButton = new javax.swing.JButton();
         memoryTabbedPane = new javax.swing.JTabbedPane();
         memoryPanel = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         memoryTable = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setMinimumSize(new java.awt.Dimension(151, 500));
+        setPreferredSize(new java.awt.Dimension(647, 430));
+        setResizable(false);
         getContentPane().setLayout(new javax.swing.BoxLayout(getContentPane(), javax.swing.BoxLayout.LINE_AXIS));
 
-        operationsPanel.setMaximumSize(new java.awt.Dimension(160, 420));
+        operationsPanel.setMaximumSize(new java.awt.Dimension(160, 450));
         operationsPanel.setPreferredSize(new java.awt.Dimension(160, 400));
         operationsPanel.setLayout(new javax.swing.BoxLayout(operationsPanel, javax.swing.BoxLayout.PAGE_AXIS));
 
@@ -405,6 +412,21 @@ public class RealMachineGUI extends javax.swing.JFrame {
 
         operationsPanel.add(buttonPanel);
 
+        jPanel1.setLayout(new java.awt.BorderLayout());
+
+        TaskNameField.setText("Name of Task");
+        jPanel1.add(TaskNameField, java.awt.BorderLayout.CENTER);
+
+        TaskButton.setText("New Task");
+        TaskButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                TaskButtonActionPerformed(evt);
+            }
+        });
+        jPanel1.add(TaskButton, java.awt.BorderLayout.PAGE_END);
+
+        operationsPanel.add(jPanel1);
+
         getContentPane().add(operationsPanel);
 
         memoryPanel.setLayout(new javax.swing.BoxLayout(memoryPanel, javax.swing.BoxLayout.PAGE_AXIS));
@@ -548,6 +570,18 @@ public class RealMachineGUI extends javax.swing.JFrame {
         updateAll();
     }//GEN-LAST:event_OFCheckBoxActionPerformed
 
+    private void TaskButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TaskButtonActionPerformed
+            String taskName;
+            taskName = TaskNameField.getText();
+            File f = new File("src/mitosv0/"+taskName+".mit");
+            if(f.exists()){
+            RM.CreateVirtualMachine(taskName);
+            updateAll();       
+            }else{
+                showMessage("File not found.");
+            }
+    }//GEN-LAST:event_TaskButtonActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JToggleButton CH1ToggleButton;
     private javax.swing.JToggleButton CH2ToggleButton;
@@ -564,6 +598,8 @@ public class RealMachineGUI extends javax.swing.JFrame {
     private javax.swing.JCheckBox SFCheckBox;
     private javax.swing.JTextField SITextField;
     private javax.swing.JTextField STextField;
+    private javax.swing.JButton TaskButton;
+    private javax.swing.JTextField TaskNameField;
     private javax.swing.JTextField TimerTextField;
     private javax.swing.JCheckBox ZFCheckBox;
     private javax.swing.JPanel buttonPanel;
@@ -581,6 +617,7 @@ public class RealMachineGUI extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JPanel memoryPanel;
     private javax.swing.JTabbedPane memoryTabbedPane;

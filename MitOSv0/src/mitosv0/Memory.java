@@ -14,5 +14,4 @@ public abstract class Memory {
         MAX_MEMORY_BLOCKS = maxBlocks;
     }
     public abstract MemoryBlock getBlock(int index);
-    
 }
