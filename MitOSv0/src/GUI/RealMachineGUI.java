@@ -531,7 +531,7 @@ public class RealMachineGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_CTextFieldActionPerformed
 
     private void STextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_STextFieldActionPerformed
-        RM.S.setValue(Integer.parseInt(STextField.getText(), 16));
+        RM.S.setValue(Integer.parseInt(STextField.getText(),2));
         updateAll();
     }//GEN-LAST:event_STextFieldActionPerformed
 
