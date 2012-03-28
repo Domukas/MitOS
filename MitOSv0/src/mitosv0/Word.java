@@ -39,10 +39,11 @@ public class Word {
     
     public void setValue(String s)
     {
+    
         if (s.length() <= 4)
-            data = s.toUpperCase();
+            data = s;
         else 
-            data = s.substring(data.length()-4, data.length());
+            data = s.substring(0, 4);
     }
     
     public void setIntValue(int s)
