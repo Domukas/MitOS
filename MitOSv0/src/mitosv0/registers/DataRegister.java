@@ -4,6 +4,7 @@
  */
 package mitosv0.registers;
 
+import mitosv0.RealMachine;
 import mitosv0.TypeConversion;
 import mitosv0.Word;
 
@@ -22,7 +23,17 @@ public class DataRegister {
     
     public void setValue(Word value)
     {
-        data = value;
+        try
+        {
+            Integer.parseInt(value.getValue(), 16);
+            data = value;
+        }
+        catch (NumberFormatException e)
+        {
+            RealMachine.gui.showMessage(value.getValue() + " is not a valid number");
+            RealMachine.PI.setValue(1);
+            RealMachine.mode.SetSupervisor();
+        }
     }
     
     public Word getValue()
