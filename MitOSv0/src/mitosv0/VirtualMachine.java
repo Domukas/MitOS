@@ -67,17 +67,19 @@ public class VirtualMachine {
         do
         {
             step();
-        } while ((RealMachine.SI.getValue() != 5) && (RealMachine.PI.getValue() != 2));
+        } while ((RealMachine.SI.getValue() != 5) && (RealMachine.PI.getValue() == 0));
     }
     
     public void step()
     {    
-        if ((RealMachine.SI.getValue() != 5) && (RealMachine.PI.getValue() != 2))
+        if ((RealMachine.SI.getValue() != 5) && (RealMachine.PI.getValue() == 0))
         {
             Word currentCommand = getCurrentCommand();
             goToNextCommand();
             processCommand(currentCommand);          
         }
+        else
+            RealMachine.gui.showMessage("Program halted");
     }
     
     
@@ -300,6 +302,9 @@ public class VirtualMachine {
                             {
                                 //Opkodas neegzistuoja
                                 RealMachine.PI.setValue(2);
+                                RealMachine.mode.SetSupervisor();
+                                RealMachine.gui.showMessage("Opcode: " + OPC + " does not exist");
+
                             }
                         }
                     }
@@ -563,7 +568,7 @@ public class VirtualMachine {
         RealMachine.SI.setValue(2);      
         RealMachine.mode.SetSupervisor();
         RealMachine.CH1.setClosed();
-        
+           
         RealMachine.gui.updateAll();
         pause(1000);
 
@@ -659,12 +664,17 @@ public class VirtualMachine {
     public void HALT ()
     {
         RealMachine.SI.setValue(5);
+        RealMachine.mode.SetSupervisor();
     }
     
     //Pagalbinės (ne virtualios mašinos)
     private void arithmeticFlagSet(Word oldValue, Word operand, Word newValue)
     {       
         setZfSf(newValue);
+        
+        System.out.println(oldValue.getValue() + getSign(oldValue));
+        System.out.println(operand.getValue() + getSign(operand));
+        System.out.println(newValue.getValue() + getSign(newValue));
             
         if (((getSign(oldValue)) == getSign(operand))
             && (getSign(oldValue) != getSign(newValue)))
@@ -695,9 +705,13 @@ public class VirtualMachine {
     }
     
     private int getSign(Word value)
-    {
+    {     
         String s = "";
         s += value.getValue().charAt(0);
+               
+        if (value.getValue().length() < 4)
+            return 0;
+        
         int i = Integer.parseInt(s, 16);
         
         
@@ -706,8 +720,7 @@ public class VirtualMachine {
         else
             return 0;
     }
-    
-    
+   
     private String encodeBytes3and2(Word word)
     {
         String OPC = "";
