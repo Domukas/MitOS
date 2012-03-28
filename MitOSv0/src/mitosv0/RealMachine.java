@@ -46,12 +46,14 @@ public class RealMachine {
     public static Output out;
     
     public static VirtualMachine VM;
-    
     public static final int PLR_BLOCK_MEMORY_OFFSET = 0x100;
-    public static final byte PLR_MAX_A2 = 0x5;
-    public static final byte PLR_LAST_A3 = 0x4;
+    public static final int PLR_MAX_A2 = 0x5;
+    public static final int PLR_LAST_A3 = 0x4;
     public static final int PLR_MAX_BLOCK_INDEX = 0x54;
     public static final int SHARED_MEMORY_BLOCK_OFFSET = 0x55;
+    private static final int MAX_VIRTUAL_MACHINE_COUNT = 5;
+    private static boolean [] freeBlocks;
+    private static int virtualMachineCount;
     
     public static RealMemory memory;
     
@@ -77,65 +79,97 @@ public class RealMachine {
         
         memory = new RealMemory(blocks);
         String taskName = "program";
-        CreateVirtualMachine(taskName);
+        
+        
+        memory = new RealMemory(blocks);
+        freeBlocks = new boolean[blocks];
+        for (int i = 0; i < blocks; i++)
+            freeBlocks[i] = true;
+        virtualMachineCount = 0;
+        
+        CreateVirtualMachine("program");
+
+        
     }
     
-    public void CreateVirtualMachine(String taskName){
- 
-        Random rnd = new Random();
-        //Nustatome PLR registro reiksmes skirtas vienai virtualiai masinai
-        PLR.setA0((byte) 0x00);
-        PLR.setA1((byte) 0x00);
-        PLR.setA2((byte) rnd.nextInt(PLR_MAX_A2+1));
-        if (PLR.getA2()==PLR_MAX_A2){
-            PLR.setA3((byte) rnd.nextInt(PLR_LAST_A3+1));
-        } else
-            PLR.setA3((byte) rnd.nextInt(0x10));
-        
-        //uzpildom lentele, kad rodytu i atsitiktines vietas
-        MemoryBlock block = memory.getBlock(PLR.getA2()*0x10+PLR.getA3());
-        
-        for (int i = 0; i < 16; i++){
-            int blockIndex = rnd.nextInt(PLR_MAX_BLOCK_INDEX);
-            for (int j = 0; j <= i; j++){
-                if (blockIndex == block.getWord(j).getIntValue()){//TODO
-                    blockIndex = rnd.nextInt(PLR_MAX_BLOCK_INDEX);
-                    j = 0;
-                }
-            }
-            block.setWord(i,new Word((short)rnd.nextInt(PLR_MAX_BLOCK_INDEX)));
-        }
+    public void CreateVirtualMachine(String fileName){
+        if (virtualMachineCount < MAX_VIRTUAL_MACHINE_COUNT)
+        {
+            virtualMachineCount++;
+            Random rnd = new Random();
+            //Nustatome PLR registro reiksmes skirtas vienai virtualiai masinai
+            //A1 - programai skirtas puslapiu skaicius, visada 16
+            PLR.setA1((byte) 0x10);
 
-        VirtualMemory virtualMemory = new VirtualMemory(PLR, memory);
-        loadProgram(virtualMemory, "src/mitosv0/"+taskName+".mit");
-        
-        VM = new VirtualMachine(R1, R2, IC, C, virtualMemory);
+            int newA2, newA3;
+            
+            //TODO: Padaryt, kad puslapiavimo lenteles neuzliptu ant bendros atminties
+            newA2 = rnd.nextInt(PLR_MAX_A2+1);
+            if (PLR.getA2()==((byte)PLR_MAX_A2))
+                newA3 = rnd.nextInt(PLR_LAST_A3+1);
+            else
+                newA3 = rnd.nextInt(0x10);
+
+            while (!freeBlocks[newA2*0x10+newA3])
+            {
+                System.out.println("Bandom perimt A2 ir A3 is naujo");
+                newA2 = rnd.nextInt(PLR_MAX_A2+1);
+                if (PLR.getA2()==((byte)PLR_MAX_A2))
+                    newA3 = rnd.nextInt(PLR_LAST_A3+1);
+                else
+                    newA3 = rnd.nextInt(0x10);
+            }
+            System.out.println("ImamA2: "+newA2+" Imam A3: "+newA3);
+            PLR.setA3((byte) newA3);
+            PLR.setA2((byte) newA2);
+            freeBlocks[newA2*0x10+newA3] = false;
+            //uzpildom lentele, kad rodytu i atsitiktines vietas
+            MemoryBlock block = memory.getBlock(PLR.getA2()*0x10+PLR.getA3());
+
+            for (int i = 0; i < 16; i++){
+                int blockIndex = rnd.nextInt(PLR_MAX_BLOCK_INDEX);
+                while (!freeBlocks[blockIndex]){
+                    blockIndex = rnd.nextInt(PLR_MAX_BLOCK_INDEX);
+                }
+                block.setWord(i,new Word((short) blockIndex));
+                freeBlocks[blockIndex] = false;
+            }
+
+            VirtualMemory virtualMemory = new VirtualMemory(PLR, memory);
+
+            loadProgram(virtualMemory, "src/mitosv0/"+fileName+".mit");
+
+            VM = new VirtualMachine(R1, R2, IC, C, virtualMemory);
+        }
+        else
+            System.out.println("Per daug virtualiu masinu!");
     }
     public void loadProgram(VirtualMemory memory, String fileName)
     {
-        VirtualMemory tmpMemory = memory;
         try {
             FileInputStream input = new FileInputStream(fileName);
             int i = 0;
             byte[] buffer = new byte[4];
             
+            //TODO: Gali buti 256 simboliai, bet jei virs, tada crashas. WAT DO?
             while ((input.read(buffer)) != -1){
                 memory.setWord(i, new Word(TypeConversion.byteArrayToString(buffer)));
                 i++;
             }
             
-            if (i >= 256)
+            if (i > 256)
             {
                 System.out.println("Nėra laisvos vietos");
             }
             else
             {
+                //Nustatomas programos dydis zodziais
+                RealMachine.PLR.setA0((byte) i);
                 RealMachine.IC.setValue(0);
             }
             
         } catch (IOException ex) {
-            System.out.println("File not found");
-            //Logger.getLogger(MitOSv0.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(MitOSv0.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
