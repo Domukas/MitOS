@@ -93,8 +93,8 @@ public class RealMachineGUI extends javax.swing.JFrame {
         
         TimerTextField.setText(Integer.toHexString(RM.timer.getValue()));
         
-        MODEToggleButton.setText(modeToString(RM.mode.isSupervisor()));
-        MODEToggleButton.setSelected(RM.mode.isSupervisor());
+        MODEToggleButton.setText(modeToString(RealMachine.mode.isSupervisor()));
+        MODEToggleButton.setSelected(RealMachine.mode.isSupervisor());
         
         PITextField.setText(Integer.toHexString(RM.PI.getValue()));
         SITextField.setText(Integer.toString(RM.SI.getValue()));

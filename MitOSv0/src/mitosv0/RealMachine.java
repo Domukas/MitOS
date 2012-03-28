@@ -50,7 +50,7 @@ public class RealMachine {
     public static final int PLR_BLOCK_MEMORY_OFFSET = 0x100;
     public static final byte PLR_MAX_A2 = 0x5;
     public static final byte PLR_LAST_A3 = 0x4;
-    public static final int PLR_MAX_BLOCK_INDEX = 0xEF;
+    public static final int PLR_MAX_BLOCK_INDEX = 0x54;
     public static final int SHARED_MEMORY_BLOCK_OFFSET = 0x55;
     
     public static RealMemory memory;
