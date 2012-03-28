@@ -34,17 +34,21 @@ public class Word {
     
     public String getValue()
     {        
-        return data;
+        return data.toUpperCase();
     }
     
     public void setValue(String s)
     {
         if (s.length() <= 4)
-            data = s;
+            data = s.toUpperCase();
+        else 
+            data = s.substring(data.length()-4, data.length());
     }
     
     public void setIntValue(int s)
     {
         data = Integer.toHexString(s);
+        if (data.length() > 4)
+            data = data.substring(data.length()-4, data.length());
     }
 }

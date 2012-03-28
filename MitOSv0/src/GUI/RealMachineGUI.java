@@ -424,7 +424,7 @@ public class RealMachineGUI extends javax.swing.JFrame {
 
         memoryPanel.add(jScrollPane1);
 
-        memoryTabbedPane.addTab("tab1", memoryPanel);
+        memoryTabbedPane.addTab("RM", memoryPanel);
 
         getContentPane().add(memoryTabbedPane);
 

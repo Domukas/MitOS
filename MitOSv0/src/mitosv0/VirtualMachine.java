@@ -313,81 +313,80 @@ public class VirtualMachine {
     //Aritmetinės komandos
     public void A1(int xx)
     {
-        int oldValue = R1.getValue().getIntValue();
-        R1.setValue(new Word ((oldValue + getWord(xx).getIntValue())));
-        arithmeticFlagSet(oldValue, getWord(xx).getIntValue(), R1.getValue().getIntValue());
+        Word oldValue = R1.getValue();
+        R1.setValue(new Word ((oldValue.getIntValue() + getWord(xx).getIntValue())));
+        arithmeticFlagSet(oldValue, getWord(xx), R1.getValue());
     }
     
     public void A2(int xx)
     {
-        int oldValue = R2.getValue().getIntValue();
-        R2.setValue(new Word ((oldValue + getWord(xx).getIntValue())));
-        arithmeticFlagSet(oldValue, getWord(xx).getIntValue(), R2.getValue().getIntValue());
+        Word oldValue = R2.getValue();
+        R2.setValue(new Word ((oldValue.getIntValue() + getWord(xx).getIntValue())));
+        arithmeticFlagSet(oldValue, getWord(xx), R2.getValue());
     }
     
     public void B1(int xx)
     {        
-        int oldValue = R1.getValue().getIntValue();
-        R1.setValue(new Word ((oldValue - getWord(xx).getIntValue())));
-        System.out.println(oldValue - getWord(xx).getIntValue());
-        arithmeticFlagSet(oldValue, getWord(xx).getIntValue(), R1.getValue().getIntValue());
+        Word oldValue = R1.getValue();
+        R1.setValue(new Word ((oldValue.getIntValue() - getWord(xx).getIntValue())));
+        arithmeticFlagSet(oldValue, getWord(xx), R1.getValue());
     }   
 
     public void B2(int xx)
     {
-        int oldValue = R2.getValue().getIntValue();
-        R2.setValue(new Word ((oldValue - getWord(xx).getIntValue())));
-        arithmeticFlagSet(oldValue, getWord(xx).getIntValue(), R2.getValue().getIntValue());
+        Word oldValue = R2.getValue();
+        R2.setValue(new Word ((oldValue.getIntValue() - getWord(xx).getIntValue())));
+        arithmeticFlagSet(oldValue, getWord(xx), R2.getValue());
     }   
     
     public void MU(int xx)
     {
-        int oldValue = R1.getValue().getIntValue();
-        R1.setValue(new Word ((oldValue * getWord(xx).getIntValue())));
-        arithmeticFlagSet(oldValue, getWord(xx).getIntValue(), R1.getValue().getIntValue());
+        Word oldValue = R1.getValue();
+        R1.setValue(new Word ((oldValue.getIntValue() * getWord(xx).getIntValue())));
+        arithmeticFlagSet(oldValue, getWord(xx), R1.getValue());
     }   
     
     public void DI(int xx)
     {
         R2.setValue(new Word ((R1.getValue().getIntValue() % getWord(xx).getIntValue())));
         
-        int oldValue = R1.getValue().getIntValue();
-        R1.setValue(new Word ((oldValue / getWord(xx).getIntValue())));
-        arithmeticFlagSet(oldValue, getWord(xx).getIntValue(), R1.getValue().getIntValue());
+        Word oldValue = R1.getValue();
+        R1.setValue(new Word ((oldValue.getIntValue() / getWord(xx).getIntValue())));
+        arithmeticFlagSet(oldValue, getWord(xx), R1.getValue());
     }
     
     //Loginės komandos
     public void XR (int xx)
     {
         R1.setValue(new Word ((R1.getValue().getIntValue() ^ getWord(xx).getIntValue())));
-        setZfSf(R1.getValue().getIntValue());
+        setZfSf(R1.getValue());
     }
 
     public void AN (int xx)
     {
         R1.setValue(new Word ((R1.getValue().getIntValue() & getWord(xx).getIntValue())));
-        setZfSf(R1.getValue().getIntValue());
+        setZfSf(R1.getValue());
     }
     
     public void OR (int xx)
     {
         R1.setValue(new Word ((R1.getValue().getIntValue() | getWord(xx).getIntValue())));
-        setZfSf(R1.getValue().getIntValue());
+        setZfSf(R1.getValue());
     }    
     
     //Palyginimo komandos
     public void C1 (int xx)
     {
-        int oldValue = R1.getValue().getIntValue();
-        int tempValue = (oldValue - getWord(xx).getIntValue());        
-        arithmeticFlagSet(oldValue, getWord(xx).getIntValue(), tempValue);
+        Word oldValue = R1.getValue();
+        Word tempValue = new Word((oldValue.getIntValue() - getWord(xx).getIntValue()));        
+        arithmeticFlagSet(oldValue, getWord(xx), tempValue);
     }
     
     public void C2 (int xx)
     {
-        int oldValue = R2.getValue().getIntValue();
-        int tempValue = (oldValue - getWord(xx).getIntValue());        
-        arithmeticFlagSet(oldValue, getWord(xx).getIntValue(), tempValue);
+        Word oldValue = R2.getValue();
+        Word tempValue = new Word ((oldValue.getIntValue() - getWord(xx).getIntValue()));        
+        arithmeticFlagSet(oldValue, getWord(xx), tempValue);
     }
     
     //Darbo su duomenimis komandos
@@ -663,7 +662,7 @@ public class VirtualMachine {
     }
     
     //Pagalbinės (ne virtualios mašinos)
-    private void arithmeticFlagSet(int oldValue, int operand, int newValue)
+    private void arithmeticFlagSet(Word oldValue, Word operand, Word newValue)
     {       
         setZfSf(newValue);
             
@@ -676,14 +675,14 @@ public class VirtualMachine {
         
     }
     
-    private void setZfSf(int newValue)
+    private void setZfSf(Word newValue)
     {
-        if (newValue == 0)
+        if (newValue.getIntValue() == 0)
         {
             C.setZeroFlag();
             C.unsetSignFlag();
         }
-        else if (newValue > 0)
+        else if (getSign(newValue) == 0)
         {
             C.unsetZeroFlag();
             C.unsetSignFlag();
@@ -695,9 +694,14 @@ public class VirtualMachine {
         }
     }
     
-    private int getSign(int value)
+    private int getSign(Word value)
     {
-        if (Integer.signum(value) == -1)
+        String s = "";
+        s += value.getValue().charAt(0);
+        int i = Integer.parseInt(s, 16);
+        
+        
+        if (i >= 8)
             return  1;
         else
             return 0;
