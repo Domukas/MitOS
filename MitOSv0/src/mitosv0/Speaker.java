@@ -28,7 +28,6 @@ public class Speaker {
         try
         {
             sdl = AudioSystem.getSourceDataLine(af);
-            sdl = AudioSystem.getSourceDataLine(af);
             sdl.open(af);
             sdl.start();
             for(int i = 0; i < length*(float)44100/1000; i++) {
@@ -41,7 +40,7 @@ public class Speaker {
             sdl.close();
         } catch (LineUnavailableException e)
         {
-            System.out.println("Speker error!");
+            System.out.println("Speaker error!");
         }
     }
         
