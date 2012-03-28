@@ -47,6 +47,7 @@ public class RealMachineGUI extends javax.swing.JFrame {
         initComponents();
         this.RM = RM;
         this.setVisible(true);
+       // STextField.setFont(STextField.new);
         vm1MemoryTable = new JTable();
         vm1MemoryTable.setModel(new VirtualMemoryTableModel(RM,this));
         
@@ -84,12 +85,15 @@ public class RealMachineGUI extends javax.swing.JFrame {
     private void updateRegisterFields()
     {
         repaint();
-        PLRTextField.setText(Integer.toHexString(RM.PLR.getValue()));
+        PLRTextField.setText(RM.PLR.getValue());
         R1TextField.setText(RM.R1.getValue().getValue().replaceFirst("^0+(?!$)", ""));
         R2TextField.setText(RM.R2.getValue().getValue().replaceFirst("^0+(?!$)", ""));
         ICTextField.setText(Integer.toHexString(RM.IC.getValue()));
         CTextField.setText(Integer.toHexString(RM.C.getValue()));
-        STextField.setText(Integer.toHexString(RM.S.getValue()));
+               String tmp = Integer.toBinaryString(RM.S.getValue());
+        while (tmp.length() < 16)
+            tmp = "0"+tmp;
+        STextField.setText(tmp);
         
         TimerTextField.setText(Integer.toHexString(RM.timer.getValue()));
         
@@ -259,6 +263,7 @@ public class RealMachineGUI extends javax.swing.JFrame {
         jLabel6.setText("S");
         registerPanel1.add(jLabel6);
 
+        STextField.setFont(new java.awt.Font("Tahoma", 0, 8)); // NOI18N
         STextField.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 STextFieldActionPerformed(evt);

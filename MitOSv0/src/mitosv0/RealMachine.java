@@ -158,6 +158,8 @@ public class RealMachine {
             VirtualMemory virtualMemory = new VirtualMemory(PLR, memory);
             loadProgram(virtualMemory, "src/mitosv0/"+fileName+".mit");
             VM = new VirtualMachine(R1, R2, IC, C, virtualMemory);
+            SI.setValue(0);
+            PI.setValue(0);
         }
         else
             System.out.println("Per daug virtualiu masinu!");
@@ -182,7 +184,7 @@ public class RealMachine {
             else
             {
                 //Nustatomas programos dydis zodziais
-                RealMachine.PLR.setA0((byte) i);
+                RealMachine.PLR.setA0((byte) (i/16+1));
                 RealMachine.IC.setValue(0);
             }
             

@@ -29,7 +29,18 @@ public class Word {
     
     public int getIntValue()
     {
-        return Integer.parseInt(data, 16);
+        try
+        {
+            return Integer.parseInt(data, 16);
+        }
+        catch(NumberFormatException e)
+        {
+            RealMachine.PI.setValue(2);
+            RealMachine.gui.updateAll();
+            RealMachine.gui.showMessage("'"+data+"' is not an integer.");
+            return 0;
+        }
+        
     }
     
     public String getValue()
