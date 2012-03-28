@@ -421,17 +421,22 @@ public class VirtualMachine {
     
     public void LCK (int x)
     {
-       RealMachine.SI.setValue(4);
-       RealMachine.mode.SetSupervisor();
-       RealMachine.S.setBit(x);         
-       
-       RealMachine.gui.updateAll();
-       pause(WAIT_TIME);
-       
-       RealMachine.SI.setValue(0);
-       RealMachine.mode.setUser(); 
-       
-       RealMachine.gui.updateAll();
+        if (RealMachine.S.isBitSet(x)){
+            RealMachine.gui.showMessage(x+" block is already locked.");
+            RealMachine.PI.setValue(1);
+        } else {
+            RealMachine.SI.setValue(4);
+            RealMachine.mode.SetSupervisor();
+            RealMachine.S.setBit(x);         
+
+            RealMachine.gui.updateAll();
+            pause(WAIT_TIME);
+
+            RealMachine.SI.setValue(0);
+            RealMachine.mode.setUser(); 
+
+            RealMachine.gui.updateAll();
+        }
     }
     
     public void X1 (int xx)
@@ -484,17 +489,22 @@ public class VirtualMachine {
     
     public void ULC (int x)
     {
-       RealMachine.SI.setValue(4);
-       RealMachine.mode.SetSupervisor(); 
-       RealMachine.S.unsetBit(x);   
+        if (!RealMachine.S.isBitSet(x)){
+            RealMachine.gui.showMessage(x+" block is already unlocked.");
+            RealMachine.PI.setValue(1);
+        } else {
+            RealMachine.SI.setValue(4);
+            RealMachine.mode.SetSupervisor(); 
+            RealMachine.S.unsetBit(x);   
        
-       RealMachine.gui.updateAll();
-       pause(WAIT_TIME);
+            RealMachine.gui.updateAll();
+            pause(WAIT_TIME);
        
-       RealMachine.SI.setValue(0);
-       RealMachine.mode.setUser();
+            RealMachine.SI.setValue(0);
+            RealMachine.mode.setUser();
        
-       RealMachine.gui.updateAll();
+            RealMachine.gui.updateAll();
+        }
     }    
     
     //Valdymo perdavimo komandos

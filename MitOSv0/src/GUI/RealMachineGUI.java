@@ -200,9 +200,8 @@ public class RealMachineGUI extends javax.swing.JFrame {
         memoryTable = new javax.swing.JTable();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setMinimumSize(new java.awt.Dimension(151, 500));
-        setPreferredSize(new java.awt.Dimension(647, 430));
-        setResizable(false);
+        setMinimumSize(new java.awt.Dimension(800, 600));
+        setPreferredSize(new java.awt.Dimension(800, 600));
         getContentPane().setLayout(new javax.swing.BoxLayout(getContentPane(), javax.swing.BoxLayout.LINE_AXIS));
 
         operationsPanel.setMaximumSize(new java.awt.Dimension(160, 450));

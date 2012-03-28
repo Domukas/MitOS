@@ -88,11 +88,6 @@ public class RealMachine {
         virtualMachineCount = 0;
         
         CreateVirtualMachine("program");
-        CreateVirtualMachine("program");
-        CreateVirtualMachine("program");
-        CreateVirtualMachine("program");
-        CreateVirtualMachine("program");
-        CreateVirtualMachine("program");
 
         
     }
@@ -106,47 +101,62 @@ public class RealMachine {
             //A1 - programai skirtas puslapiu skaicius, visada 16
             PLR.setA1((byte) 0x10);
 
-            int newA2, newA3;
-            
-            //TODO: Padaryt, kad puslapiavimo lenteles neuzliptu ant bendros atminties
-            newA2 = rnd.nextInt(PLR_MAX_A2+1);
-            if (PLR.getA2()==((byte)PLR_MAX_A2))
-                newA3 = rnd.nextInt(PLR_LAST_A3+1);
-            else
-                newA3 = rnd.nextInt(0x10);
+            if (virtualMachineCount < MAX_VIRTUAL_MACHINE_COUNT-1){
+                int newA2, newA3;
 
-            while (!freeBlocks[newA2*0x10+newA3] | (newA2*0x10+newA3 > PLR_MAX_BLOCK_INDEX))
-            {
-                System.out.println("Bandom perimt A2 ir A3 is naujo,nes A2="+newA2+" ir A3="+newA3+", o blokas yra"+freeBlocks[newA2*0x10+newA3]);
                 newA2 = rnd.nextInt(PLR_MAX_A2+1);
-                if (PLR.getA2()==((byte)PLR_MAX_A2)){
-                    System.out.println("A2 maksimalus");
+                if (PLR.getA2()==((byte)PLR_MAX_A2))
                     newA3 = rnd.nextInt(PLR_LAST_A3+1);
-                }
                 else
-                {newA3 = rnd.nextInt(0x10);}
-                System.out.println("Tinka? A2 ir A3,nes A2="+newA2+" ir A3="+newA3+", o blokas yra"+freeBlocks[newA2*0x10+newA3]);
-            }
-            System.out.println("Tiko");
-            PLR.setA3((byte) newA3);
-            PLR.setA2((byte) newA2);
-            freeBlocks[newA2*0x10+newA3] = false;
-            //uzpildom lentele, kad rodytu i atsitiktines vietas
-            MemoryBlock block = memory.getBlock(PLR.getA2()*0x10+PLR.getA3());
+                    newA3 = rnd.nextInt(0x10);
 
-            for (int i = 0; i < 16; i++){
-                int blockIndex = rnd.nextInt(PLR_MAX_BLOCK_INDEX);
-                while (!freeBlocks[blockIndex]){
-                    blockIndex = rnd.nextInt(PLR_MAX_BLOCK_INDEX);
+                while (!freeBlocks[newA2*0x10+newA3] | (newA2*0x10+newA3 > PLR_MAX_BLOCK_INDEX))
+                {
+                    newA2 = rnd.nextInt(PLR_MAX_A2+1);
+                    if (PLR.getA2()==((byte)PLR_MAX_A2)){
+                        newA3 = rnd.nextInt(PLR_LAST_A3+1);
+                    }
+                    else {
+                        newA3 = rnd.nextInt(0x10);
+                    }
                 }
-                block.setWord(i,new Word((short) blockIndex));
-                freeBlocks[blockIndex] = false;
+                PLR.setA3((byte) newA3);
+                PLR.setA2((byte) newA2);
+                freeBlocks[newA2*0x10+newA3] = false;
+                //uzpildom lentele, kad rodytu i atsitiktines vietas
+                MemoryBlock block = memory.getBlock(PLR.getA2()*0x10+PLR.getA3());
+
+                for (int i = 0; i < 16; i++){
+                    int blockIndex = rnd.nextInt(PLR_MAX_BLOCK_INDEX);
+                    while (!freeBlocks[blockIndex]){
+                        blockIndex = rnd.nextInt(PLR_MAX_BLOCK_INDEX);
+                    }
+                    block.setWord(i,new Word((short) blockIndex));
+                    freeBlocks[blockIndex] = false;
+                }
+                //Penktoji masina is penkiu, nebeduodan random, nes biski gali uztrukci
+            } else {
+                int i = 0;
+                //randam pirma tuscia, talpinam ten lentele
+                while (!freeBlocks[i]){
+                    i++;
+                }
+                PLR.setA2((byte) (i / 0x10));
+                PLR.setA3((byte) (i % 0x10));
+                freeBlocks[i] = false;
+                MemoryBlock block = memory.getBlock(PLR.getA2()*0x10+PLR.getA3());
+                for (int j = 0; j < 16; j ++){
+                    while(!freeBlocks[i])
+                    {
+                        i++;
+                    }
+                    block.setWord(j,new Word(i));
+                    freeBlocks[i] = false;
+                }
             }
 
             VirtualMemory virtualMemory = new VirtualMemory(PLR, memory);
-
             loadProgram(virtualMemory, "src/mitosv0/"+fileName+".mit");
-
             VM = new VirtualMachine(R1, R2, IC, C, virtualMemory);
         }
         else
