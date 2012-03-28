@@ -88,6 +88,11 @@ public class RealMachine {
         virtualMachineCount = 0;
         
         CreateVirtualMachine("program");
+        CreateVirtualMachine("program");
+        CreateVirtualMachine("program");
+        CreateVirtualMachine("program");
+        CreateVirtualMachine("program");
+        CreateVirtualMachine("program");
 
         
     }
@@ -110,16 +115,19 @@ public class RealMachine {
             else
                 newA3 = rnd.nextInt(0x10);
 
-            while (!freeBlocks[newA2*0x10+newA3])
+            while (!freeBlocks[newA2*0x10+newA3] | (newA2*0x10+newA3 > PLR_MAX_BLOCK_INDEX))
             {
-                System.out.println("Bandom perimt A2 ir A3 is naujo");
+                System.out.println("Bandom perimt A2 ir A3 is naujo,nes A2="+newA2+" ir A3="+newA3+", o blokas yra"+freeBlocks[newA2*0x10+newA3]);
                 newA2 = rnd.nextInt(PLR_MAX_A2+1);
-                if (PLR.getA2()==((byte)PLR_MAX_A2))
+                if (PLR.getA2()==((byte)PLR_MAX_A2)){
+                    System.out.println("A2 maksimalus");
                     newA3 = rnd.nextInt(PLR_LAST_A3+1);
+                }
                 else
-                    newA3 = rnd.nextInt(0x10);
+                {newA3 = rnd.nextInt(0x10);}
+                System.out.println("Tinka? A2 ir A3,nes A2="+newA2+" ir A3="+newA3+", o blokas yra"+freeBlocks[newA2*0x10+newA3]);
             }
-            System.out.println("ImamA2: "+newA2+" Imam A3: "+newA3);
+            System.out.println("Tiko");
             PLR.setA3((byte) newA3);
             PLR.setA2((byte) newA2);
             freeBlocks[newA2*0x10+newA3] = false;
