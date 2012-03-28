@@ -84,8 +84,8 @@ public class RealMachineGUI extends javax.swing.JFrame {
     {
         repaint();
         PLRTextField.setText(Integer.toHexString(RM.PLR.getValue()));
-        R1TextField.setText(RM.R1.getValue().getValue());
-        R2TextField.setText(RM.R2.getValue().getValue());
+        R1TextField.setText(RM.R1.getValue().getValue().replaceFirst("^0+(?!$)", ""));
+        R2TextField.setText(RM.R2.getValue().getValue().replaceFirst("^0+(?!$)", ""));
         ICTextField.setText(Integer.toHexString(RM.IC.getValue()));
         CTextField.setText(Integer.toHexString(RM.C.getValue()));
         STextField.setText(Integer.toHexString(RM.S.getValue()));
