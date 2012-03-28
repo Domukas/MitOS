@@ -45,6 +45,8 @@ OF = 1 – priešingu atveju.
 
 
 public class VirtualMachine {
+
+    static final int WAIT_TIME = 3000;
     
     public DataRegister R1, R2;
     public ICRegister IC;
@@ -58,8 +60,7 @@ public class VirtualMachine {
         this.R2 = R2;
         this.IC = IC;
         this.C = C;
-        this.memory = memory;
-        
+        this.memory = memory;   
     }
     
     public void run()
@@ -67,6 +68,8 @@ public class VirtualMachine {
         do
         {
             step();
+            //RealMachine.gui.updateAll();
+            //pause(500);
         } while ((RealMachine.SI.getValue() != 5) && (RealMachine.PI.getValue() == 0));
     }
     
@@ -423,7 +426,7 @@ public class VirtualMachine {
        RealMachine.S.setBit(x);         
        
        RealMachine.gui.updateAll();
-       pause(1000);
+       pause(WAIT_TIME);
        
        RealMachine.SI.setValue(0);
        RealMachine.mode.setUser(); 
@@ -436,7 +439,7 @@ public class VirtualMachine {
         int x = xx/0x10;
         if (!RealMachine.S.isBitSet(x))
         {
-            RealMachine.PI.setValue(1); //TODO
+            RealMachine.PI.setValue(1); 
             RealMachine.gui.showMessage("Accessing unavailable memory!");
         }
         else 
@@ -448,7 +451,7 @@ public class VirtualMachine {
         int x = xx/0x10;
         if (!RealMachine.S.isBitSet(x))
         {
-            RealMachine.PI.setValue(1); //TODO
+            RealMachine.PI.setValue(1); 
             RealMachine.gui.showMessage("Accessing unavailable memory!");
         }
         else 
@@ -460,7 +463,7 @@ public class VirtualMachine {
         int x = xx/0x10;
         if (!RealMachine.S.isBitSet(x))
         {
-            RealMachine.PI.setValue(1); //TODO
+            RealMachine.PI.setValue(1); 
             RealMachine.gui.showMessage("Accessing unavailable memory!");
         }
         else 
@@ -472,7 +475,7 @@ public class VirtualMachine {
         int x = xx/0x10;
         if (!RealMachine.S.isBitSet(x))
         {
-            RealMachine.PI.setValue(1); //TODO
+            RealMachine.PI.setValue(1); 
             RealMachine.gui.showMessage("Accessing unavailable memory!");
         }
         else 
@@ -486,7 +489,7 @@ public class VirtualMachine {
        RealMachine.S.unsetBit(x);   
        
        RealMachine.gui.updateAll();
-       pause(1000);
+       pause(WAIT_TIME);
        
        RealMachine.SI.setValue(0);
        RealMachine.mode.setUser();
@@ -544,7 +547,7 @@ public class VirtualMachine {
         RealMachine.CH2.setClosed();
         
         RealMachine.gui.updateAll();
-        pause(1000);
+        pause(WAIT_TIME);
                 
         RealMachine.timer.timePass(2);
         
@@ -570,7 +573,7 @@ public class VirtualMachine {
         RealMachine.CH1.setClosed();
            
         RealMachine.gui.updateAll();
-        pause(1000);
+        pause(WAIT_TIME);
 
         RealMachine.timer.timePass(2);
         
@@ -589,9 +592,6 @@ public class VirtualMachine {
         RealMachine.CH1.setOpen();
         RealMachine.mode.setUser();
         RealMachine.SI.setValue(0);
-           
-        
-
     }    
     
     //Garsiakalbio komandos
@@ -599,10 +599,15 @@ public class VirtualMachine {
     public void GGR1(){
         RealMachine.SI.setValue(3);
         RealMachine.mode.SetSupervisor();
+        RealMachine.CH4.setClosed();
         
-            //reikia kad po puses komandos GUI atvaizduotu kad pasikeitineja modas ir SI
+        RealMachine.gui.updateAll();
+        pause(WAIT_TIME);
+        
         int volume = RealMachine.R1.getValue().getIntValue();
         RealMachine.speakers.setVolume(volume);
+        
+        RealMachine.CH4.setOpen();
         RealMachine.SI.setValue(0);
         RealMachine.mode.setUser();       
     }
@@ -610,10 +615,15 @@ public class VirtualMachine {
     public void GGR2(){
         RealMachine.SI.setValue(3);
         RealMachine.mode.SetSupervisor();
+        RealMachine.CH4.setClosed();
         
-            //reikia kad po puses komandos GUI atvaizduotu kad pasikeitineja modas ir SI
+        RealMachine.gui.updateAll();
+        pause(WAIT_TIME);
+        
         int volume = RealMachine.R2.getValue().getIntValue();
         RealMachine.speakers.setVolume(volume);
+        
+        RealMachine.CH4.setOpen();
         RealMachine.SI.setValue(0);
         RealMachine.mode.setUser();
     }
@@ -621,10 +631,15 @@ public class VirtualMachine {
     public void GLR1(){
         RealMachine.SI.setValue(3);
         RealMachine.mode.SetSupervisor();
+        RealMachine.CH4.setClosed();
         
-            //reikia kad po puses komandos GUI atvaizduotu kad pasikeitineja modas ir SI
+        RealMachine.gui.updateAll();
+        pause(WAIT_TIME);
+        
         int volume = RealMachine.R1.getValue().getIntValue();
         RealMachine.speakers.setLength(volume);
+        
+        RealMachine.CH4.setOpen();
         RealMachine.SI.setValue(0);
         RealMachine.mode.setUser();
     }
@@ -632,18 +647,31 @@ public class VirtualMachine {
     public void GLR2(){
         RealMachine.SI.setValue(3);
         RealMachine.mode.SetSupervisor();
+        RealMachine.CH4.setClosed();
         
-            //reikia kad po puses komandos GUI atvaizduotu kad pasikeitineja modas ir SI
+        RealMachine.gui.updateAll();
+        pause(WAIT_TIME);
+
         int volume = RealMachine.R2.getValue().getIntValue();
         RealMachine.speakers.setLength(volume);
+        
+        RealMachine.CH4.setOpen();
         RealMachine.SI.setValue(0);
         RealMachine.mode.setUser();
     }
     
     public void GNR1(){
         RealMachine.SI.setValue(3);
+        RealMachine.mode.SetSupervisor();
+        RealMachine.CH4.setClosed();
+        
+        RealMachine.gui.updateAll();
+        pause(WAIT_TIME);
+        
         int value = RealMachine.R1.getValue().getIntValue();
         RealMachine.speakers.play(value);
+        
+        RealMachine.CH4.setOpen();
         RealMachine.SI.setValue(0);
         RealMachine.mode.setUser();
     }
@@ -651,10 +679,16 @@ public class VirtualMachine {
     public void GNR2(){
         RealMachine.SI.setValue(3);
         RealMachine.mode.SetSupervisor();
+        RealMachine.CH4.setClosed();
         
-            //reikia kad po puses komandos GUI atvaizduotu kad pasikeitineja modas ir SI
+        
+        RealMachine.gui.updateAll();
+        pause(WAIT_TIME);
+        
         int value = RealMachine.R2.getValue().getIntValue();
         RealMachine.speakers.play(value);
+        
+        RealMachine.CH4.setOpen();
         RealMachine.SI.setValue(0);
         RealMachine.mode.setUser();
     }
@@ -671,11 +705,7 @@ public class VirtualMachine {
     private void arithmeticFlagSet(Word oldValue, Word operand, Word newValue)
     {       
         setZfSf(newValue);
-        
-        System.out.println(oldValue.getValue() + getSign(oldValue));
-        System.out.println(operand.getValue() + getSign(operand));
-        System.out.println(newValue.getValue() + getSign(newValue));
-            
+          
         if (((getSign(oldValue)) == getSign(operand))
             && (getSign(oldValue) != getSign(newValue)))
             
@@ -745,8 +775,6 @@ public class VirtualMachine {
         
         address += word.getValue().charAt(2);
         address += word.getValue().charAt(3);
-        
-        System.out.println("XXaddress ->" + address);
                
         try 
         {

@@ -75,8 +75,7 @@ public class RealMachineGUI extends javax.swing.JFrame {
     {
         updateRegisterFields();
         updateFlagInfo();
-        this.requestFocus();
-        this.repaint();
+        this.paint(this.getGraphics());
         memoryTable.repaint();
         vm1MemoryTable.repaint();
     }
