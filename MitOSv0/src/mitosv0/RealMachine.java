@@ -48,9 +48,10 @@ public class RealMachine {
     public static VirtualMachine VM;
     
     public static final int PLR_BLOCK_MEMORY_OFFSET = 0x100;
-    public static final byte PLR_MIN_A2 = 0x10;
-    public static final int PLR_MAX_BLOCK_INDEX = 0xEF;
-    public static final int SHARED_MEMORY_BLOCK_OFFSET = 0xF0;
+    public static final byte PLR_MAX_A2 = 0x5;
+    public static final byte PLR_LAST_A3 = 0x4;
+    public static final int PLR_MAX_BLOCK_INDEX = 0x54;
+    public static final int SHARED_MEMORY_BLOCK_OFFSET = 0x55;
     
     public static RealMemory memory;
     
@@ -81,16 +82,19 @@ public class RealMachine {
     
     private void CreateVirtualMachine(){
  
-        
+        Random rnd = new Random();
         //Nustatome PLR registro reiksmes skirtas vienai virtualiai masinai
         PLR.setA0((byte) 0x00);
         PLR.setA1((byte) 0x00);
-        PLR.setA2(PLR_MIN_A2);
-        PLR.setA3((byte) 0x00);
+        PLR.setA2((byte) rnd.nextInt(PLR_MAX_A2+1));
+        if (PLR.getA2()==PLR_MAX_A2){
+            PLR.setA3((byte) rnd.nextInt(PLR_LAST_A3+1));
+        } else
+            PLR.setA3((byte) rnd.nextInt(0x10));
         
         //uzpildom lentele, kad rodytu i atsitiktines vietas
-        MemoryBlock block = memory.getBlock(PLR_MIN_A2*0x10);
-        Random rnd = new Random();
+        MemoryBlock block = memory.getBlock(PLR.getA2()*0x10+PLR.getA3());
+        
         for (int i = 0; i < 16; i++){
             int blockIndex = rnd.nextInt(PLR_MAX_BLOCK_INDEX);
             for (int j = 0; j <= i; j++){

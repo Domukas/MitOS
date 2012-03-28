@@ -34,21 +34,16 @@ public Component getTableCellRendererComponent(JTable table, Object value,boolea
             setForeground(table.getForeground());
             //Netuscius langelius spalvinam melynai
             if (!(columnValue.equals("0") || columnValue.equals("\0\0\0\0") || columnValue.equals(0))) setBackground(new Color(0xBBBBFF));
+            //Spalvinam IC reiksme
             if (table.getModel() instanceof  VirtualMemoryTableModel)
             {
-                if ((row == RealMachine.IC.getValue() / 16)&&(column == RealMachine.IC.getValue() % 16))
+                if ((row == RealMachine.IC.getValue() / 16)&&(column-1 == RealMachine.IC.getValue() % 16))
                     setBackground(new Color(0xFFFF00));
             } else if (table.getModel() instanceof  MemoryTableModel)
             {
-                for (int i = 0; i < 15; i++)
-                {
-                    if (column == RealMachine.IC.getValue()+1 % 16 && RealMachine.IC.getValue()+1 / 16 == row &&
-                            row == RealMachine.memory.getBlock(RealMachine.PLR.getA2()*0x10 + RealMachine.PLR.getA3()).getWord(i).getIntValue())
-                {
-                    setBackground(new Color(0xFFFF00));
-                    setToolTipText("Virtualios masinos "+(i+1)+" blokas");
-                }
-            }
+                if ((column-1 == (RealMachine.IC.getValue() % 16)) &&
+                    (row == RealMachine.memory.getBlock(RealMachine.PLR.getA2()*0x10 + RealMachine.PLR.getA3()).getWord(RealMachine.IC.getValue() / 16).getIntValue()))
+                        setBackground(new Color(0xFFFF00));
             }
         }
          return this;

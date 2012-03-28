@@ -4,6 +4,7 @@
  */
 package mitosv0;
 
+import java.awt.Color;
 import java.lang.reflect.InvocationTargetException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -544,10 +545,13 @@ public class VirtualMachine {
     {
         RealMachine.SI.setValue(1);
         RealMachine.mode.SetSupervisor();
+        System.out.println(RealMachine.mode.isSupervisor());
         RealMachine.CH2.setClosed();
+
         
         RealMachine.gui.updateAll();
         pause(WAIT_TIME);
+
                 
         RealMachine.timer.timePass(2);
         
