@@ -579,6 +579,7 @@ public class RealMachineGUI extends javax.swing.JFrame {
             taskName = TaskNameField.getText();
             File f = new File("src/mitosv0/"+taskName+".mit");
             if(f.exists()){
+            //TODO: Programos kode turi buti nurodyta, kiek isskiriame virtualiai masinai atminties.
             RM.CreateVirtualMachine(taskName);
             updateAll();       
             }else{

@@ -8,6 +8,7 @@ import IODevices.Output;
 import IODevices.Input;
 import GUI.RealMachineGUI;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.util.Random;
@@ -53,6 +54,7 @@ public class RealMachine {
     public static final int SHARED_MEMORY_BLOCK_OFFSET = 0x55;
     private static final int MAX_VIRTUAL_MACHINE_COUNT = 5;
     private static boolean [] freeBlocks;
+    private static int freeBlockCount;
     private static int virtualMachineCount;
     
     public static RealMemory memory;
@@ -85,6 +87,7 @@ public class RealMachine {
         freeBlocks = new boolean[blocks];
         for (int i = 0; i < blocks; i++)
             freeBlocks[i] = true;
+        freeBlockCount = blocks;
         virtualMachineCount = 0;
         
         CreateVirtualMachine("program");
@@ -93,13 +96,43 @@ public class RealMachine {
     }
     
     public void CreateVirtualMachine(String fileName){
-        if (virtualMachineCount < MAX_VIRTUAL_MACHINE_COUNT)
+        FileInputStream input = null;
+        try {
+            input = new FileInputStream("src/mitosv0/"+fileName+".mit");
+            //TODO: Nuskaitom kiek reikia atminties programai
+            
+            int requiredMemory = 0x1; //input read bla bla
+            VirtualMemory virtualMemory = CreateVirtualMachineMemory(requiredMemory);
+            if (virtualMemory != null)
+            {
+                
+                loadProgram(virtualMemory, input);
+                VM = new VirtualMachine(R1, R2, IC, C, virtualMemory);
+                SI.setValue(0);
+                PI.setValue(0);
+            }
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(RealMachine.class.getName()).log(Level.SEVERE, null, ex);
+        } finally {
+            try {
+                input.close();
+            } catch (IOException ex) {
+                Logger.getLogger(RealMachine.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+    
+    public VirtualMemory CreateVirtualMachineMemory(int requiredBlocks){
+        if (virtualMachineCount < MAX_VIRTUAL_MACHINE_COUNT & requiredBlocks < freeBlockCount)
         {
             virtualMachineCount++;
             Random rnd = new Random();
             //Nustatome PLR registro reiksmes skirtas vienai virtualiai masinai
             //A1 - programai skirtas puslapiu skaicius, visada 16
-            PLR.setA1((byte) 0x10);
+            if (requiredBlocks >= 0x10)
+                PLR.setA1((byte) 0);
+            else
+                PLR.setA1((byte) requiredBlocks);
 
             if (virtualMachineCount < MAX_VIRTUAL_MACHINE_COUNT-1){
                 int newA2, newA3;
@@ -123,16 +156,18 @@ public class RealMachine {
                 PLR.setA3((byte) newA3);
                 PLR.setA2((byte) newA2);
                 freeBlocks[newA2*0x10+newA3] = false;
+                freeBlockCount--;
                 //uzpildom lentele, kad rodytu i atsitiktines vietas
                 MemoryBlock block = memory.getBlock(PLR.getA2()*0x10+PLR.getA3());
 
-                for (int i = 0; i < 16; i++){
+                for (int i = 0; i < requiredBlocks; i++){
                     int blockIndex = rnd.nextInt(PLR_MAX_BLOCK_INDEX);
                     while (!freeBlocks[blockIndex]){
                         blockIndex = rnd.nextInt(PLR_MAX_BLOCK_INDEX);
                     }
                     block.setWord(i,new Word((short) blockIndex));
                     freeBlocks[blockIndex] = false;
+                    freeBlockCount--;
                 }
                 //Penktoji masina is penkiu, nebeduodan random, nes biski gali uztrukci
             } else {
@@ -144,46 +179,58 @@ public class RealMachine {
                 PLR.setA2((byte) (i / 0x10));
                 PLR.setA3((byte) (i % 0x10));
                 freeBlocks[i] = false;
+                freeBlockCount--;
                 MemoryBlock block = memory.getBlock(PLR.getA2()*0x10+PLR.getA3());
-                for (int j = 0; j < 16; j ++){
+                for (int j = 0; j < requiredBlocks; j ++){
                     while(!freeBlocks[i])
                     {
                         i++;
                     }
                     block.setWord(j,new Word(i));
                     freeBlocks[i] = false;
+                    freeBlockCount--;
                 }
             }
 
-            VirtualMemory virtualMemory = new VirtualMemory(PLR, memory);
-            loadProgram(virtualMemory, "src/mitosv0/"+fileName+".mit");
-            VM = new VirtualMachine(R1, R2, IC, C, virtualMemory);
-            SI.setValue(0);
-            PI.setValue(0);
+            return new VirtualMemory(PLR, memory);
         }
         else
+        {
             System.out.println("Per daug virtualiu masinu!");
+            return null;
+        }
     }
-    public void loadProgram(VirtualMemory memory, String fileName)
+    public void loadProgram(VirtualMemory memory, FileInputStream input)
     {
         try {
-            FileInputStream input = new FileInputStream(fileName);
             int i = 0;
             byte[] buffer = new byte[4];
+            boolean loadOK = true;
             
-            //TODO: Gali buti 256 simboliai, bet jei virs, tada crashas. WAT DO?
+            //Masinai duotu bloku (ir tuo paciu zodziu) skaicius.
+            int maxWordCount = 0x100;
+            if (PLR.getA1() != 0)
+                maxWordCount = PLR.getA1()*0x10;
+
+            
             while ((input.read(buffer)) != -1){
-                memory.setWord(i, new Word(TypeConversion.byteArrayToString(buffer)));
-                i++;
+                if (i < maxWordCount-1)
+                {
+                    memory.setWord(i, new Word(TypeConversion.byteArrayToString(buffer)));
+                    i++;
+                } 
+                else 
+                {
+                    //Pykstam nes daugiau programai nebeduota vietos!
+                    System.out.println("Nėra laisvos vietos");
+                    loadOK = false;
+                    break; 
+                }
             }
             
-            if (i > 256)
+            if (loadOK)
             {
-                System.out.println("Nėra laisvos vietos");
-            }
-            else
-            {
-                //Nustatomas programos dydis zodziais
+                //Nustatomas programos dydis blokais
                 RealMachine.PLR.setA0((byte) (i/16+1));
                 RealMachine.IC.setValue(0);
             }
