@@ -87,19 +87,19 @@ public class RealMachine {
         freeBlockCount = blocks;
         virtualMachineCount = 0;
         
-        CreateVirtualMachine("program");
+        //CreateVirtualMachine("program");
 
         
     }
     
-    public void CreateVirtualMachine(String fileName){
+    public boolean CreateVirtualMachine(String fileName){
         FileInputStream input = null;
         try {
             input = new FileInputStream("src/mitosv0/"+fileName+".mit");
             int requiredMemory = getBlockCount(input);
             
             input = new FileInputStream("src/mitosv0/"+fileName+".mit");
-            if (requiredMemory <= 16)
+            if ((requiredMemory <= 16) && (requiredMemory > 0)) 
             {
                 VirtualMemory virtualMemory = CreateVirtualMachineMemory(requiredMemory);
                 if (virtualMemory != null)
@@ -111,9 +111,7 @@ public class RealMachine {
                 }
             }
             else
-            {
-                System.out.println("Virtual machine can't have more than 16 blocks of memory");
-            }
+              return false;
         } catch (FileNotFoundException ex) {
             Logger.getLogger(RealMachine.class.getName()).log(Level.SEVERE, null, ex);
         } finally {
@@ -123,6 +121,7 @@ public class RealMachine {
                 Logger.getLogger(RealMachine.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+        return true;
     }
     
     public VirtualMemory CreateVirtualMachineMemory(int requiredBlocks){
@@ -268,7 +267,7 @@ public class RealMachine {
             if (line.startsWith("@Memory"))
             {
                 line = line.substring(7, line.length());
-                return Integer.parseInt(line);
+                return Integer.parseInt(line, 16);
             }
         } catch (IOException ex) {
             Logger.getLogger(RealMachine.class.getName()).log(Level.SEVERE, null, ex);

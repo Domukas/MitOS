@@ -49,34 +49,39 @@ public class RealMachineGUI extends javax.swing.JFrame {
         this.RM = RM;
         this.setVisible(true);
        // STextField.setFont(STextField.new);
-        if (RealMachine.VM != null)
-        {
-            vm1MemoryTable = new JTable();
-            vm1MemoryTable.setModel(new VirtualMemoryTableModel(RM,this));
-            vm1MemoryTable.setFillsViewportHeight(true);
-            memoryTabbedPane.add("VM1", new JScrollPane(vm1MemoryTable));
-            vm1MemoryTable.setColumnSelectionAllowed(true);
-            vm1MemoryTable.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        }
         
         updateRegisterFields();  
         updateFlagInfo();
         //Norim, kad adreso stulpelio dydis nesikeistu - vietos butu tiek, kiek uztenka
         memoryTable.getColumnModel().getColumn(0).setMaxWidth(32);
         memoryTable.getColumnModel().getColumn(0).setMinWidth(32);  
-        if (RealMachine.VM != null)
-        {
-            vm1MemoryTable.getColumnModel().getColumn(0).setMaxWidth(32);
-            vm1MemoryTable.getColumnModel().getColumn(0).setMinWidth(32);
-        }
+
         MemoryTableRenderer cr=new MemoryTableRenderer();
         MemoryTableFirstColumnRenderer cfr = new MemoryTableFirstColumnRenderer(RM);
         memoryTable.getColumn(memoryTable.getColumnName(0)).setCellRenderer(cfr);
         for (int i=1;i < memoryTable.getColumnCount(); i++)
         {
             memoryTable.getColumn(memoryTable.getColumnName(i)).setCellRenderer(cr);
-            if (RealMachine.VM != null)
-                vm1MemoryTable.getColumn(memoryTable.getColumnName(i)).setCellRenderer(cr);
+        }
+    }
+    
+    private void createVMTab()
+    {
+        vm1MemoryTable = new JTable();
+        vm1MemoryTable.setModel(new VirtualMemoryTableModel(RM,this));
+        vm1MemoryTable.setFillsViewportHeight(true);
+        memoryTabbedPane.add("VM1", new JScrollPane(vm1MemoryTable));
+        vm1MemoryTable.setColumnSelectionAllowed(true);
+        vm1MemoryTable.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        vm1MemoryTable.getColumnModel().getColumn(0).setMaxWidth(32);
+        vm1MemoryTable.getColumnModel().getColumn(0).setMinWidth(32);
+        
+        MemoryTableRenderer cr=new MemoryTableRenderer();
+        MemoryTableFirstColumnRenderer cfr = new MemoryTableFirstColumnRenderer(RM);
+        memoryTable.getColumn(memoryTable.getColumnName(0)).setCellRenderer(cfr);
+        for (int i=1;i < memoryTable.getColumnCount(); i++)
+        {
+            vm1MemoryTable.getColumn(memoryTable.getColumnName(i)).setCellRenderer(cr);
         }
     }
     
@@ -592,12 +597,21 @@ public class RealMachineGUI extends javax.swing.JFrame {
             String taskName;
             taskName = TaskNameField.getText();
             File f = new File("src/mitosv0/"+taskName+".mit");
+            
             if(f.exists()){
-            //TODO: Programos kode turi buti nurodyta, kiek isskiriame virtualiai masinai atminties.
-            RM.CreateVirtualMachine(taskName);
-            updateAll();       
-            }else{
-                showMessage("File not found.");
+                if (RealMachine.VM == null)
+                {
+                    if (RM.CreateVirtualMachine(taskName))
+                            createVMTab();
+                        else
+                            showMessage("Number of blocks, assigned to virtual machine, is invalid");
+                }
+                else
+                    RM.CreateVirtualMachine(taskName);
+                
+                updateAll();       
+                }else{
+                    showMessage("File not found.");
             }
     }//GEN-LAST:event_TaskButtonActionPerformed
 
