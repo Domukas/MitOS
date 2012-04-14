@@ -7,10 +7,7 @@ package mitosv0;
 import IODevices.Output;
 import IODevices.Input;
 import GUI.RealMachineGUI;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.ObjectInputStream;
+import java.io.*;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -99,17 +96,23 @@ public class RealMachine {
         FileInputStream input = null;
         try {
             input = new FileInputStream("src/mitosv0/"+fileName+".mit");
-            //TODO: Nuskaitom kiek reikia atminties programai
+            int requiredMemory = getBlockCount(input);
             
-            int requiredMemory = 0x1; //input read bla bla
-            VirtualMemory virtualMemory = CreateVirtualMachineMemory(requiredMemory);
-            if (virtualMemory != null)
+            input = new FileInputStream("src/mitosv0/"+fileName+".mit");
+            if (requiredMemory <= 16)
             {
-                
-                loadProgram(virtualMemory, input);
-                VM = new VirtualMachine(R1, R2, IC, C, virtualMemory);
-                SI.setValue(0);
-                PI.setValue(0);
+                VirtualMemory virtualMemory = CreateVirtualMachineMemory(requiredMemory);
+                if (virtualMemory != null)
+                {
+                    loadProgram(virtualMemory, input);
+                    VM = new VirtualMachine(R1, R2, IC, C, virtualMemory);
+                    SI.setValue(0);
+                    PI.setValue(0);
+                }
+            }
+            else
+            {
+                System.out.println("Virtual machine can't have more than 16 blocks of memory");
             }
         } catch (FileNotFoundException ex) {
             Logger.getLogger(RealMachine.class.getName()).log(Level.SEVERE, null, ex);
@@ -212,22 +215,36 @@ public class RealMachine {
             if (PLR.getA1() != 0)
                 maxWordCount = PLR.getA1()*0x10;
 
+            BufferedReader br = new BufferedReader(new InputStreamReader(input));
+            String line;
             
-            while ((input.read(buffer)) != -1){
-                if (i < maxWordCount-1)
+            boolean codeBegins = false;
+            while ((line = br.readLine()) != null)
+            {
+                System.out.println(line);
+                line = line.replaceAll(" ", "");
+                if (codeBegins && !line.equals("@CodeEnd") && (line.length()!=0))
                 {
-                    memory.setWord(i, new Word(TypeConversion.byteArrayToString(buffer)));
-                    i++;
-                } 
-                else 
-                {
-                    //Pykstam nes daugiau programai nebeduota vietos!
-                    System.out.println("Nėra laisvos vietos");
-                    loadOK = false;
-                    break; 
+                    if (i < maxWordCount-1)
+                    {
+                        memory.setWord(i, new Word(line));
+                        i++;
+                    } 
+                    else 
+                    {
+                        //Pykstam nes daugiau programai nebeduota vietos!
+                        System.out.println("Nėra laisvos vietos");
+                        loadOK = false;
+                        break; 
+                    }   
+                    
                 }
+                
+                if (line.equals("@Code"))
+                    codeBegins = true;
+                
             }
-            
+           
             if (loadOK)
             {
                 //Nustatomas programos dydis blokais
@@ -238,6 +255,26 @@ public class RealMachine {
         } catch (IOException ex) {
             Logger.getLogger(MitOSv0.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    private int getBlockCount(FileInputStream input)
+    {
+        BufferedReader br = new BufferedReader(new InputStreamReader(input));
+        
+        String line;
+        try {
+            line = br.readLine();
+            line = line.replaceAll(" ", "");
+            if (line.startsWith("@Memory"))
+            {
+                line = line.substring(7, line.length());
+                return Integer.parseInt(line);
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(RealMachine.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        return 0;
     }
     
     public void DumpMemory()
