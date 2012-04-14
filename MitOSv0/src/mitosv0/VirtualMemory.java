@@ -16,7 +16,6 @@ public class VirtualMemory extends Memory{
     private PLRRegister PLR;
     
     public VirtualMemory(PLRRegister PLR, RealMemory memory){
-        super(16);
         this.memory = memory;
         this.PLR = PLR;
     }
@@ -47,5 +46,9 @@ public class VirtualMemory extends Memory{
     public MemoryBlock getSharedMemoryBlock(int index)
     {
         return memory.getBlock(RealMachine.SHARED_MEMORY_BLOCK_OFFSET + index);
+    }
+
+    public int getMaxMemoryBlocks() {
+        return (PLR.getA1() != 0) ? PLR.getA1() : 0x10;
     }
 }

@@ -23,7 +23,7 @@ public class MemoryTableModel extends TableModel {
 	}
 
 	public int getRowCount() {
-            return memory.MAX_MEMORY_BLOCKS;
+            return memory.getMaxMemoryBlocks();
 	}
         
         public void setValueAt(Object value, int row, int col) {

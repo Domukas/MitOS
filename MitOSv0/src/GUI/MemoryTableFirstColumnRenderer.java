@@ -38,7 +38,10 @@ public Component getTableCellRendererComponent(JTable table, Object value,boolea
             setBackground(table.getBackground());
             setForeground(table.getForeground());
             //Spalvinam virtualios masinos atminties blokus geltonai
-            for (int i = 0; i <= 15; i++){
+            int blockCount = 0x10;
+            if (rm.PLR.getA1() != 0)
+                blockCount = rm.PLR.getA1();
+            for (int i = 0; i <= blockCount-1; i++){
                 if (row == rm.memory.getBlock(rm.PLR.getA2()*0x10 + rm.PLR.getA3()).getWord(i).getIntValue())
                 {
                     setBackground(new Color(0xFFFF00));

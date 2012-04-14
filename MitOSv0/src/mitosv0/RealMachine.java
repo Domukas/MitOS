@@ -242,7 +242,7 @@ public class RealMachine {
     
     public void DumpMemory()
     {
-        for (int i = 0; i < memory.MAX_MEMORY_BLOCKS; i++)
+        for (int i = 0; i < memory.getMaxMemoryBlocks(); i++)
         {
             System.out.print(i+": ");
             for (int j = 0; j < 16; j++)

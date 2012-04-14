@@ -4,6 +4,7 @@
  */
 package GUI;
 
+import java.awt.Dimension;
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.util.LinkedList;
@@ -50,7 +51,7 @@ public class RealMachineGUI extends javax.swing.JFrame {
        // STextField.setFont(STextField.new);
         vm1MemoryTable = new JTable();
         vm1MemoryTable.setModel(new VirtualMemoryTableModel(RM,this));
-        
+        vm1MemoryTable.setFillsViewportHeight(true);
         memoryTabbedPane.add("VM1", new JScrollPane(vm1MemoryTable));
         vm1MemoryTable.setColumnSelectionAllowed(true);
         vm1MemoryTable.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
@@ -218,6 +219,12 @@ public class RealMachineGUI extends javax.swing.JFrame {
 
         jLabel1.setText("PLR");
         registerPanel1.add(jLabel1);
+
+        PLRTextField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                PLRTextFieldActionPerformed(evt);
+            }
+        });
         registerPanel1.add(PLRTextField);
 
         jLabel2.setText("R1");
@@ -433,7 +440,7 @@ public class RealMachineGUI extends javax.swing.JFrame {
 
         getContentPane().add(operationsPanel);
 
-        memoryPanel.setLayout(new javax.swing.BoxLayout(memoryPanel, javax.swing.BoxLayout.PAGE_AXIS));
+        memoryPanel.setLayout(new javax.swing.BoxLayout(memoryPanel, javax.swing.BoxLayout.LINE_AXIS));
 
         memoryTable.setModel(new MemoryTableModel(RM, this));
         memoryTable.setColumnSelectionAllowed(true);
@@ -586,6 +593,15 @@ public class RealMachineGUI extends javax.swing.JFrame {
                 showMessage("File not found.");
             }
     }//GEN-LAST:event_TaskButtonActionPerformed
+
+    private void PLRTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PLRTextFieldActionPerformed
+        try {
+            int intValue = Integer.parseInt(PLRTextField.getText(), 16);
+            RM.PLR.setValue(intValue);
+            updateAll();
+        } 
+            catch (NumberFormatException e) {}
+    }//GEN-LAST:event_PLRTextFieldActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JToggleButton CH1ToggleButton;
