@@ -1,0 +1,11 @@
+@Memory 10
+@Code
+JP03
+00AA    
+0022
+L101
+A102
+S110
+DPT1
+HALT
+@CodeEnd
