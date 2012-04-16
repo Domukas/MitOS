@@ -1,12 +1,11 @@
-@Memory 1
+@Memory 10
 @Code
 JP03
-0043
-3222
+00AA    
+0022
 L101
-LCK2
-Z122
-ULC2
-X122
+A102
+S110
+DPT1
 HALT
 @CodeEnd

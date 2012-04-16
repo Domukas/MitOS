@@ -50,7 +50,7 @@ public class Word {
     
     public void setValue(String s)
     {
-    
+            
         if (s.length() <= 4)
             data = s;
         else 

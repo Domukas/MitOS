@@ -198,7 +198,7 @@ public class RealMachine {
         }
         else
         {
-            System.out.println("Per daug virtualiu masinu!");
+            RealMachine.gui.showMessage("Too many virtual machines!");
             return null;
         }
     }
@@ -241,7 +241,6 @@ public class RealMachine {
                 
                 if (line.equals("@Code"))
                     codeBegins = true;
-                
             }
            
             if (loadOK)

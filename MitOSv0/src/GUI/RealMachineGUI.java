@@ -103,9 +103,11 @@ public class RealMachineGUI extends javax.swing.JFrame {
         R2TextField.setText(RM.R2.getValue().getValue().replaceFirst("^0+(?!$)", ""));
         ICTextField.setText(Integer.toHexString(RM.IC.getValue()));
         CTextField.setText(Integer.toHexString(RM.C.getValue()));
-               String tmp = Integer.toBinaryString(RM.S.getValue());
+        
+        String tmp = Integer.toBinaryString(RM.S.getValue());
         while (tmp.length() < 16)
             tmp = "0"+tmp;
+        tmp = tmp.substring(tmp.length()-16, tmp.length());
         STextField.setText(tmp);
         
         TimerTextField.setText(Integer.toHexString(RM.timer.getValue()));
