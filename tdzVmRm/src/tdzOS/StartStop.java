@@ -12,28 +12,15 @@ import tdzVmRm.Processor;
  *
  * @author Tomas
  */
-public class Process {
+public class StartStop extends Process {
     
-    public ProcessDescriptor pd;
-    
-    public Process(LinkedList inList, int internalID, String externalID, 
+    public StartStop(LinkedList inList, int internalID, String externalID, 
            ProcessorState ps, Processor p, LinkedList<Resource> cr,
            LinkedList<Resource> or, ProcessState state, int priority,
            Process parent, LinkedList<Process> c)
     {
-       
-        pd = new ProcessDescriptor(inList, internalID, externalID, ps, p,
-                cr, or, state, priority, parent, c);
-    }
-    
-    public void step()
-    {
-        
-    }
-    
-    private void createSystemResources()
-    {
-        
+        super(inList, internalID, externalID, ps, p, cr, or, state,
+                priority, parent, c);
     }
     
 }

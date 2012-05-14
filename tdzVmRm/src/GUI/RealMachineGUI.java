@@ -15,6 +15,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.SwingUtilities;
 import javax.swing.table.DefaultTableModel;
+import tdzOS.OS;
 import tdzVmRm.RealMachine;
 import tdzVmRm.VirtualMachine;
 import tdzVmRm.Word;
@@ -30,6 +31,7 @@ public class RealMachineGUI extends javax.swing.JFrame {
      */
     
     RealMachine RM;
+    OS os;
     JTable vm1MemoryTable;
     
     //Reikalinga nusakyti lenteles reiksmiu tipui
@@ -43,10 +45,11 @@ public class RealMachineGUI extends javax.swing.JFrame {
         return tableDataType;
     }
     
-    public RealMachineGUI(RealMachine RM) {
+    public RealMachineGUI(RealMachine RM, OS os) {
         super("Real machine");
         initComponents();
         this.RM = RM;
+        this.os = os;
         this.setVisible(true);
        // STextField.setFont(STextField.new);
         
@@ -213,6 +216,7 @@ public class RealMachineGUI extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         TaskNameField = new javax.swing.JTextField();
         TaskButton = new javax.swing.JButton();
+        osStepButton = new javax.swing.JButton();
         memoryTabbedPane = new javax.swing.JTabbedPane();
         memoryPanel = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -449,6 +453,14 @@ public class RealMachineGUI extends javax.swing.JFrame {
         });
         jPanel1.add(TaskButton, java.awt.BorderLayout.PAGE_END);
 
+        osStepButton.setText("OS step");
+        osStepButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                osStepButtonActionPerformed(evt);
+            }
+        });
+        jPanel1.add(osStepButton, java.awt.BorderLayout.PAGE_START);
+
         operationsPanel.add(jPanel1);
 
         getContentPane().add(operationsPanel);
@@ -625,6 +637,10 @@ public class RealMachineGUI extends javax.swing.JFrame {
             catch (NumberFormatException e) {}
     }//GEN-LAST:event_PLRTextFieldActionPerformed
 
+    private void osStepButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_osStepButtonActionPerformed
+        os.step();
+    }//GEN-LAST:event_osStepButtonActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JToggleButton CH1ToggleButton;
     private javax.swing.JToggleButton CH2ToggleButton;
@@ -666,6 +682,7 @@ public class RealMachineGUI extends javax.swing.JFrame {
     private javax.swing.JTabbedPane memoryTabbedPane;
     private javax.swing.JTable memoryTable;
     private javax.swing.JPanel operationsPanel;
+    private javax.swing.JButton osStepButton;
     private javax.swing.JPanel registerPanel1;
     private javax.swing.JPanel registerPanel2;
     private javax.swing.JButton runButton;
