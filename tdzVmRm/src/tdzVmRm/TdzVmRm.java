@@ -10,6 +10,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import tdzOS.OS;
 
 /**
  *
@@ -24,8 +25,8 @@ public class TdzVmRm {
         // TODO code application logic here
 
         RealMachine RM = new RealMachine(0x65);
-        
+        OS os = new OS(RM);
         RealMachineGUI rmGUI = new RealMachineGUI(RM);
-        RM.addGui(rmGUI);
+        //RM.addGui(rmGUI);
     }
 }

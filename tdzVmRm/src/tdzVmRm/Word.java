@@ -1,4 +1,4 @@
-/*
+ /*
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
@@ -35,7 +35,7 @@ public class Word {
         }
         catch(NumberFormatException e)
         {
-            RealMachine.PI.setValue(2);
+            RealMachine.proc[0].PI.setValue(2);
             RealMachine.gui.updateAll();
             RealMachine.gui.showMessage("'"+data+"' is not an integer.");
             return 0;

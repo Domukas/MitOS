@@ -98,42 +98,42 @@ public class RealMachineGUI extends javax.swing.JFrame {
     private void updateRegisterFields()
     {
         repaint();
-        PLRTextField.setText(RM.PLR.getValue());
-        R1TextField.setText(RM.R1.getValue().getValue().replaceFirst("^0+(?!$)", ""));
-        R2TextField.setText(RM.R2.getValue().getValue().replaceFirst("^0+(?!$)", ""));
-        ICTextField.setText(Integer.toHexString(RM.IC.getValue()));
-        CTextField.setText(Integer.toHexString(RM.C.getValue()));
+        PLRTextField.setText(RM.proc[0].PLR.getValue());
+        R1TextField.setText(RM.proc[0].R1.getValue().getValue().replaceFirst("^0+(?!$)", ""));
+        R2TextField.setText(RM.proc[0].R2.getValue().getValue().replaceFirst("^0+(?!$)", ""));
+        ICTextField.setText(Integer.toHexString(RM.proc[0].IC.getValue()));
+        CTextField.setText(Integer.toHexString(RM.proc[0].C.getValue()));
         
-        String tmp = Integer.toBinaryString(RM.S.getValue());
+        String tmp = Integer.toBinaryString(RM.proc[0].S.getValue());
         while (tmp.length() < 16)
             tmp = "0"+tmp;
         tmp = tmp.substring(tmp.length()-16, tmp.length());
         STextField.setText(tmp);
         
-        TimerTextField.setText(Integer.toHexString(RM.timer.getValue()));
+        TimerTextField.setText(Integer.toHexString(RM.proc[0].timer.getValue()));
         
-        MODEToggleButton.setText(modeToString(RealMachine.mode.isSupervisor()));
-        MODEToggleButton.setSelected(RealMachine.mode.isSupervisor());
+        MODEToggleButton.setText(modeToString(RealMachine.proc[0].mode.isSupervisor()));
+        MODEToggleButton.setSelected(RealMachine.proc[0].mode.isSupervisor());
         
-        PITextField.setText(Integer.toHexString(RM.PI.getValue()));
-        SITextField.setText(Integer.toString(RM.SI.getValue()));
+        PITextField.setText(Integer.toHexString(RM.proc[0].PI.getValue()));
+        SITextField.setText(Integer.toString(RM.proc[0].SI.getValue()));
         
-        CH1ToggleButton.setText(CHStateToString(RM.CH1.isOpen()));
-        CH1ToggleButton.setSelected(RM.CH1.isOpen());
-        CH2ToggleButton.setText(CHStateToString(RM.CH2.isOpen()));
-        CH2ToggleButton.setSelected(RM.CH2.isOpen());
-        CH3ToggleButton.setText(CHStateToString(RM.CH3.isOpen()));
-        CH3ToggleButton.setSelected(RM.CH3.isOpen());
-        CH4ToggleButton.setText(CHStateToString(RM.CH4.isOpen()));
-        CH4ToggleButton.setSelected(RM.CH4.isOpen());
+        CH1ToggleButton.setText(CHStateToString(RM.proc[0].CH1.isOpen()));
+        CH1ToggleButton.setSelected(RM.proc[0].CH1.isOpen());
+        CH2ToggleButton.setText(CHStateToString(RM.proc[0].CH2.isOpen()));
+        CH2ToggleButton.setSelected(RM.proc[0].CH2.isOpen());
+        CH3ToggleButton.setText(CHStateToString(RM.proc[0].CH3.isOpen()));
+        CH3ToggleButton.setSelected(RM.proc[0].CH3.isOpen());
+        CH4ToggleButton.setText(CHStateToString(RM.proc[0].CH4.isOpen()));
+        CH4ToggleButton.setSelected(RM.proc[0].CH4.isOpen());
     }
     
     
     private void updateFlagInfo()
     {
-        ZFCheckBox.setSelected(RM.C.isZeroFlagSet());
-        SFCheckBox.setSelected(RM.C.isSignFlagSet());
-        OFCheckBox.setSelected(RM.C.isOverflowFlagSet());
+        ZFCheckBox.setSelected(RM.proc[0].C.isZeroFlagSet());
+        SFCheckBox.setSelected(RM.proc[0].C.isSignFlagSet());
+        OFCheckBox.setSelected(RM.proc[0].C.isOverflowFlagSet());
     }
     
     private String CHStateToString(boolean state)
@@ -220,7 +220,6 @@ public class RealMachineGUI extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(800, 600));
-        setPreferredSize(new java.awt.Dimension(800, 600));
         getContentPane().setLayout(new javax.swing.BoxLayout(getContentPane(), javax.swing.BoxLayout.LINE_AXIS));
 
         operationsPanel.setMaximumSize(new java.awt.Dimension(160, 450));
@@ -488,42 +487,42 @@ public class RealMachineGUI extends javax.swing.JFrame {
 
     private void CH2ToggleButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CH2ToggleButtonActionPerformed
         if (CH2ToggleButton.isSelected())
-            RM.CH2.setOpen();
+            RM.proc[0].CH2.setOpen();
         else
-            RM.CH2.setClosed();
-        CH2ToggleButton.setText(CHStateToString(RM.CH2.isOpen()));
+            RM.proc[0].CH2.setClosed();
+        CH2ToggleButton.setText(CHStateToString(RM.proc[0].CH2.isOpen()));
     }//GEN-LAST:event_CH2ToggleButtonActionPerformed
 
     private void CH3ToggleButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CH3ToggleButtonActionPerformed
         if (CH3ToggleButton.isSelected())
-            RM.CH3.setOpen();
+            RM.proc[0].CH3.setOpen();
         else
-            RM.CH3.setClosed();
-        CH3ToggleButton.setText(CHStateToString(RM.CH3.isOpen()));
+            RM.proc[0].CH3.setClosed();
+        CH3ToggleButton.setText(CHStateToString(RM.proc[0].CH3.isOpen()));
     }//GEN-LAST:event_CH3ToggleButtonActionPerformed
 
     private void CH1ToggleButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CH1ToggleButtonActionPerformed
         if (CH1ToggleButton.isSelected())
-            RM.CH1.setOpen();
+            RM.proc[0].CH1.setOpen();
         else
-            RM.CH1.setClosed();
-        CH1ToggleButton.setText(CHStateToString(RM.CH1.isOpen()));
+            RM.proc[0].CH1.setClosed();
+        CH1ToggleButton.setText(CHStateToString(RM.proc[0].CH1.isOpen()));
     }//GEN-LAST:event_CH1ToggleButtonActionPerformed
 
     private void CH4ToggleButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CH4ToggleButtonActionPerformed
         if (CH4ToggleButton.isSelected())
-            RM.CH4.setOpen();
+            RM.proc[0].CH4.setOpen();
         else
-            RM.CH4.setClosed();
-        CH4ToggleButton.setText(CHStateToString(RM.CH4.isOpen()));
+            RM.proc[0].CH4.setClosed();
+        CH4ToggleButton.setText(CHStateToString(RM.proc[0].CH4.isOpen()));
     }//GEN-LAST:event_CH4ToggleButtonActionPerformed
 
     private void MODEToggleButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MODEToggleButtonActionPerformed
         if (MODEToggleButton.isSelected())
-            RM.mode.SetSupervisor();
+            RM.proc[0].mode.SetSupervisor();
         else
-            RM.mode.setUser();
-        MODEToggleButton.setText(modeToString(RM.mode.isSupervisor()));
+            RM.proc[0].mode.setUser();
+        MODEToggleButton.setText(modeToString(RM.proc[0].mode.isSupervisor()));
     }//GEN-LAST:event_MODEToggleButtonActionPerformed
 
     private void runButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_runButtonActionPerformed
@@ -532,66 +531,66 @@ public class RealMachineGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_runButtonActionPerformed
 
     private void R2TextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_R2TextFieldActionPerformed
-        RM.R2.setValue(new Word(Integer.parseInt(R2TextField.getText(), 16)));
+        RM.proc[0].R2.setValue(new Word(Integer.parseInt(R2TextField.getText(), 16)));
         updateAll();
     }//GEN-LAST:event_R2TextFieldActionPerformed
 
     private void R1TextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_R1TextFieldActionPerformed
-        RM.R1.setValue(new Word(Integer.parseInt(R1TextField.getText(), 16)));
+        RM.proc[0].R1.setValue(new Word(Integer.parseInt(R1TextField.getText(), 16)));
         updateAll();
     }//GEN-LAST:event_R1TextFieldActionPerformed
 
     private void ICTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ICTextFieldActionPerformed
-        RM.IC.setValue(Integer.parseInt(ICTextField.getText(), 16));
+        RM.proc[0].IC.setValue(Integer.parseInt(ICTextField.getText(), 16));
         updateAll();
     }//GEN-LAST:event_ICTextFieldActionPerformed
 
     private void CTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CTextFieldActionPerformed
-        RM.C.setValue(Integer.parseInt(CTextField.getText(), 16));
+        RM.proc[0].C.setValue(Integer.parseInt(CTextField.getText(), 16));
         updateAll();        
     }//GEN-LAST:event_CTextFieldActionPerformed
 
     private void STextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_STextFieldActionPerformed
-        RM.S.setValue(Integer.parseInt(STextField.getText(),2));
+        RM.proc[0].S.setValue(Integer.parseInt(STextField.getText(),2));
         updateAll();
     }//GEN-LAST:event_STextFieldActionPerformed
 
     private void TimerTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TimerTextFieldActionPerformed
-        RM.timer.setValue(Integer.parseInt(TimerTextField.getText(), 16));
+        RM.proc[0].timer.setValue(Integer.parseInt(TimerTextField.getText(), 16));
         updateAll();
     }//GEN-LAST:event_TimerTextFieldActionPerformed
 
     private void PITextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PITextFieldActionPerformed
-        RM.PI.setValue(Integer.parseInt(PITextField.getText(), 16));
+        RM.proc[0].PI.setValue(Integer.parseInt(PITextField.getText(), 16));
         updateAll();
     }//GEN-LAST:event_PITextFieldActionPerformed
 
     private void SITextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SITextFieldActionPerformed
-        RM.SI.setValue(Integer.parseInt(SITextField.getText(), 16));
+        RM.proc[0].SI.setValue(Integer.parseInt(SITextField.getText(), 16));
         updateAll();
     }//GEN-LAST:event_SITextFieldActionPerformed
 
     private void ZFCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ZFCheckBoxActionPerformed
         if (ZFCheckBox.isSelected())
-            RM.C.setZeroFlag();
+            RM.proc[0].C.setZeroFlag();
         else 
-            RM.C.unsetZeroFlag();
+            RM.proc[0].C.unsetZeroFlag();
         updateAll();
     }//GEN-LAST:event_ZFCheckBoxActionPerformed
 
     private void SFCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SFCheckBoxActionPerformed
         if (SFCheckBox.isSelected())
-            RM.C.setSignFlag();
+            RM.proc[0].C.setSignFlag();
         else 
-            RM.C.unsetSignFlag();
+            RM.proc[0].C.unsetSignFlag();
         updateAll();
     }//GEN-LAST:event_SFCheckBoxActionPerformed
 
     private void OFCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_OFCheckBoxActionPerformed
         if (OFCheckBox.isSelected())
-            RM.C.setOverflowFlag();
+            RM.proc[0].C.setOverflowFlag();
         else 
-            RM.C.unsetOverflowFlag();
+            RM.proc[0].C.unsetOverflowFlag();
         updateAll();
     }//GEN-LAST:event_OFCheckBoxActionPerformed
 
@@ -620,7 +619,7 @@ public class RealMachineGUI extends javax.swing.JFrame {
     private void PLRTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PLRTextFieldActionPerformed
         try {
             int intValue = Integer.parseInt(PLRTextField.getText(), 16);
-            RM.PLR.setValue(intValue);
+            RM.proc[0].PLR.setValue(intValue);
             updateAll();
         } 
             catch (NumberFormatException e) {}

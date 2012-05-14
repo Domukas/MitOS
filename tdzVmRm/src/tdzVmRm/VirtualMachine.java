@@ -70,12 +70,12 @@ public class VirtualMachine {
             step();
             //RealMachine.gui.updateAll();
             //pause(500);
-        } while ((RealMachine.SI.getValue() != 5) && (RealMachine.PI.getValue() == 0));
+        } while ((RealMachine.proc[0].SI.getValue() != 5) && (RealMachine.proc[0].PI.getValue() == 0));
     }
     
     public void step()
     {    
-        if ((RealMachine.SI.getValue() != 5) && (RealMachine.PI.getValue() == 0))
+        if ((RealMachine.proc[0].SI.getValue() != 5) && (RealMachine.proc[0].PI.getValue() == 0))
         {
             Word currentCommand = getCurrentCommand();
             goToNextCommand();
@@ -97,7 +97,7 @@ public class VirtualMachine {
         val++;
         IC.setValue(val);
         
-        RealMachine.timer.timePass(1);
+        RealMachine.proc[0].timer.timePass(1);
     }
        
     private void processCommand(Word currentWord)
@@ -304,8 +304,8 @@ public class VirtualMachine {
                             default:
                             {
                                 //Opkodas neegzistuoja
-                                RealMachine.PI.setValue(2);
-                                RealMachine.mode.SetSupervisor();
+                                RealMachine.proc[0].PI.setValue(2);
+                                RealMachine.proc[0].mode.SetSupervisor();
                                 RealMachine.gui.showMessage("Opcode: " + OPC + " does not exist");
 
                             }
@@ -421,19 +421,19 @@ public class VirtualMachine {
     
     public void LCK (int x)
     {
-        if (RealMachine.S.isBitSet(x)){
+        if (RealMachine.proc[0].S.isBitSet(x)){
             RealMachine.gui.showMessage(x+" block is already locked.");
-            RealMachine.PI.setValue(1);
+            RealMachine.proc[0].PI.setValue(1);
         } else {
-            RealMachine.SI.setValue(4);
-            RealMachine.mode.SetSupervisor();
-            RealMachine.S.setBit(x);         
+            RealMachine.proc[0].SI.setValue(4);
+            RealMachine.proc[0].mode.SetSupervisor();
+            RealMachine.proc[0].S.setBit(x);         
 
             RealMachine.gui.updateAll();
             pause(WAIT_TIME);
 
-            RealMachine.SI.setValue(0);
-            RealMachine.mode.setUser(); 
+            RealMachine.proc[0].SI.setValue(0);
+            RealMachine.proc[0].mode.setUser(); 
 
             RealMachine.gui.updateAll();
         }
@@ -442,9 +442,9 @@ public class VirtualMachine {
     public void X1 (int xx)
     {
         int x = xx/0x10;
-        if (!RealMachine.S.isBitSet(x))
+        if (!RealMachine.proc[0].S.isBitSet(x))
         {
-            RealMachine.PI.setValue(1); 
+            RealMachine.proc[0].PI.setValue(1); 
             RealMachine.gui.showMessage("Accessing unavailable memory!");
         }
         else 
@@ -454,9 +454,9 @@ public class VirtualMachine {
     public void X2 (int xx)
     {
         int x = xx/0x10;
-        if (!RealMachine.S.isBitSet(x))
+        if (!RealMachine.proc[0].S.isBitSet(x))
         {
-            RealMachine.PI.setValue(1); 
+            RealMachine.proc[0].PI.setValue(1); 
             RealMachine.gui.showMessage("Accessing unavailable memory!");
         }
         else 
@@ -466,9 +466,9 @@ public class VirtualMachine {
     public void Z1 (int xx)
     {
         int x = xx/0x10;
-        if (!RealMachine.S.isBitSet(x))
+        if (!RealMachine.proc[0].S.isBitSet(x))
         {
-            RealMachine.PI.setValue(1); 
+            RealMachine.proc[0].PI.setValue(1); 
             RealMachine.gui.showMessage("Accessing unavailable memory!");
         }
         else 
@@ -478,9 +478,9 @@ public class VirtualMachine {
     public void Z2 (int xx)
     {
         int x = xx/0x10;
-        if (!RealMachine.S.isBitSet(x))
+        if (!RealMachine.proc[0].S.isBitSet(x))
         {
-            RealMachine.PI.setValue(1); 
+            RealMachine.proc[0].PI.setValue(1); 
             RealMachine.gui.showMessage("Accessing unavailable memory!");
         }
         else 
@@ -489,19 +489,19 @@ public class VirtualMachine {
     
     public void ULC (int x)
     {
-        if (!RealMachine.S.isBitSet(x)){
+        if (!RealMachine.proc[0].S.isBitSet(x)){
             RealMachine.gui.showMessage(x+" block is already unlocked.");
-            RealMachine.PI.setValue(1);
+            RealMachine.proc[0].PI.setValue(1);
         } else {
-            RealMachine.SI.setValue(4);
-            RealMachine.mode.SetSupervisor(); 
-            RealMachine.S.unsetBit(x);   
+            RealMachine.proc[0].SI.setValue(4);
+            RealMachine.proc[0].mode.SetSupervisor(); 
+            RealMachine.proc[0].S.unsetBit(x);   
        
             RealMachine.gui.updateAll();
             pause(WAIT_TIME);
        
-            RealMachine.SI.setValue(0);
-            RealMachine.mode.setUser();
+            RealMachine.proc[0].SI.setValue(0);
+            RealMachine.proc[0].mode.setUser();
        
             RealMachine.gui.updateAll();
         }
@@ -552,14 +552,14 @@ public class VirtualMachine {
     
     public void DGT (int x)
     {
-        RealMachine.SI.setValue(1);
-        RealMachine.mode.SetSupervisor();
-        RealMachine.CH2.setClosed();
+        RealMachine.proc[0].SI.setValue(1);
+        RealMachine.proc[0].mode.SetSupervisor();
+        RealMachine.proc[0].CH2.setClosed();
 
         RealMachine.gui.updateAll();
         pause(WAIT_TIME);
 
-        RealMachine.timer.timePass(2);
+        RealMachine.proc[0].timer.timePass(2);
         
         String temp = RealMachine.in.get();
         for (int i = 0; i < temp.length() / 4 + 1; i++)
@@ -571,21 +571,21 @@ public class VirtualMachine {
            setWord(x * 0x10 + i, new Word(temp.substring(i*4, end)));
         }
         
-        RealMachine.CH2.setOpen();
-        RealMachine.SI.setValue(0);
-        RealMachine.mode.setUser();
+        RealMachine.proc[0].CH2.setOpen();
+        RealMachine.proc[0].SI.setValue(0);
+        RealMachine.proc[0].mode.setUser();
     }
     
     public void DPT (int x)
     {
-        RealMachine.SI.setValue(2);      
-        RealMachine.mode.SetSupervisor();
-        RealMachine.CH1.setClosed();
+        RealMachine.proc[0].SI.setValue(2);      
+        RealMachine.proc[0].mode.SetSupervisor();
+        RealMachine.proc[0].CH1.setClosed();
            
         RealMachine.gui.updateAll();
         pause(WAIT_TIME);
 
-        RealMachine.timer.timePass(2);
+        RealMachine.proc[0].timer.timePass(2);
         
         
         String temp = "";
@@ -599,116 +599,116 @@ public class VirtualMachine {
         
         RealMachine.out.send(temp);
         
-        RealMachine.CH1.setOpen();
-        RealMachine.mode.setUser();
-        RealMachine.SI.setValue(0);
+        RealMachine.proc[0].CH1.setOpen();
+        RealMachine.proc[0].mode.setUser();
+        RealMachine.proc[0].SI.setValue(0);
     }    
     
     //Garsiakalbio komandos
     
     public void GGR1(){
-        RealMachine.SI.setValue(3);
-        RealMachine.mode.SetSupervisor();
-        RealMachine.CH4.setClosed();
+        RealMachine.proc[0].SI.setValue(3);
+        RealMachine.proc[0].mode.SetSupervisor();
+        RealMachine.proc[0].CH4.setClosed();
         
         RealMachine.gui.updateAll();
         pause(WAIT_TIME);
         
-        int volume = RealMachine.R1.getValue().getIntValue();
+        int volume = RealMachine.proc[0].R1.getValue().getIntValue();
         RealMachine.speakers.setVolume(volume);
         
-        RealMachine.CH4.setOpen();
-        RealMachine.SI.setValue(0);
-        RealMachine.mode.setUser();       
+        RealMachine.proc[0].CH4.setOpen();
+        RealMachine.proc[0].SI.setValue(0);
+        RealMachine.proc[0].mode.setUser();       
     }
     
     public void GGR2(){
-        RealMachine.SI.setValue(3);
-        RealMachine.mode.SetSupervisor();
-        RealMachine.CH4.setClosed();
+        RealMachine.proc[0].SI.setValue(3);
+        RealMachine.proc[0].mode.SetSupervisor();
+        RealMachine.proc[0].CH4.setClosed();
         
         RealMachine.gui.updateAll();
         pause(WAIT_TIME);
         
-        int volume = RealMachine.R2.getValue().getIntValue();
+        int volume = RealMachine.proc[0].R2.getValue().getIntValue();
         RealMachine.speakers.setVolume(volume);
         
-        RealMachine.CH4.setOpen();
-        RealMachine.SI.setValue(0);
-        RealMachine.mode.setUser();
+        RealMachine.proc[0].CH4.setOpen();
+        RealMachine.proc[0].SI.setValue(0);
+        RealMachine.proc[0].mode.setUser();
     }
     
     public void GLR1(){
-        RealMachine.SI.setValue(3);
-        RealMachine.mode.SetSupervisor();
-        RealMachine.CH4.setClosed();
+        RealMachine.proc[0].SI.setValue(3);
+        RealMachine.proc[0].mode.SetSupervisor();
+        RealMachine.proc[0].CH4.setClosed();
         
         RealMachine.gui.updateAll();
         pause(WAIT_TIME);
         
-        int volume = RealMachine.R1.getValue().getIntValue();
+        int volume = RealMachine.proc[0].R1.getValue().getIntValue();
         RealMachine.speakers.setLength(volume);
         
-        RealMachine.CH4.setOpen();
-        RealMachine.SI.setValue(0);
-        RealMachine.mode.setUser();
+        RealMachine.proc[0].CH4.setOpen();
+        RealMachine.proc[0].SI.setValue(0);
+        RealMachine.proc[0].mode.setUser();
     }
     
     public void GLR2(){
-        RealMachine.SI.setValue(3);
-        RealMachine.mode.SetSupervisor();
-        RealMachine.CH4.setClosed();
+        RealMachine.proc[0].SI.setValue(3);
+        RealMachine.proc[0].mode.SetSupervisor();
+        RealMachine.proc[0].CH4.setClosed();
         
         RealMachine.gui.updateAll();
         pause(WAIT_TIME);
 
-        int volume = RealMachine.R2.getValue().getIntValue();
+        int volume = RealMachine.proc[0].R2.getValue().getIntValue();
         RealMachine.speakers.setLength(volume);
         
-        RealMachine.CH4.setOpen();
-        RealMachine.SI.setValue(0);
-        RealMachine.mode.setUser();
+        RealMachine.proc[0].CH4.setOpen();
+        RealMachine.proc[0].SI.setValue(0);
+        RealMachine.proc[0].mode.setUser();
     }
     
     public void GNR1(){
-        RealMachine.SI.setValue(3);
-        RealMachine.mode.SetSupervisor();
-        RealMachine.CH4.setClosed();
+        RealMachine.proc[0].SI.setValue(3);
+        RealMachine.proc[0].mode.SetSupervisor();
+        RealMachine.proc[0].CH4.setClosed();
         
         RealMachine.gui.updateAll();
         pause(WAIT_TIME);
         
-        int value = RealMachine.R1.getValue().getIntValue();
+        int value = RealMachine.proc[0].R1.getValue().getIntValue();
         RealMachine.speakers.play(value);
         
-        RealMachine.CH4.setOpen();
-        RealMachine.SI.setValue(0);
-        RealMachine.mode.setUser();
+        RealMachine.proc[0].CH4.setOpen();
+        RealMachine.proc[0].SI.setValue(0);
+        RealMachine.proc[0].mode.setUser();
     }
     
     public void GNR2(){
-        RealMachine.SI.setValue(3);
-        RealMachine.mode.SetSupervisor();
-        RealMachine.CH4.setClosed();
+        RealMachine.proc[0].SI.setValue(3);
+        RealMachine.proc[0].mode.SetSupervisor();
+        RealMachine.proc[0].CH4.setClosed();
         
         
         RealMachine.gui.updateAll();
         pause(WAIT_TIME);
         
-        int value = RealMachine.R2.getValue().getIntValue();
+        int value = RealMachine.proc[0].R2.getValue().getIntValue();
         RealMachine.speakers.play(value);
         
-        RealMachine.CH4.setOpen();
-        RealMachine.SI.setValue(0);
-        RealMachine.mode.setUser();
+        RealMachine.proc[0].CH4.setOpen();
+        RealMachine.proc[0].SI.setValue(0);
+        RealMachine.proc[0].mode.setUser();
     }
     
     //Programos pabaigos komadna
     
     public void HALT ()
     {
-        RealMachine.SI.setValue(5);
-        RealMachine.mode.SetSupervisor();
+        RealMachine.proc[0].SI.setValue(5);
+        RealMachine.proc[0].mode.SetSupervisor();
     }
     
     //Pagalbinės (ne virtualios mašinos)

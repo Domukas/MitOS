@@ -37,12 +37,12 @@ public Component getTableCellRendererComponent(JTable table, Object value,boolea
             //Spalvinam IC reiksme
             if (table.getModel() instanceof  VirtualMemoryTableModel)
             {
-                if ((row == RealMachine.IC.getValue() / 16)&&(column-1 == RealMachine.IC.getValue() % 16))
+                if ((row == RealMachine.proc[0].IC.getValue() / 16)&&(column-1 == RealMachine.proc[0].IC.getValue() % 16))
                     setBackground(new Color(0xFFFF00));
             } else if (table.getModel() instanceof  MemoryTableModel)
             {
-                if ((column-1 == (RealMachine.IC.getValue() % 16)) &&
-                    (row == RealMachine.memory.getBlock(RealMachine.PLR.getA2()*0x10 + RealMachine.PLR.getA3()).getWord(RealMachine.IC.getValue() / 16).getIntValue()))
+                if ((column-1 == (RealMachine.proc[0].IC.getValue() % 16)) &&
+                    (row == RealMachine.memory.getBlock(RealMachine.proc[0].PLR.getA2()*0x10 + RealMachine.proc[0].PLR.getA3()).getWord(RealMachine.proc[0].IC.getValue() / 16).getIntValue()))
                         setBackground(new Color(0xFFFF00));
             }
         }

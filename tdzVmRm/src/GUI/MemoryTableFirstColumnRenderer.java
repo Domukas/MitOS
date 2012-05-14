@@ -39,10 +39,10 @@ public Component getTableCellRendererComponent(JTable table, Object value,boolea
             setForeground(table.getForeground());
             //Spalvinam virtualios masinos atminties blokus geltonai
             int blockCount = 0x10;
-            if (rm.PLR.getA1() != 0)
-                blockCount = rm.PLR.getA1();
+            if (rm.proc[0].PLR.getA1() != 0)
+                blockCount = rm.proc[0].PLR.getA1();
             for (int i = 0; i <= blockCount-1; i++){
-                if (row == rm.memory.getBlock(rm.PLR.getA2()*0x10 + rm.PLR.getA3()).getWord(i).getIntValue())
+                if (row == rm.memory.getBlock(rm.proc[0].PLR.getA2()*0x10 + rm.proc[0].PLR.getA3()).getWord(i).getIntValue())
                 {
                     setBackground(new Color(0xFFFF00));
                     setToolTipText("Virtualios masinos "+(i+1)+" blokas");
@@ -55,7 +55,7 @@ public Component getTableCellRendererComponent(JTable table, Object value,boolea
                 setBackground(new Color(0x77FF77));
             }
             //Spalvinam PLR registro naudojama bloka raudonai
-            if (row == rm.PLR.getA2()*0x10+rm.PLR.getA3())
+            if (row == rm.proc[0].PLR.getA2()*0x10+rm.proc[0].PLR.getA3())
             {
                 setToolTipText("Puslapiavimo lentele");
                 setBackground(new Color(0xFF0000));

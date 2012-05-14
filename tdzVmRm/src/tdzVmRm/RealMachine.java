@@ -8,6 +8,7 @@ import IODevices.Output;
 import IODevices.Input;
 import GUI.RealMachineGUI;
 import java.io.*;
+import java.util.LinkedList;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -29,15 +30,19 @@ public class RealMachine {
     
     public static RealMachineGUI gui;
     
+    
+    /*
     public static PLRRegister PLR;
     public static DataRegister R1, R2;
     public static ICRegister IC;
     public static CRegister C;
     public static SemaphoreRegister S;
-    public static TimerRegister timer; //Timer ir mode gal kazkaip kitaip pervadint
+    public static TimerRegister timer;
     public static ModeRegister mode;
     public static INTRegister PI, SI;
     public static CHRegister CH1, CH2, CH3, CH4;
+    */
+    public static Processor[] proc = new Processor[2];
     
     public static Speaker speakers;
     public static Input in;
@@ -58,6 +63,7 @@ public class RealMachine {
     
     public RealMachine(int blocks)
     {
+        /*
         PLR = new PLRRegister();
         R1 = new DataRegister();
         R2 = new DataRegister();
@@ -72,6 +78,10 @@ public class RealMachine {
         CH2 = new CHRegister();
         CH3 = new CHRegister();
         CH4 = new CHRegister();
+        * */
+        proc[0] = new Processor();
+        proc[1] = new Processor();
+        
         speakers = new Speaker();
         in = new Input();
         out = new Output();
@@ -105,9 +115,9 @@ public class RealMachine {
                 if (virtualMemory != null)
                 {
                     loadProgram(virtualMemory, input);
-                    VM = new VirtualMachine(R1, R2, IC, C, virtualMemory);
-                    SI.setValue(0);
-                    PI.setValue(0);
+                    VM = new VirtualMachine(proc[0].R1, proc[0].R2, proc[0].IC, proc[0].C, virtualMemory);
+                    proc[0].SI.setValue(0);
+                    proc[0].PI.setValue(0);
                 }
             }
             else
@@ -132,15 +142,15 @@ public class RealMachine {
             //Nustatome PLR registro reiksmes skirtas vienai virtualiai masinai
             //A1 - programai skirtas puslapiu skaicius, visada 16
             if (requiredBlocks >= 0x10)
-                PLR.setA1((byte) 0);
+                proc[0].PLR.setA1((byte) 0);
             else
-                PLR.setA1((byte) requiredBlocks);
+                proc[0].PLR.setA1((byte) requiredBlocks);
 
             if (virtualMachineCount < MAX_VIRTUAL_MACHINE_COUNT-1){
                 int newA2, newA3;
 
                 newA2 = rnd.nextInt(PLR_MAX_A2+1);
-                if (PLR.getA2()==((byte)PLR_MAX_A2))
+                if (proc[0].PLR.getA2()==((byte)PLR_MAX_A2))
                     newA3 = rnd.nextInt(PLR_LAST_A3+1);
                 else
                     newA3 = rnd.nextInt(0x10);
@@ -148,19 +158,19 @@ public class RealMachine {
                 while (!freeBlocks[newA2*0x10+newA3] | (newA2*0x10+newA3 > PLR_MAX_BLOCK_INDEX))
                 {
                     newA2 = rnd.nextInt(PLR_MAX_A2+1);
-                    if (PLR.getA2()==((byte)PLR_MAX_A2)){
+                    if (proc[0].PLR.getA2()==((byte)PLR_MAX_A2)){
                         newA3 = rnd.nextInt(PLR_LAST_A3+1);
                     }
                     else {
                         newA3 = rnd.nextInt(0x10);
                     }
                 }
-                PLR.setA3((byte) newA3);
-                PLR.setA2((byte) newA2);
+                proc[0].PLR.setA3((byte) newA3);
+                proc[0].PLR.setA2((byte) newA2);
                 freeBlocks[newA2*0x10+newA3] = false;
                 freeBlockCount--;
                 //uzpildom lentele, kad rodytu i atsitiktines vietas
-                MemoryBlock block = memory.getBlock(PLR.getA2()*0x10+PLR.getA3());
+                MemoryBlock block = memory.getBlock(proc[0].PLR.getA2()*0x10+proc[0].PLR.getA3());
 
                 for (int i = 0; i < requiredBlocks; i++){
                     int blockIndex = rnd.nextInt(PLR_MAX_BLOCK_INDEX);
@@ -178,11 +188,11 @@ public class RealMachine {
                 while (!freeBlocks[i]){
                     i++;
                 }
-                PLR.setA2((byte) (i / 0x10));
-                PLR.setA3((byte) (i % 0x10));
+                proc[0].PLR.setA2((byte) (i / 0x10));
+                proc[0].PLR.setA3((byte) (i % 0x10));
                 freeBlocks[i] = false;
                 freeBlockCount--;
-                MemoryBlock block = memory.getBlock(PLR.getA2()*0x10+PLR.getA3());
+                MemoryBlock block = memory.getBlock(proc[0].PLR.getA2()*0x10+proc[0].PLR.getA3());
                 for (int j = 0; j < requiredBlocks; j ++){
                     while(!freeBlocks[i])
                     {
@@ -194,7 +204,7 @@ public class RealMachine {
                 }
             }
 
-            return new VirtualMemory(PLR, memory);
+            return new VirtualMemory(proc[0].PLR, memory);
         }
         else
         {
@@ -211,8 +221,8 @@ public class RealMachine {
             
             //Masinai duotu bloku (ir tuo paciu zodziu) skaicius.
             int maxWordCount = 0x100;
-            if (PLR.getA1() != 0)
-                maxWordCount = PLR.getA1()*0x10;
+            if (proc[0].PLR.getA1() != 0)
+                maxWordCount = proc[0].PLR.getA1()*0x10;
 
             BufferedReader br = new BufferedReader(new InputStreamReader(input));
             String line;
@@ -246,8 +256,8 @@ public class RealMachine {
             if (loadOK)
             {
                 //Nustatomas programos dydis blokais
-                RealMachine.PLR.setA0((byte) (i/16+1));
-                RealMachine.IC.setValue(0);
+                RealMachine.proc[0].PLR.setA0((byte) (i/16+1));
+                RealMachine.proc[0].IC.setValue(0);
             }
             
         } catch (IOException ex) {
