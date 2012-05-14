@@ -226,7 +226,7 @@ public class RealMachineGUI extends javax.swing.JFrame {
         setMinimumSize(new java.awt.Dimension(800, 600));
         getContentPane().setLayout(new javax.swing.BoxLayout(getContentPane(), javax.swing.BoxLayout.LINE_AXIS));
 
-        operationsPanel.setMaximumSize(new java.awt.Dimension(160, 450));
+        operationsPanel.setMaximumSize(new java.awt.Dimension(160, 550));
         operationsPanel.setPreferredSize(new java.awt.Dimension(160, 400));
         operationsPanel.setLayout(new javax.swing.BoxLayout(operationsPanel, javax.swing.BoxLayout.PAGE_AXIS));
 

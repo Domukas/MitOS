@@ -22,5 +22,10 @@ public class StartStop extends Process {
         super(inList, internalID, externalID, ps, p, cr, or, state,
                 priority, parent, c);
     }
+ 
+    private void createSystemResources()
+    {
+        
+    }
     
 }

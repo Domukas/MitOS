@@ -31,9 +31,4 @@ public class Process {
         
     }
     
-    private void createSystemResources()
-    {
-        
-    }
-    
 }
