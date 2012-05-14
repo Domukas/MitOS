@@ -18,12 +18,15 @@ public class OS {
         Run, Ready, ReadyS, Blocked, BlockedS
     }
     
-    LinkedList<Process> processes;
-    LinkedList<Process> readyProcesses;
-    LinkedList<Process> runProcesses;
-    LinkedList<Resource> resources;
+    public LinkedList<Process> processes;
+    public LinkedList<Process> readyProcesses;
+    public LinkedList<Process> runProcesses;
+    public LinkedList<Process> blockedProcesses;
     
-    RealMachine rm;
+    public LinkedList<Resource> resources;
+    
+    public RealMachine rm;
+    ProcessManager processManager;
     
     public OS (RealMachine rm)
     {
@@ -33,6 +36,7 @@ public class OS {
     
     private void initProcesses()
     {
+        processManager = new ProcessManager(this);
         //TODO
     }
 }

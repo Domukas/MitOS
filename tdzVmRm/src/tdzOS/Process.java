@@ -10,7 +10,7 @@ package tdzOS;
  */
 public class Process {
     
-    ProcessDescriptor pd;
+    public ProcessDescriptor pd;
     
     public Process()
     {
