@@ -5,6 +5,7 @@
 package tdzOS;
 
 import java.util.LinkedList;
+import tdzOS.OS.ProcName;
 import tdzOS.OS.ProcessState;
 import tdzVmRm.Processor;
 
@@ -15,7 +16,7 @@ import tdzVmRm.Processor;
 public class ProcessDescriptor {
    public LinkedList inList;                //sąrašas, kuriame yra procesas
    public int internalID;
-   public String externalID;
+   public ProcName externalID;
    public ProcessorState procesorState;
    public Processor processor;
    public LinkedList<Resource> createdResources;
@@ -24,10 +25,11 @@ public class ProcessDescriptor {
    public int priority;
    public Process parent;
    public LinkedList<Process> children;
+   public OS core;
    
-   public ProcessDescriptor(LinkedList inList, int internalID, String externalID, 
+   public ProcessDescriptor(LinkedList inList, int internalID, ProcName externalID, 
            ProcessorState ps, Processor p, LinkedList<Resource> cr, LinkedList<Resource> or,
-           ProcessState state, int priority, Process parent, LinkedList<Process> c)
+           ProcessState state, int priority, Process parent, LinkedList<Process> c, OS core)
    {
        this.inList = inList;
        this.internalID = internalID;
@@ -39,7 +41,8 @@ public class ProcessDescriptor {
        this.state = state;
        this.priority = priority;
        this.parent = parent;
-       this.children = c;           
+       this.children = c;   
+       this.core = core;
    }
    
    
