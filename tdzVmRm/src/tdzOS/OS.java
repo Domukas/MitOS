@@ -221,9 +221,6 @@ public class OS {
         }
         //ismetamas is bendro resursu saraso
         resources.remove(r);
-        //naikinamas resurso deskriptorius
-        
-        //?????????? finalize or what?
     }
     
     //TODO primityvas resurso prasymui
@@ -238,7 +235,7 @@ public class OS {
     }
     
     //TODO primityvas resurso atlaisvinimui
-    public void clearResource(Resource r, LinkedList<Object> components)
+    public void freeResource(Resource r, LinkedList<Object> components)
     {
         //Resurso elementas pridedamas prie resurso elementų sąrašo.
         for(int i = 0 ; i < components.size(); i++)
