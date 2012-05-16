@@ -179,6 +179,59 @@ public class OS {
         System.out.println("-------------------------");
     }
     
+    //TODO primityvas resurso sunaikinimui
+    public void DestroyResource(Resource r)
+    {
+        //istrinam resursa is ji sukurusio proceso sukurtu resursu saraso
+        Process creatorProcess = r.rd.creator;
+        creatorProcess.pd.createdResources.remove(r);
+        //istrinam jo elementu sarasa
+        for (int i = 0; i < r.rd.components.size(); i++)
+        {
+            r.rd.components.remove(i);
+        }
+        //atblokuojami visi procesai laukiantys sio resurso
+        for(int i = 0; i < processes.size(); i++)
+        {
+            Process currentProcess = processes.get(i);
+            for(int j = 0; j < currentProcess.pd.ownedResources.size(); j++)
+            {
+                if((currentProcess.pd.ownedResources.get(j).equals(r)) && (currentProcess.pd.state == ProcessState.Blocked))
+                {
+                    currentProcess.pd.state = ProcessState.Ready;
+                }
+            }
+        }
+        //ismetamas is bendro resursu saraso
+        resources.remove(r);
+        //naikinamas resurso deskriptorius
+        
+        //?????????? finalize or what?
+    }
+    
+    //TODO primityvas resurso prasymui
+    public void RequestResource(Process currentProcess, Resource r)
+    {
+        //Procesas, iškvietęs šį primityvą, yra užblokuojamas
+        currentProcess.pd.state = ProcessState.Blocked;
+        //įtraukiamas į to resurso laukiančių procesų sąrašą. 
+        r.rd.waitingProcesses.add(currentProcess);
+        //kvieciamas resurso paskirstytojas.
+        resourceManager.Execute(r);
+    }
+    
+    //TODO primityvas resurso atlaisvinimui
+    public void ClearResource(Resource r, LinkedList<Object> components)
+    {
+        //Resurso elementas pridedamas prie resurso elementų sąrašo.
+        for(int i = 0 ; i < components.size(); i++)
+        {
+             r.rd.components.add(components.get(i)); //????????
+        }
+        //kviečiamas resursų paskirstytojas.
+        resourceManager.Execute(r);
+    }
+    
     public void step()
     {
         System.out.println("Step!");
@@ -194,7 +247,7 @@ public class OS {
         processManager = new ProcessManager(this);
         System.out.println("Process manager sukurtas");
         
-        resourceManager = new ResourceManager();
+        resourceManager = new ResourceManager(this);
         System.out.println("Resource manager sukurtas");
         
         System.out.println("Darbo pradzia");

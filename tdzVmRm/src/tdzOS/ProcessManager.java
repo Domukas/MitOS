@@ -59,7 +59,7 @@ public class ProcessManager { //planuotojas
     public Process HighestReadyProcess()//jei yra pasiruosusiu tai paima didziausio prioriteto, jei ne tai println
     {
         Process highestReadyProcess = null;
-        if(IsReadyProccesses() == true)
+        if(AreReadyProccesses() == true)
         {
             highestReadyProcess = getHighestReadyProcess();
         }
@@ -70,14 +70,14 @@ public class ProcessManager { //planuotojas
         return highestReadyProcess;
     }
     
-    public boolean IsReadyProccesses() //ar yra pasiruosusiu procesu sarase
+    public boolean AreReadyProccesses() //ar yra pasiruosusiu procesu sarase
     {
-        boolean isReadyProccesses = false;
+        boolean areReadyProccesses = false;
         for (int i = 0; i < os.readyProcesses.size(); i++)
         {
-            isReadyProccesses = true;
+            areReadyProccesses = true;
         }
-        return isReadyProccesses;
+        return areReadyProccesses;
     }
     
     public Process getHighestReadyProcess() //pasiima pasiruosusi procesa su didziausiu prioritetu
