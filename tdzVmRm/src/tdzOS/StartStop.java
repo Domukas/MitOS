@@ -33,8 +33,11 @@ public class StartStop extends Process {
     {
         //Kuriam sisteminius resursus
         System.out.println("StartStop kuria sisteminius resursus");
-                
-        pd.core.createResource(this, ResName.EiluteAtmintyje, createMessage("HelloWorld!"));
+          
+        
+        
+        //Testavimui tiktai
+        //pd.core.createResource(this, ResName.EiluteAtmintyje, createMessage("HelloWorld!"));
         
     }
     
