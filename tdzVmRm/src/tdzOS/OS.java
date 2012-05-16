@@ -111,6 +111,23 @@ public class OS {
           }
     }
     
+    //primityvas naikinimui proceso
+    public void destroyProcess()
+    {
+        
+    }
+    
+    //primityvas stabdymui proceso
+    public void stopProcess()
+    {
+        
+    }
+    
+    //primityvas aktyvavimui proceso
+    public void activateProcess()
+    {
+        //TODO
+    }
     
     //Primityvas resurso kurimui
     public void createResource(Process creator, ResName externalID, LinkedList<Object> parameters)
@@ -180,7 +197,7 @@ public class OS {
     }
     
     //TODO primityvas resurso sunaikinimui
-    public void DestroyResource(Resource r)
+    public void destroyResource(Resource r)
     {
         //istrinam resursa is ji sukurusio proceso sukurtu resursu saraso
         Process creatorProcess = r.rd.creator;
@@ -210,7 +227,7 @@ public class OS {
     }
     
     //TODO primityvas resurso prasymui
-    public void RequestResource(Process currentProcess, Resource r)
+    public void requestResource(Process currentProcess, Resource r)
     {
         //Procesas, iškvietęs šį primityvą, yra užblokuojamas
         currentProcess.pd.state = ProcessState.Blocked;
@@ -221,7 +238,7 @@ public class OS {
     }
     
     //TODO primityvas resurso atlaisvinimui
-    public void ClearResource(Resource r, LinkedList<Object> components)
+    public void clearResource(Resource r, LinkedList<Object> components)
     {
         //Resurso elementas pridedamas prie resurso elementų sąrašo.
         for(int i = 0 ; i < components.size(); i++)
