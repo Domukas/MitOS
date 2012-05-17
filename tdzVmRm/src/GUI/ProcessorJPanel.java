@@ -86,6 +86,7 @@ public class ProcessorJPanel extends javax.swing.JPanel {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        java.awt.GridBagConstraints gridBagConstraints;
 
         jLabel1 = new javax.swing.JLabel();
         PLRTextField = new javax.swing.JTextField();
@@ -119,7 +120,10 @@ public class ProcessorJPanel extends javax.swing.JPanel {
         SFCheckBox = new javax.swing.JCheckBox();
         ZFCheckBox = new javax.swing.JCheckBox();
 
-        setLayout(new java.awt.GridLayout(0, 2));
+        setMaximumSize(new java.awt.Dimension(256, 128));
+        setMinimumSize(new java.awt.Dimension(256, 128));
+        setPreferredSize(new java.awt.Dimension(256, 128));
+        setLayout(new java.awt.GridLayout(0, 4));
 
         jLabel1.setText("PLR");
         add(jLabel1);
@@ -184,6 +188,7 @@ public class ProcessorJPanel extends javax.swing.JPanel {
         jLabel8.setText("MODE");
         add(jLabel8);
 
+        MODEToggleButton.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         MODEToggleButton.setText("User");
         MODEToggleButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -226,6 +231,7 @@ public class ProcessorJPanel extends javax.swing.JPanel {
         jLabel11.setText("CH1");
         add(jLabel11);
 
+        CH1ToggleButton.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         CH1ToggleButton.setText("Open");
         CH1ToggleButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -237,6 +243,7 @@ public class ProcessorJPanel extends javax.swing.JPanel {
         jLabel12.setText("CH2");
         add(jLabel12);
 
+        CH2ToggleButton.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         CH2ToggleButton.setText("Open");
         CH2ToggleButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -248,6 +255,7 @@ public class ProcessorJPanel extends javax.swing.JPanel {
         jLabel13.setText("CH3");
         add(jLabel13);
 
+        CH3ToggleButton.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         CH3ToggleButton.setText("Open");
         CH3ToggleButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -259,6 +267,7 @@ public class ProcessorJPanel extends javax.swing.JPanel {
         jLabel14.setText("CH4");
         add(jLabel14);
 
+        CH4ToggleButton.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
         CH4ToggleButton.setText("Open");
         CH4ToggleButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -291,20 +300,6 @@ public class ProcessorJPanel extends javax.swing.JPanel {
         });
         add(ZFCheckBox);
     }// </editor-fold>//GEN-END:initComponents
-
-    private void PLRTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PLRTextFieldActionPerformed
-        try {
-            int intValue = Integer.parseInt(PLRTextField.getText(), 16);
-            proc.PLR.setValue(intValue);
-            owner.updateAll();
-        } catch (NumberFormatException e) {
-        }
-    }//GEN-LAST:event_PLRTextFieldActionPerformed
-
-    private void R1TextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_R1TextFieldActionPerformed
-        proc.R1.setValue(new Word(Integer.parseInt(R1TextField.getText(), 16)));
-        owner.updateAll();
-    }//GEN-LAST:event_R1TextFieldActionPerformed
 
     private void R2TextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_R2TextFieldActionPerformed
         proc.R2.setValue(new Word(Integer.parseInt(R2TextField.getText(), 16)));
@@ -412,6 +407,20 @@ public class ProcessorJPanel extends javax.swing.JPanel {
         }
         owner.updateAll();
     }//GEN-LAST:event_ZFCheckBoxActionPerformed
+
+    private void R1TextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_R1TextFieldActionPerformed
+        proc.R1.setValue(new Word(Integer.parseInt(R1TextField.getText(), 16)));
+        owner.updateAll();
+    }//GEN-LAST:event_R1TextFieldActionPerformed
+
+    private void PLRTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PLRTextFieldActionPerformed
+        try {
+            int intValue = Integer.parseInt(PLRTextField.getText(), 16);
+            proc.PLR.setValue(intValue);
+            owner.updateAll();
+        } catch (NumberFormatException e) {
+        }
+    }//GEN-LAST:event_PLRTextFieldActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JToggleButton CH1ToggleButton;
