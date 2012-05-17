@@ -139,7 +139,7 @@ public class OS {
         //sarasas procesu, kurie laukia sito resurso...
         //turi but tuscias...
         LinkedList<Process> waitingProcesses = new LinkedList<Process>();
-        
+        LinkedList<Integer> waitingProcessComponentCount = new LinkedList<Integer>();
         //Generuojam isorini ID pagal tai, koki kuriam
         int internalID = generateResourceInternalID(externalID);
         Resource r = null;
@@ -153,7 +153,7 @@ public class OS {
                 //Paduodam:
                 //creator, externalID, internalID, reusable, components, waitingProcesses, resourceManager
                 r = new Resource(creator, externalID, internalID, false, 
-                    parameters, waitingProcesses, resourceManager); 
+                    parameters, waitingProcesses, waitingProcessComponentCount, resourceManager); 
                 
 
                 
@@ -167,7 +167,7 @@ public class OS {
                 //Paduodam:
                 //creator, externalID, internalID, reusable, components, waitingProcesses, resourceManager
                 r = new Resource(creator, externalID, internalID, true, //Pakartotino naudojimo
-                    parameters, waitingProcesses, resourceManager);     
+                    parameters, waitingProcesses, waitingProcessComponentCount, resourceManager);     
             break;    
                 
         }
@@ -214,22 +214,53 @@ public class OS {
     {
         //Procesas, iškvietęs šį primityvą, yra užblokuojamas
         currentProcess.pd.state = ProcessState.Blocked;
-        //įtraukiamas į to resurso laukiančių procesų sąrašą. 
+        //įtraukiamas į to resurso laukiančių procesų sąrašą.
         r.rd.waitingProcesses.add(currentProcess);
+        //Itraukiama ir kiek reikia jam butent resurso elementu
+        r.rd.waitingProcessComponentCount.add(count);
         //kvieciamas resurso paskirstytojas.
-        resourceManager.execute(r, count);
+        resourceManager.execute();
     }
     
     //TODO primityvas resurso atlaisvinimui
-    public void freeResource(Resource r, LinkedList<Object> components, int count)
+    public void freeResource(Process process, Resource r)
     {
+        //Atlaisvinti resursą.
+        //Šį primityvą kviečia procesas, kuris nori atlaisvinti jam nereikalingą
+        //resursą arba tiesiog perduoti pranešimą ar informaciją kitam procesui.
+        //Resurso elementas, primityvui perduotas kaip funkcijos parametras,
+        //yra pridedamas prie resurso elementų sąrašo. Šio primityvo pabaigoje
+        //yra kviečiamas resursų paskirstytojas.
         //Resurso elementas pridedamas prie resurso elementų sąrašo.
-        for(int i = 0 ; i < components.size(); i++)
+        
+        boolean onTheList = false;
+        Resource tmpRes = null;
+        //randam resursa laisvu resursu sarase
+        for(int i = 0; i < resources.size(); i++)
         {
-             r.rd.components.add(components.get(i)); //????????
+            if((resources.get(i).rd.externalID == r.rd.externalID) && (resources.get(i).rd.internalID == r.rd.internalID))
+            {
+                onTheList = true;
+                tmpRes = resources.get(i);
+            }
         }
-        //kviečiamas resursų paskirstytojas.
-        resourceManager.execute(r, count);
+        //jei tokio resurso nera sarase tai ji tiesiog pridedam
+        if(!onTheList)
+        {
+            resources.add(r);
+        }
+        //jei jis jau buvo toks sarase, tuomet reiks prideti jo komponentes
+        else
+        {
+            for(int i = 0; i < r.rd.components.size(); i++)
+            {
+                tmpRes.rd.components.add(r.rd.components.get(i)); //ar cia visad bus priskirtas ir nebus null?
+                r.rd.components.remove(i);
+            }
+        }
+        process.pd.ownedResources.remove(r);
+        
+        resourceManager.execute();
     }
     
     public void step()

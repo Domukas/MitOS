@@ -20,7 +20,7 @@ class ResourceManager {
     }
     //---------------------------------------------------------
     //paskirstytojas konkreciam procesui
-    public void execute(Process process, Resource r, int count)
+    /*public void execute(Process process, Resource r, int count)
     {     
         //jei yra procesu kuriems res reikalingas
         if (r.rd.waitingProcesses.size() != 0)
@@ -32,35 +32,51 @@ class ResourceManager {
         } 
         //kvieciam procesu planuotoja
         os.processManager.Execute();
-    }
+    }*/
+    
     //----------------------------------------
-    //paskirstytojas visiems procesams
-    public void execute(Resource r, int count)
+    //paskirstytojas visiems procesams visu resursu
+    public void execute()
     {
-        //jei yra procesu kuriems res reikalingas
-        if (r.rd.waitingProcesses.size() != 0)
+        //ziuri visus laisvus resursus
+        for(int i = 0; i < os.resources.size(); i++)
         {
-            //tai randam su didziausiu prioritetu procesa
-            Process tmpProcess = findHighestProcessWhereResourceIsNeeded(r);
-            //duodam resursa arba jo dali procesui
-            giveToProcessAResourceComponents(tmpProcess, r, count);
-            //jei tam procesui daugiau jokiu resursu nereikia, pazymim ji pasiruosusiu
-            readyTheProcess(tmpProcess);
-        } 
+            //paima kiekviena resursa
+            Resource r = os.resources.get(i);
+            //ir kiekvieno resurso visus procesus kuriems jo reikia
+            LinkedList<Process> tmpProcessList = new LinkedList<>();
+            
+            //sortas
+            //jei neskaidomas resursas
+            
+            tmpProcessList = r.rd.waitingProcesses;
+            for(int j = 0 ; j < tmpProcessList.size(); j++)
+            {
+                //tada iesko visad didziausio prioriteto
+                Process tmpProcess = findHighestProcessWhereResourceIsNeeded(tmpProcessList);
+                //duodam resursa arba jo dali procesui
+                int count = os.resources.get(j).rd.waitingProcessComponentCount.get(j);   //???
+                giveToProcessAResourceComponents(tmpProcess, r, count);
+                //jei tam procesui daugiau jokiu resursu nereikia, pazymim ji pasiruosusiu
+                readyTheProcess(tmpProcess);
+                //ismetam is laikino saraso kad veliau vel surastu didziausio prioriteto
+                tmpProcessList.remove(j);
+            }
+        }
         //kvieciam procesu planuotoja
         os.processManager.Execute();
     }
     //---------------------------------------------------------
-    Process findHighestProcessWhereResourceIsNeeded(Resource r)
+    Process findHighestProcessWhereResourceIsNeeded(LinkedList<Process> tmpProcessList)
     {
         int priority = 0;
         Process tmpProcess = null;
-        for(int i = 0; i < r.rd.waitingProcesses.size(); i++)
+        for(int i = 0; i < tmpProcessList.size(); i++)
         {
-            if(priority < r.rd.waitingProcesses.get(i).pd.priority)
+            if(priority < tmpProcessList.get(i).pd.priority)
             {
-                priority = r.rd.waitingProcesses.get(i).pd.priority;
-                tmpProcess = r.rd.waitingProcesses.get(i);
+                priority = tmpProcessList.get(i).pd.priority;
+                tmpProcess = tmpProcessList.get(i);
             }
         }
         return tmpProcess;
@@ -80,7 +96,10 @@ class ResourceManager {
                     newComponents.add(tmpComponent);
                 }
                 //sukuriam resursa identiska originalui bet su kitu componentu sarasu
-                Resource tmpR = new Resource(r.rd.creator, r.rd.externalID, r.rd.internalID, r.rd.reusable, newComponents, r.rd.waitingProcesses, r.rd.resourceManager);
+                Resource tmpR = new Resource(r.rd.creator, r.rd.externalID,
+                        r.rd.internalID, r.rd.reusable, newComponents,r.rd.waitingProcesses,
+                        r.rd.waitingProcessComponentCount, r.rd.resourceManager);
+                
                 //atiduodam ta nauja resursa procesui
                 tmpProcess.pd.ownedResources.add(tmpR);
                 
