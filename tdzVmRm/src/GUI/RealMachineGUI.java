@@ -123,34 +123,150 @@ public class RealMachineGUI extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        java.awt.GridBagConstraints gridBagConstraints;
 
         tableDataTypeButtonGroup = new javax.swing.ButtonGroup();
         operationsPanel = new javax.swing.JPanel();
         processorsTabbedPane = new javax.swing.JTabbedPane();
-        buttonPanel = new javax.swing.JPanel();
-        runButton = new javax.swing.JButton();
-        stepButton = new javax.swing.JButton();
-        jPanel1 = new javax.swing.JPanel();
-        TaskNameField = new javax.swing.JTextField();
-        TaskButton = new javax.swing.JButton();
-        osStepButton = new javax.swing.JButton();
+        procResJPanel = new javax.swing.JPanel();
+        processesJLabel = new javax.swing.JLabel();
+        processesJScrollPane = new javax.swing.JScrollPane();
+        processesJList = new javax.swing.JList();
+        resourcesJLabel = new javax.swing.JLabel();
+        resourcesJScrollPane = new javax.swing.JScrollPane();
+        resourcesJList = new javax.swing.JList();
+        infoJPanel = new javax.swing.JPanel();
+        infoLabel = new javax.swing.JLabel();
+        infoJScrollPane = new javax.swing.JScrollPane();
+        infoJTextArea = new javax.swing.JTextArea();
         memoryTabbedPane = new javax.swing.JTabbedPane();
         memoryPanel = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         memoryTable = new javax.swing.JTable();
+        buttonPanel = new javax.swing.JPanel();
+        runButton = new javax.swing.JButton();
+        stepButton = new javax.swing.JButton();
+        osStepButton = new javax.swing.JButton();
+        taskNameField = new javax.swing.JTextField();
+        taskButton = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setMinimumSize(new java.awt.Dimension(800, 600));
+        setMinimumSize(new java.awt.Dimension(860, 600));
         getContentPane().setLayout(new javax.swing.BoxLayout(getContentPane(), javax.swing.BoxLayout.LINE_AXIS));
 
         operationsPanel.setMaximumSize(new java.awt.Dimension(160, 550));
-        operationsPanel.setPreferredSize(new java.awt.Dimension(160, 400));
-        operationsPanel.setLayout(new javax.swing.BoxLayout(operationsPanel, javax.swing.BoxLayout.PAGE_AXIS));
+        operationsPanel.setMinimumSize(new java.awt.Dimension(256, 128));
+        operationsPanel.setPreferredSize(new java.awt.Dimension(256, 128));
+        operationsPanel.setLayout(new java.awt.GridLayout(0, 1));
         operationsPanel.add(processorsTabbedPane);
 
-        buttonPanel.setMaximumSize(new java.awt.Dimension(160, 420));
-        buttonPanel.setPreferredSize(new java.awt.Dimension(160, 400));
-        buttonPanel.setLayout(new java.awt.GridLayout(1, 0));
+        procResJPanel.setLayout(new java.awt.GridBagLayout());
+
+        processesJLabel.setText("Processes");
+        processesJLabel.setMaximumSize(new java.awt.Dimension(128, 14));
+        processesJLabel.setMinimumSize(new java.awt.Dimension(128, 14));
+        processesJLabel.setPreferredSize(new java.awt.Dimension(128, 14));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        procResJPanel.add(processesJLabel, gridBagConstraints);
+
+        processesJScrollPane.setMinimumSize(new java.awt.Dimension(128, 100));
+        processesJScrollPane.setPreferredSize(new java.awt.Dimension(32, 400));
+
+        processesJList.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        processesJList.setModel(new javax.swing.AbstractListModel() {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
+            public int getSize() { return strings.length; }
+            public Object getElementAt(int i) { return strings[i]; }
+        });
+        processesJList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        processesJList.setMaximumSize(new java.awt.Dimension(32000, 32000));
+        processesJScrollPane.setViewportView(processesJList);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 0;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weighty = 0.5;
+        procResJPanel.add(processesJScrollPane, gridBagConstraints);
+
+        resourcesJLabel.setText("Resources");
+        resourcesJLabel.setMaximumSize(new java.awt.Dimension(128, 14));
+        resourcesJLabel.setMinimumSize(new java.awt.Dimension(128, 14));
+        resourcesJLabel.setPreferredSize(new java.awt.Dimension(128, 14));
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 0;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+        procResJPanel.add(resourcesJLabel, gridBagConstraints);
+
+        resourcesJScrollPane.setMinimumSize(new java.awt.Dimension(128, 100));
+        resourcesJScrollPane.setPreferredSize(new java.awt.Dimension(128, 400));
+
+        resourcesJList.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
+        resourcesJList.setModel(new javax.swing.AbstractListModel() {
+            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5", "jhjh", "kjgk", "jkk" };
+            public int getSize() { return strings.length; }
+            public Object getElementAt(int i) { return strings[i]; }
+        });
+        resourcesJList.setMaximumSize(new java.awt.Dimension(30, 32000));
+        resourcesJScrollPane.setViewportView(resourcesJList);
+
+        gridBagConstraints = new java.awt.GridBagConstraints();
+        gridBagConstraints.gridx = 1;
+        gridBagConstraints.gridy = 2;
+        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
+        gridBagConstraints.weighty = 0.5;
+        procResJPanel.add(resourcesJScrollPane, gridBagConstraints);
+
+        operationsPanel.add(procResJPanel);
+
+        infoJPanel.setLayout(new javax.swing.BoxLayout(infoJPanel, javax.swing.BoxLayout.Y_AXIS));
+
+        infoLabel.setText("Infomation");
+        infoLabel.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        infoLabel.setMaximumSize(new java.awt.Dimension(256, 14));
+        infoLabel.setMinimumSize(new java.awt.Dimension(256, 14));
+        infoLabel.setPreferredSize(new java.awt.Dimension(256, 14));
+        infoJPanel.add(infoLabel);
+
+        infoJScrollPane.setMinimumSize(new java.awt.Dimension(256, 128));
+        infoJScrollPane.setPreferredSize(new java.awt.Dimension(256, 128));
+
+        infoJTextArea.setColumns(20);
+        infoJTextArea.setRows(5);
+        infoJTextArea.setText("asdasdasdasd\n");
+        infoJTextArea.setMinimumSize(new java.awt.Dimension(128, 128));
+        infoJScrollPane.setViewportView(infoJTextArea);
+
+        infoJPanel.add(infoJScrollPane);
+
+        operationsPanel.add(infoJPanel);
+
+        getContentPane().add(operationsPanel);
+
+        memoryPanel.setLayout(new javax.swing.BoxLayout(memoryPanel, javax.swing.BoxLayout.Y_AXIS));
+
+        memoryTable.setModel(new MemoryTableModel(RM, this));
+        memoryTable.setColumnSelectionAllowed(true);
+        memoryTable.addInputMethodListener(new java.awt.event.InputMethodListener() {
+            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
+            }
+            public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
+                memoryTableInputMethodTextChanged(evt);
+            }
+        });
+        jScrollPane1.setViewportView(memoryTable);
+        memoryTable.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+
+        memoryPanel.add(jScrollPane1);
+
+        buttonPanel.setMaximumSize(new java.awt.Dimension(30000, 16));
+        buttonPanel.setMinimumSize(new java.awt.Dimension(128, 16));
+        buttonPanel.setPreferredSize(new java.awt.Dimension(128, 16));
+        buttonPanel.setLayout(new javax.swing.BoxLayout(buttonPanel, javax.swing.BoxLayout.LINE_AXIS));
 
         runButton.setText("Run");
         runButton.addActionListener(new java.awt.event.ActionListener() {
@@ -168,58 +284,36 @@ public class RealMachineGUI extends javax.swing.JFrame {
         });
         buttonPanel.add(stepButton);
 
-        operationsPanel.add(buttonPanel);
-
-        jPanel1.setLayout(new java.awt.BorderLayout());
-
-        TaskNameField.setText("Name of Task");
-        TaskNameField.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                TaskNameFieldMouseClicked(evt);
-            }
-        });
-        TaskNameField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                TaskNameFieldActionPerformed(evt);
-            }
-        });
-        jPanel1.add(TaskNameField, java.awt.BorderLayout.CENTER);
-
-        TaskButton.setText("New Task");
-        TaskButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                TaskButtonActionPerformed(evt);
-            }
-        });
-        jPanel1.add(TaskButton, java.awt.BorderLayout.PAGE_END);
-
         osStepButton.setText("OS step");
         osStepButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 osStepButtonActionPerformed(evt);
             }
         });
-        jPanel1.add(osStepButton, java.awt.BorderLayout.PAGE_START);
+        buttonPanel.add(osStepButton);
 
-        operationsPanel.add(jPanel1);
-
-        getContentPane().add(operationsPanel);
-
-        memoryPanel.setLayout(new javax.swing.BoxLayout(memoryPanel, javax.swing.BoxLayout.LINE_AXIS));
-
-        memoryTable.setModel(new MemoryTableModel(RM, this));
-        memoryTable.setColumnSelectionAllowed(true);
-        memoryTable.addInputMethodListener(new java.awt.event.InputMethodListener() {
-            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
-            }
-            public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
-                memoryTableInputMethodTextChanged(evt);
+        taskNameField.setText("Task name");
+        taskNameField.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                taskNameFieldMouseClicked(evt);
             }
         });
-        jScrollPane1.setViewportView(memoryTable);
-        memoryTable.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        taskNameField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                taskNameFieldActionPerformed(evt);
+            }
+        });
+        buttonPanel.add(taskNameField);
 
-        memoryPanel.add(jScrollPane1);
+        taskButton.setText("New Task");
+        taskButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                taskButtonActionPerformed(evt);
+            }
+        });
+        buttonPanel.add(taskButton);
+
+        memoryPanel.add(buttonPanel);
 
         memoryTabbedPane.addTab("RM", memoryPanel);
 
@@ -242,9 +336,9 @@ public class RealMachineGUI extends javax.swing.JFrame {
         updateAll();
     }//GEN-LAST:event_runButtonActionPerformed
 
-    private void TaskButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TaskButtonActionPerformed
+    private void taskButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_taskButtonActionPerformed
             String taskName;
-            taskName = TaskNameField.getText();
+            taskName = taskNameField.getText();
             File f = new File("src/tdzVmRm/"+taskName+".tdz");
             
             if(f.exists()){
@@ -262,34 +356,44 @@ public class RealMachineGUI extends javax.swing.JFrame {
                 }else{
                     showMessage("File not found.");
             }
-    }//GEN-LAST:event_TaskButtonActionPerformed
+    }//GEN-LAST:event_taskButtonActionPerformed
 
     private void osStepButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_osStepButtonActionPerformed
         os.step();
     }//GEN-LAST:event_osStepButtonActionPerformed
 
-    private void TaskNameFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TaskNameFieldActionPerformed
+    private void taskNameFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_taskNameFieldActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_TaskNameFieldActionPerformed
+    }//GEN-LAST:event_taskNameFieldActionPerformed
 
-    private void TaskNameFieldMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TaskNameFieldMouseClicked
-        TaskNameField.setText("");
-    }//GEN-LAST:event_TaskNameFieldMouseClicked
+    private void taskNameFieldMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_taskNameFieldMouseClicked
+        taskNameField.setText("");
+    }//GEN-LAST:event_taskNameFieldMouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton TaskButton;
-    private javax.swing.JTextField TaskNameField;
     private javax.swing.JPanel buttonPanel;
-    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel infoJPanel;
+    private javax.swing.JScrollPane infoJScrollPane;
+    private javax.swing.JTextArea infoJTextArea;
+    private javax.swing.JLabel infoLabel;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JPanel memoryPanel;
     private javax.swing.JTabbedPane memoryTabbedPane;
     private javax.swing.JTable memoryTable;
     private javax.swing.JPanel operationsPanel;
     private javax.swing.JButton osStepButton;
+    private javax.swing.JPanel procResJPanel;
+    private javax.swing.JLabel processesJLabel;
+    private javax.swing.JList processesJList;
+    private javax.swing.JScrollPane processesJScrollPane;
     private javax.swing.JTabbedPane processorsTabbedPane;
+    private javax.swing.JLabel resourcesJLabel;
+    private javax.swing.JList resourcesJList;
+    private javax.swing.JScrollPane resourcesJScrollPane;
     private javax.swing.JButton runButton;
     private javax.swing.JButton stepButton;
     private javax.swing.ButtonGroup tableDataTypeButtonGroup;
+    private javax.swing.JButton taskButton;
+    private javax.swing.JTextField taskNameField;
     // End of variables declaration//GEN-END:variables
 }
