@@ -33,10 +33,7 @@ public class Process {
     {
        
         pd = new ProcessDescriptor(inList, internalID, externalID, ps, p,
-                cr, or, state, priority, parent, c, core);
-        
-        ProcName pn = ProcName.GetLine;
-        
+                cr, or, state, priority, parent, c, core);  
     }
     
     public void step()

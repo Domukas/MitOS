@@ -32,13 +32,32 @@ public class StartStop extends Process {
     private void createSystemResources()
     {
         //Kuriam sisteminius resursus
-        System.out.println("StartStop kuria sisteminius resursus");
-          
+        System.out.println("StartStop kuria sisteminius resursus");     
+        createResourceVartotojoAtmintis();
+    }
+    
+    private void createResourceVartotojoAtmintis()
+    {
+        System.out.println("Kuriam atminties resursa");
+
+        LinkedList<Object> memoryBlocks = new LinkedList<Object>();
+        int totalBlocks = pd.core.rm.memory.getMaxMemoryBlocks();
         
+        //Pridedam i komponentu sarasa nuorodas i jau egzistuojancia atminti
+        for (int i = 0; i < totalBlocks; i++)
+        {
+            memoryBlocks.add(pd.core.rm.memory.getBlock(i));
+        }
         
-        //Testavimui tiktai
-        //pd.core.createResource(this, ResName.EiluteAtmintyje, createMessage("HelloWorld!"));
+        System.out.println("Nuorodos nukopijuotos. Skaicius:" +
+                memoryBlocks.size());
         
+        pd.core.createResource(this, ResName.VartotojoAtmintis, memoryBlocks);
+    }
+    
+    private void createResourceSupervizorineAtmintis()
+    {
+        //Supervizorine is string'u
     }
     
 }

@@ -38,27 +38,30 @@ public Component getTableCellRendererComponent(JTable table, Object value,boolea
             setBackground(table.getBackground());
             setForeground(table.getForeground());
             //Spalvinam virtualios masinos atminties blokus geltonai
-            int blockCount = 0x10;
-            if (rm.proc[0].PLR.getA1() != 0)
-                blockCount = rm.proc[0].PLR.getA1();
-            for (int i = 0; i <= blockCount-1; i++){
-                if (row == rm.memory.getBlock(rm.proc[0].PLR.getA2()*0x10 + rm.proc[0].PLR.getA3()).getWord(i).getIntValue())
-                {
-                    setBackground(new Color(0xFFFF00));
-                    setToolTipText("Virtualios masinos "+(i+1)+" blokas");
+            for (int procID = 0; procID < rm.proc.length; procID++)
+            {
+                int blockCount = 0x10;
+                if (rm.proc[procID].PLR.getA1() != 0)
+                    blockCount = rm.proc[procID].PLR.getA1();
+                for (int i = 0; i <= blockCount-1; i++){
+                    if (row == rm.memory.getBlock(rm.proc[procID].PLR.getA2()*0x10 + rm.proc[procID].PLR.getA3()).getWord(i).getIntValue())
+                    {
+                        setBackground(new Color(0xFFFF00));
+                        setToolTipText("Processor "+procID+" Block "+(i+1));
+                    }
                 }
-            }
-            //Spalvinam bendros atminties blokus zaliai
-            if (row >= rm.SHARED_MEMORY_BLOCK_OFFSET && row < rm.SHARED_MEMORY_BLOCK_OFFSET+0x10)
-            {
-                setToolTipText("Bendra atmintis");
-                setBackground(new Color(0x77FF77));
-            }
-            //Spalvinam PLR registro naudojama bloka raudonai
-            if (row == rm.proc[0].PLR.getA2()*0x10+rm.proc[0].PLR.getA3())
-            {
-                setToolTipText("Puslapiavimo lentele");
-                setBackground(new Color(0xFF0000));
+                //Spalvinam bendros atminties blokus zaliai
+                if (row >= rm.SHARED_MEMORY_BLOCK_OFFSET && row < rm.SHARED_MEMORY_BLOCK_OFFSET+0x10)
+                {
+                    setToolTipText("Shared memory");
+                    setBackground(new Color(0x77FF77));
+                }
+                //Spalvinam PLR registro naudojama bloka raudonai
+                if (row == rm.proc[procID].PLR.getA2()*0x10+rm.proc[procID].PLR.getA3())
+                {
+                    setToolTipText("Processor "+procID+" Page table");
+                    setBackground(new Color(0xFF0000));
+                }
             }
         }
          return this;
