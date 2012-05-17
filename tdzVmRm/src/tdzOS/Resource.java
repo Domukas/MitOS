@@ -16,10 +16,10 @@ class Resource {
 
     public Resource(Process creator, ResName externalID, int internalID,
             boolean reusable, LinkedList<Object> components, //APTARNAUJAMU SARASAS NEREIKALINGAS AR REIKALINGAS?
-            LinkedList<Process> waitingProcesses, ResourceManager resourceManager)
+            LinkedList<Process> waitingProcesses, LinkedList<Integer> waitingProcessComponentCount, ResourceManager resourceManager)
     {
         rd = new ResourceDescriptor(creator, externalID, internalID,
-                reusable, components, waitingProcesses, resourceManager);
+                reusable, components, waitingProcesses, waitingProcessComponentCount, resourceManager);
         
     }
 }
