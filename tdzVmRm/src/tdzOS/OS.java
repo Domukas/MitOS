@@ -135,20 +135,18 @@ public class OS {
         System.out.println("-------------------------");
         System.out.println("Kurti resursa iskviestas!");
         
-        LinkedList<Process> waitingProcesses;
-        int internalID;
-        Resource r;
+        
+        //sarasas procesu, kurie laukia sito resurso...
+        //turi but tuscias...
+        LinkedList<Process> waitingProcesses = new LinkedList<Process>();
+        
+        //Generuojam isorini ID pagal tai, koki kuriam
+        int internalID = generateResourceInternalID(externalID);
+        Resource r = null;
                 
         switch (externalID)
         {
-            case EiluteAtmintyje:
-                
-                internalID = generateResourceInternalID();
-                
-                //sarasas procesu, kurie laukia sito resurso...
-                //turi but tuscias...
-                waitingProcesses = new LinkedList<Process>();
-                
+            case EiluteAtmintyje:         
                 System.out.println("Kuriamas resursas " + externalID +
                         " su parametru " + (String)parameters.getFirst());
                 
@@ -157,42 +155,30 @@ public class OS {
                 r = new Resource(creator, externalID, internalID, false, 
                     parameters, waitingProcesses, resourceManager); 
                 
-                //pridedam tevui i sukurtu resursu sarasa sita resursa
-                creator.pd.createdResources.add(r);
-                
-                //pridedam i visu resursu sarasa
-                resources.add(r);
-                
-                System.out.println("Resursas sukurtas-------");
+
                 
             break;
                 
-            case VartotojoAtmintis:                         //NEBAIGTA
-                internalID = generateResourceInternalID();
-                
-                //sarasas procesu, kurie laukia sito resurso...
-                //turi but tuscias...
-                waitingProcesses = new LinkedList<Process>();
+            case VartotojoAtmintis:
                 
                 System.out.println("Kuriamas resursas " + externalID +
-                        " su parametru " + (String)parameters.getFirst());
+                        " Bloku skaicius: " + parameters.size());
                 
                 //Paduodam:
                 //creator, externalID, internalID, reusable, components, waitingProcesses, resourceManager
-                r = new Resource(creator, externalID, internalID, false, 
-                    parameters, waitingProcesses, resourceManager); 
-                
-                //pridedam tevui i sukurtu resursu sarasa sita resursa
-                creator.pd.createdResources.add(r);
-                
-                //pridedam i visu resursu sarasa
-                resources.add(r);
-                
-                System.out.println("Resursas sukurtas-------");
-                
+                r = new Resource(creator, externalID, internalID, true, //Pakartotino naudojimo
+                    parameters, waitingProcesses, resourceManager);     
             break;    
                 
         }
+        
+        //pridedam tevui i sukurtu resursu sarasa sita resursa
+        creator.pd.createdResources.add(r);
+                
+        //pridedam i visu resursu sarasa
+        resources.add(r);
+                
+        System.out.println("Resursas sukurtas-------");
         System.out.println("-------------------------");
     }
     
@@ -275,7 +261,7 @@ public class OS {
         //TODO
     }
     
-    private int generateResourceInternalID()
+    private int generateResourceInternalID(ResName resName)
     {
         //TODDO
         return 0;
