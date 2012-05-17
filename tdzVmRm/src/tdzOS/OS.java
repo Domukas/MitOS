@@ -210,18 +210,18 @@ public class OS {
     }
     
     //TODO primityvas resurso prasymui
-    public void requestResource(Process currentProcess, Resource r)
+    public void requestResource(Process currentProcess, Resource r, int count)
     {
         //Procesas, iškvietęs šį primityvą, yra užblokuojamas
         currentProcess.pd.state = ProcessState.Blocked;
         //įtraukiamas į to resurso laukiančių procesų sąrašą. 
         r.rd.waitingProcesses.add(currentProcess);
         //kvieciamas resurso paskirstytojas.
-        resourceManager.Execute(r);
+        resourceManager.execute(r, count);
     }
     
     //TODO primityvas resurso atlaisvinimui
-    public void freeResource(Resource r, LinkedList<Object> components)
+    public void freeResource(Resource r, LinkedList<Object> components, int count)
     {
         //Resurso elementas pridedamas prie resurso elementų sąrašo.
         for(int i = 0 ; i < components.size(); i++)
@@ -229,7 +229,7 @@ public class OS {
              r.rd.components.add(components.get(i)); //????????
         }
         //kviečiamas resursų paskirstytojas.
-        resourceManager.Execute(r);
+        resourceManager.execute(r, count);
     }
     
     public void step()

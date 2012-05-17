@@ -24,7 +24,7 @@ class ProcessorState {
     {
     }
     
-    public void SaveProcessorState(Processor processor)
+    public void saveProcessorState(Processor processor)
     {
         this.PLR.setValue(processor.PLR.getIntValue());
         this.R1.setValue(processor.R1.getValue());
@@ -43,7 +43,7 @@ class ProcessorState {
         this.PI.setValue(processor.PI.getValue());
         this.SI.setValue(processor.SI.getValue());
     }
-    public void LoadProcessorState(Processor processor)
+    public void loadProcessorState(Processor processor)
     {
         processor.PLR.setValue(this.PLR.getIntValue());
         processor.R1.setValue(this.R1.getValue());
