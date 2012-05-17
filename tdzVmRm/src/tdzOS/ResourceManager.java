@@ -20,7 +20,7 @@ class ResourceManager {
     }
     //---------------------------------------------------------
     //paskirstytojas konkreciam procesui
-    public void Execute(Process process, Resource r, int count)
+    public void execute(Process process, Resource r, int count)
     {     
         //jei yra procesu kuriems res reikalingas
         if (r.rd.waitingProcesses.size() != 0)
@@ -35,7 +35,7 @@ class ResourceManager {
     }
     //----------------------------------------
     //paskirstytojas visiems procesams
-    public void Execute(Resource r, int count)
+    public void execute(Resource r, int count)
     {
         //jei yra procesu kuriems res reikalingas
         if (r.rd.waitingProcesses.size() != 0)

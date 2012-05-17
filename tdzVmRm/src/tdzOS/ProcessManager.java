@@ -97,7 +97,7 @@ public class ProcessManager { //planuotojas
     
     public void LoadAndSet(Process currentProcess)//pakrauna proceso busena RM procesoriui, pasalina ir pasiruosusiu ir ideda i veikianciu procesu sarasa
     {
-        currentProcess.pd.procesorState.LoadProcessorState(os.rm.proc[0]); //cia reiktu procesoriu keisti
+        currentProcess.pd.procesorState.loadProcessorState(os.rm.proc[0]); //cia reiktu procesoriu keisti
         int index = os.readyProcesses.indexOf(currentProcess);
         os.readyProcesses.remove(index);
         os.runProcesses.add(currentProcess);

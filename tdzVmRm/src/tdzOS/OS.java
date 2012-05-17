@@ -217,7 +217,7 @@ public class OS {
         //įtraukiamas į to resurso laukiančių procesų sąrašą. 
         r.rd.waitingProcesses.add(currentProcess);
         //kvieciamas resurso paskirstytojas.
-        resourceManager.Execute(r, count);
+        resourceManager.execute(r, count);
     }
     
     //TODO primityvas resurso atlaisvinimui
@@ -229,7 +229,7 @@ public class OS {
              r.rd.components.add(components.get(i)); //????????
         }
         //kviečiamas resursų paskirstytojas.
-        resourceManager.Execute(r, count);
+        resourceManager.execute(r, count);
     }
     
     public void step()
