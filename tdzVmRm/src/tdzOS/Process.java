@@ -13,18 +13,10 @@ import tdzVmRm.Processor;
  *
  * @author Tomas
  */
-public class Process {
-    
-    enum actions
-    {;
-        public actions getNext()
-        {
-            return values()[(ordinal()+1) % values().length];
-        }
-    }
+public abstract class Process {
     
     public ProcessDescriptor pd;
-    private actions nextInstruction;
+    protected int nextInstruction;  
     
     public Process(LinkedList inList, int internalID, ProcName externalID, 
            ProcessorState ps, Processor p, LinkedList<Resource> cr,
@@ -33,14 +25,13 @@ public class Process {
     {
        
         pd = new ProcessDescriptor(inList, internalID, externalID, ps, p,
-                cr, or, state, priority, parent, c, core);  
+                cr, or, state, priority, parent, c, core); 
+        
+        nextInstruction = 1;
     }
     
-    public void step()
-    {
+    public abstract void step();
 
-    }
-    
     //Sukuriam sarasa is vieno elemento, kuris yra String'as
     //To reikia, nes primityvas kurti resursa priima tik resurso elementu sarasa
     protected LinkedList<Object> createMessage(String message)

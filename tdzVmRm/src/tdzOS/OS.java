@@ -160,6 +160,8 @@ public class OS {
             break;
                 
             case VartotojoAtmintis:
+            case SupervizorineAtmintis:  
+            case HDD:    
                 
                 System.out.println("Kuriamas resursas " + externalID +
                         " Bloku skaicius: " + parameters.size());
@@ -169,6 +171,20 @@ public class OS {
                 r = new Resource(creator, externalID, internalID, true, //Pakartotino naudojimo
                     parameters, waitingProcesses, waitingProcessComponentCount, resourceManager);     
             break;    
+                
+            case IvedimoIrenginys:
+            case IsvedimoIrenginys:
+            case GarsiakalbioIrenginys:
+                
+            System.out.println("Kuriamas resursas " + externalID);
+
+            //Paduodam:
+            //creator, externalID, internalID, reusable, components, waitingProcesses, resourceManager
+            r = new Resource(creator, externalID, internalID, true, //Pakartotino naudojimo
+                parameters, waitingProcesses, waitingProcessComponentCount, resourceManager);                 
+                
+            break;    
+                
                 
         }
         

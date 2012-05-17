@@ -24,16 +24,82 @@ public class StartStop extends Process {
         super(inList, internalID, externalID, ps, p, cr, or, state,
                 priority, parent, c, core);
         
+        //TIK testinimui
+        step();
+    }
+    
+    public void step()
+    {
+        switch (nextInstruction)
+        {
+            case 1:
+                createSystemResources();
+                break;
+                
+            case 2:
+                createSystemProcesses();
+                break;
+                
+            case 3:
+                blockForExit();
+                break;
+                
+            case 4:
+                destroySystemProcesses();
+                break;
+                
+            case 5:
+                destroySystemResources();
+                break;
+        }
         
-        createSystemResources();
+        nextInstruction++;
         
+        if (nextInstruction > 5)
+        {
+            nextInstruction = 1;
+        }
+                
     }
  
     private void createSystemResources()
     {
         //Kuriam sisteminius resursus
-        System.out.println("StartStop kuria sisteminius resursus");     
+        System.out.println("StartStop kuria sisteminius resursus");  
+        
         createResourceVartotojoAtmintis();
+        createResourceSupervizorineAtmintis(265);
+        createResourceHDD(256);
+        
+        System.out.println("Kuria IO irenginio resursus");  
+        pd.core.createResource(this, ResName.IvedimoIrenginys, new LinkedList<Object>());
+        pd.core.createResource(this, ResName.IsvedimoIrenginys, new LinkedList<Object>());
+        System.out.println("IO irenginiu resursai sukurti");  
+        
+        System.out.println("StartStop kuria garsiakalbio irenginio resursus");
+        pd.core.createResource(this, ResName.GarsiakalbioIrenginys, new LinkedList<Object>());
+        pd.core.createResource(this, ResName.GarsiakalbioIrenginys, new LinkedList<Object>());
+        System.out.println("Garsiakalbio irenginio resursai sukurti");
+    }
+    
+    private void createSystemProcesses()
+    {
+        System.out.println("StartStop kuria sisteminius procesus");  
+    }
+    
+    private void blockForExit()
+    {
+        System.out.println("StartStop blokuojasi del MOS pabaigos resurso");  
+    }
+    
+    private void destroySystemProcesses()
+    {
+        System.out.println("StartStop naikina procesus");  
+    }
+    
+    private void destroySystemResources()
+    {
+        System.out.println("StartStop naikina resursus");  
     }
     
     private void createResourceVartotojoAtmintis()
@@ -55,9 +121,41 @@ public class StartStop extends Process {
         pd.core.createResource(this, ResName.VartotojoAtmintis, memoryBlocks);
     }
     
-    private void createResourceSupervizorineAtmintis()
+    
+    //Supervizorine is string'u del paprastumo...
+    private void createResourceSupervizorineAtmintis(int totalBlocks)
     {
-        //Supervizorine is string'u
+        System.out.println("Kuriam supervizorines atminties resursa");
+
+        LinkedList<Object> memoryBlocks = new LinkedList<Object>();
+        
+        //Kuriam supervizorines atminties blokus
+        for (int i = 0; i < totalBlocks; i++)
+        {
+            memoryBlocks.add(new String());
+        }
+        
+        System.out.println("Sukurta " + totalBlocks + " supervizorines atminties bloku");
+        
+        pd.core.createResource(this, ResName.SupervizorineAtmintis, memoryBlocks);
     }
+    
+    //HDD atmintis taip pat is string...
+    private void createResourceHDD(int totalBlocks)
+    {
+        System.out.println("Kuriam HDD resursa");
+
+        LinkedList<Object> memoryBlocks = new LinkedList<Object>();
+        
+        //Kuriam HDD blokus
+        for (int i = 0; i < totalBlocks; i++)
+        {
+            memoryBlocks.add(new String());
+        }
+        
+        System.out.println("Sukurta " + totalBlocks + " HDD bloku");
+        
+        pd.core.createResource(this, ResName.HDD, memoryBlocks);
+    }    
     
 }
