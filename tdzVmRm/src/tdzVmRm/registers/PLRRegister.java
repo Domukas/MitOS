@@ -28,6 +28,10 @@ public class PLRRegister{
         return tmp;
     }
     
+    public int getIntValue(){
+        return data;
+    }
+    
     public byte getA0()
     {
         return (byte)(data >>> 12);
