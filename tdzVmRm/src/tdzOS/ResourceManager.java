@@ -38,14 +38,19 @@ class ResourceManager {
     public void Execute(Process process, Resource r)
     {
         //TODO
-        
+
         os.processManager.Execute();
     }
     
     //paskirstytojas visiem laukiantiems resursams kai resursas skaidomas dalimis
     public void Execute(Resource r, int count)
     {
-        //TODO
+        //jei yra procesu kuriems res reikalingas
+        if(r.rd.waitingProcesses.size() != 0)
+        {
+            //tada ziurim ar toks resursas galimas atiduoti
+           // r.rd.externalIDas
+        }
         
         os.processManager.Execute();
     }
@@ -53,8 +58,40 @@ class ResourceManager {
     //paskirstytojas visiems laukiantiems resursams kai resursas neskaidomas
     public void Execute(Resource r)
     {
-        //TODO
-        
+        //jei yra procesu kuriems res reikalingas
+        if (r.rd.waitingProcesses.size() != 0)
+        {
+            int priority = 0;
+            Process tmpProcess = null;
+            //tai randam su didziausiu prioritetu procesa
+            for(int i = 0; i < r.rd.waitingProcesses.size(); i++)
+            {
+                if(priority < r.rd.waitingProcesses.get(i).pd.priority)
+                {
+                    tmpProcess = r.rd.waitingProcesses.get(i);
+                }
+            }
+            //jam duodam resurso nuoroda ir pasalinam resursa is laisvu res saraso.
+            tmpProcess.pd.ownedResources.add(r);
+            os.resources.remove(r);
+            //jei tam procesui daugiau jokiu resursu nereikia, pazymim ji pasiruosusiu
+            boolean stillNeeded = false;
+            for(int i = 0; i < os.resources.size(); i++)
+            {
+                for(int j = 0; j < os.resources.get(i).rd.waitingProcesses.size(); j++)
+                {
+                    if(tmpProcess == os.resources.get(i).rd.waitingProcesses.get(j))
+                    {
+                        stillNeeded = true;
+                    }
+                }
+            }
+            if(!stillNeeded)
+            {
+                tmpProcess.pd.state =  OS.ProcessState.Ready;
+            }
+        } 
+        //kvieciam procesu planuotoja
         os.processManager.Execute();
     }
 }

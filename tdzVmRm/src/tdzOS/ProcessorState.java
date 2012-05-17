@@ -20,7 +20,7 @@ class ProcessorState {
     public  ModeRegister mode;
     public  INTRegister PI, SI;
     
-    ProcessorState()
+    public ProcessorState()
     {
     }
     
