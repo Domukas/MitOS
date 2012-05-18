@@ -4,7 +4,9 @@
  */
 package tdzOS;
 
+import java.util.Collections;
 import java.util.LinkedList;
+import java.util.Random;
 
 /**
  *
@@ -43,55 +45,85 @@ class ResourceManager {
         {
             //paima kiekviena resursa
             Resource r = os.resources.get(i);
+            
             //ir kiekvieno resurso visus procesus kuriems jo reikia
-            LinkedList<Process> tmpProcessList = new LinkedList<>();
+            LinkedList<Process> tmpProcessList = r.rd.waitingProcesses;
+            //Kiek sarasas parodo, kiek reikia kiekvienam procesui resurso elementu
+            LinkedList<Integer> requestedCountList = r.rd.waitingProcessComponentCount;
             
-            //sortas
-            //jei neskaidomas resursas
+            //Surikiuoja laukianciu procesu sarasa pagal prioriteta
+            SortWaitingProcessesList(tmpProcessList, requestedCountList);
             
-            tmpProcessList = r.rd.waitingProcesses;
             for(int j = 0 ; j < tmpProcessList.size(); j++)
             {
-                //tada iesko visad didziausio prioriteto
-                Process tmpProcess = findHighestProcessWhereResourceIsNeeded(tmpProcessList);
-                //duodam resursa arba jo dali procesui
-                int count = os.resources.get(j).rd.waitingProcessComponentCount.get(j);   //???
-                giveToProcessAResourceComponents(tmpProcess, r, count);
-                //jei tam procesui daugiau jokiu resursu nereikia, pazymim ji pasiruosusiu
-                readyTheProcess(tmpProcess);
-                //ismetam is laikino saraso kad veliau vel surastu didziausio prioriteto
-                tmpProcessList.remove(j);
+                int count = requestedCountList.get(j);
+                
+                if (giveResourceToProcess(tmpProcessList.get(j), r, count))
+                {
+                    //jei tam procesui daugiau jokiu resursu nereikia, pazymim ji pasiruosusiu
+                    if (tmpProcessList.size() == 0)
+                        //Procesa nustatom pasiruosusiu
+                        //Jei jis dar laukia kokio nors resurso, tai sitas metodas
+                        //Jo pasiruosusiu nepadaro
+                        readyTheProcess(tmpProcessList.get(j));
+                    
+                    //ismetam ta procesa is resurso laukianciu saraso, jei jis gavo resursa
+                    tmpProcessList.remove(j);
+                    requestedCountList.remove(j);
+                }
             }
         }
         //kvieciam procesu planuotoja
         os.processManager.Execute();
     }
-    //---------------------------------------------------------
-    Process findHighestProcessWhereResourceIsNeeded(LinkedList<Process> tmpProcessList)
+    
+    private void SortWaitingProcessesList(LinkedList<Process> list,
+            LinkedList<Integer> requestedCountList)
     {
-        int priority = 0;
-        Process tmpProcess = null;
-        for(int i = 0; i < tmpProcessList.size(); i++)
+        for(int i=0; i<(list.size()-1); i++)
         {
-            if(priority < tmpProcessList.get(i).pd.priority)
+            for (int j=i+1; j<(list.size()-1); j++)
             {
-                priority = tmpProcessList.get(i).pd.priority;
-                tmpProcess = tmpProcessList.get(i);
+                if (list.get(i).pd.priority < list.get(j).pd.priority)
+                {
+                    Collections.swap(list, i, j);
+                    Collections.swap(requestedCountList, i, j);
+                }
             }
         }
-        return tmpProcess;
     }
     //-----------------------------------------------------------------------------
-    void giveToProcessAResourceComponents(Process tmpProcess, Resource r, int count)
+    private boolean giveResourceToProcess(Process tmpProcess, Resource r, int count)
     {
         if((r.rd.components.size() >= count) && (tmpProcess != null))
             {
+                
+                //Is saraso dalinam resursus atsitiktinai
+                Random randomGenerator = new Random();
+                for (int i=0; i<count; i++)
+                {
+                    //generuojam atsitiktini skaciu 
+                    int randomInt = randomGenerator.nextInt(r.rd.components.size());
+                    tmpProcess.pd.ownedResources.add(r.rd.components.get(randomInt));
+                    r.rd.components.remove(randomInt);
+                    
+                    System.out.println("Procesui " + tmpProcess.pd.externalID + 
+                            " skiriamas resurso " + r.rd.externalID + " " + randomInt + 
+                            " -tasis elementas");
+                    
+                    //Jei to resurso nebeliko laisvu komponentu, tai ji pasalinam is laisvu saraso
+                    if (r.rd.components.size() == 0)
+                        os.resources.remove(r);
+                }
+                
+                return true;
+                /*
                 //sukuriam tuscia komponentu sarasa
-                LinkedList<Object> newComponents = new LinkedList<Object>();
+                LinkedList<ResComponent> newComponents = new LinkedList<ResComponent>();
                 //tuomet priskiriam tam naujam resursui tuos komponentus, o is originalo juos isimam
                 for(int i = 0; i < count; i++)
                 {
-                    Object tmpComponent = r.rd.components.get(i);
+                    ResComponent tmpComponent = r.rd.components.get(i);
                     r.rd.components.remove(i);
                     newComponents.add(tmpComponent);
                 }
@@ -108,7 +140,10 @@ class ResourceManager {
                 {
                     os.resources.remove(r);
                 }
+                * 
+                */
             } 
+        else return false;
     }
     //--------------------------------------
     void readyTheProcess(Process tmpProcess)
@@ -131,6 +166,7 @@ class ResourceManager {
                 tmpProcess.pd.state =  OS.ProcessState.Ready;
             }
         }
+        else System.out.println("Kazkas labai negerai!!!!!");
     }
     //---------------------    
 }

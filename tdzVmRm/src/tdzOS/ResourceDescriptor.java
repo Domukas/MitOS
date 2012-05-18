@@ -16,14 +16,14 @@ public class ResourceDescriptor {
     ResName externalID;
     boolean reusable;
     Process creator;          //DOKUMENTE PARASYTA, KAD VIDINIS KUREJO VARDAS, O NE ID
-    LinkedList<Object> components; //TODO
+    LinkedList<ResComponent> components; //TODO
     LinkedList<Process> waitingProcesses;
     LinkedList<Integer> waitingProcessComponentCount;
     ResourceManager resourceManager;
  
     
     public ResourceDescriptor(Process creator, ResName externalID, int internalID,
-            boolean reusable, LinkedList<Object> components, //APTARNAUJAMU SARASAS NEREIKALINGAS AR REIKALINGAS?
+            boolean reusable, LinkedList<ResComponent> components, //APTARNAUJAMU SARASAS NEREIKALINGAS AR REIKALINGAS?
             LinkedList<Process> waitingProcesses, LinkedList<Integer> waitingProcessComponentCount, ResourceManager resourceManager)
     {
         this.creator = creator;

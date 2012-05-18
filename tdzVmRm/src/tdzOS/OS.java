@@ -61,11 +61,14 @@ public class OS {
     
     
     //Primityvas procesu kurimui
-    public void createProcess(Process parent, OS.ProcessState state, int priority,
-            LinkedList<Resource> resources, ProcName externalID)
+    public void createProcess(Process parent, ProcessState state, int priority,
+            LinkedList<ResComponent> resources, ProcName externalID)
     {
         System.out.println("-------------------------");
         System.out.println("Kurti procesa iskviestas!");
+        
+        if (resources == null)
+            resources = new LinkedList<ResComponent>();
         
         switch (externalID)
         {
@@ -76,7 +79,7 @@ public class OS {
                 
                 Process p = new StartStop(processes, internalID, externalID,
                     new ProcessorState(), rm.proc[0], new LinkedList<Resource>(),
-                    new LinkedList<Resource>(), state, priority, parent,
+                    resources, state, priority, parent,
                     new LinkedList<Process>(), this);
                 
                 //Pridedam procesus i reikiamus sarasus
@@ -247,34 +250,54 @@ public class OS {
         //Resurso elementas, primityvui perduotas kaip funkcijos parametras,
         //yra pridedamas prie resurso elementų sąrašo. Šio primityvo pabaigoje
         //yra kviečiamas resursų paskirstytojas.
-        //Resurso elementas pridedamas prie resurso elementų sąrašo.
-        
-        boolean onTheList = false;
+        //Resurso elementas pridedamas prie resurso elementų sąrašo.  
+
+        boolean isInFreeList = false;
         Resource tmpRes = null;
-        //randam resursa laisvu resursu sarase
+        
+        //randam resursa resursu sarase
         for(int i = 0; i < resources.size(); i++)
         {
+            //gal galima patikrint pagal kalses??? ///TODO
             if((resources.get(i).rd.externalID == r.rd.externalID) && (resources.get(i).rd.internalID == r.rd.internalID))
             {
-                onTheList = true;
+                //jei randam laisvu sarase ta resursa, tai reiskia, kad 
+                //jam turim grazint tuos komponentus. Todel isimenam ji.
+                isInFreeList = true;
                 tmpRes = resources.get(i);
+                break;
             }
         }
-        //jei tokio resurso nera sarase tai ji tiesiog pridedam
-        if(!onTheList)
-        {
-            resources.add(r);
+        
+        if (isInFreeList)
+        {   
+            //reiks prideti jo komponentus
+
+            for (ResComponent c:process.pd.ownedResources)
+            {
+                //neaisku ar suveiks.... //TODO
+                //atiduodam komponentus...
+                if (c.parent == tmpRes)
+                {
+                    tmpRes.rd.components.add(c);
+                    process.pd.ownedResources.remove(c);
+                }
+            }
         }
-        //jei jis jau buvo toks sarase, tuomet reiks prideti jo komponentes
         else
         {
-            for(int i = 0; i < r.rd.components.size(); i++)
+            //Jei ne laisvu sarase, tada i ta sarasa resursa idedam
+            //Ir jam vel grazinam komponentus
+            tmpRes = r;
+            resources.add(r);
+            
+            //Grazinam jam komponentus
+            for (ResComponent c:process.pd.ownedResources)
             {
-                tmpRes.rd.components.add(r.rd.components.get(i)); //ar cia visad bus priskirtas ir nebus null?
-                r.rd.components.remove(i);
+                tmpRes.rd.components.add(c);
+                process.pd.ownedResources.remove(c);
             }
         }
-        process.pd.ownedResources.remove(r);
         
         resourceManager.execute();
     }
@@ -298,7 +321,7 @@ public class OS {
         System.out.println("Resource manager sukurtas");
         
         System.out.println("Darbo pradzia");
-        createProcess(null, OS.ProcessState.Ready, 1, resources, ProcName.StartStop);
+        createProcess(null, OS.ProcessState.Ready, 90, null, ProcName.StartStop);
         //TODO
     }
     

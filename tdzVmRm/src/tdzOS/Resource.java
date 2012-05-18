@@ -18,8 +18,14 @@ class Resource {
             boolean reusable, LinkedList<Object> components, //APTARNAUJAMU SARASAS NEREIKALINGAS AR REIKALINGAS?
             LinkedList<Process> waitingProcesses, LinkedList<Integer> waitingProcessComponentCount, ResourceManager resourceManager)
     {
+        
+        LinkedList<ResComponent> resComponents = new LinkedList<ResComponent>();
+        for (Object o: components)
+            resComponents.add(new ResComponent(o, this));
+            
+        
         rd = new ResourceDescriptor(creator, externalID, internalID,
-                reusable, components, waitingProcesses, waitingProcessComponentCount, resourceManager);
+                reusable, resComponents, waitingProcesses, waitingProcessComponentCount, resourceManager);
         
     }
 }

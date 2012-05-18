@@ -18,14 +18,15 @@ public class StartStop extends Process {
     
     public StartStop(LinkedList inList, int internalID, ProcName externalID, 
            ProcessorState ps, Processor p, LinkedList<Resource> cr,
-           LinkedList<Resource> or, ProcessState state, int priority,
+           LinkedList<ResComponent> or, ProcessState state, int priority,
            Process parent, LinkedList<Process> c, OS core)
     {
         super(inList, internalID, externalID, ps, p, cr, or, state,
                 priority, parent, c, core);
         
         //TIK testinimui
-        step();
+        //step();
+
     }
     
     public void step()
@@ -82,22 +83,26 @@ public class StartStop extends Process {
         System.out.println("Garsiakalbio irenginio resursai sukurti");
     }
     
-    private void createSystemProcesses()
+    private void createSystemProcesses() //TODO
     {
         System.out.println("StartStop kuria sisteminius procesus");  
+        
+        System.out.println("Kuriamas procesas Read");  
+        pd.core.createProcess(this, ProcessState.Ready, 80, null, ProcName.Interrupt);
+        System.out.println("Procesas Read sukutas");  
     }
     
-    private void blockForExit()
+    private void blockForExit() //TODO
     {
         System.out.println("StartStop blokuojasi del MOS pabaigos resurso");  
     }
     
-    private void destroySystemProcesses()
+    private void destroySystemProcesses() //TODO
     {
         System.out.println("StartStop naikina procesus");  
     }
     
-    private void destroySystemResources()
+    private void destroySystemResources() //TODO
     {
         System.out.println("StartStop naikina resursus");  
     }

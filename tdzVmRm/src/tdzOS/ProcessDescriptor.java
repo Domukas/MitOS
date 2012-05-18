@@ -20,7 +20,7 @@ public class ProcessDescriptor {
    public ProcessorState procesorState;
    public Processor processor;
    public LinkedList<Resource> createdResources;
-   public LinkedList<Resource> ownedResources;
+   public LinkedList<ResComponent> ownedResources; //Cia ne patys resursai, o ju komponentai
    public ProcessState state;
    public int priority;
    public Process parent;
@@ -28,7 +28,7 @@ public class ProcessDescriptor {
    public OS core;
    
    public ProcessDescriptor(LinkedList inList, int internalID, ProcName externalID, 
-           ProcessorState ps, Processor p, LinkedList<Resource> cr, LinkedList<Resource> or,
+           ProcessorState ps, Processor p, LinkedList<Resource> cr, LinkedList<ResComponent> or,
            ProcessState state, int priority, Process parent, LinkedList<Process> c, OS core)
    {
        this.inList = inList;

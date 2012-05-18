@@ -20,7 +20,7 @@ public abstract class Process {
     
     public Process(LinkedList inList, int internalID, ProcName externalID, 
            ProcessorState ps, Processor p, LinkedList<Resource> cr,
-           LinkedList<Resource> or, ProcessState state, int priority,
+           LinkedList<ResComponent> or, ProcessState state, int priority,
            Process parent, LinkedList<Process> c, OS core)
     {
        
@@ -40,5 +40,11 @@ public abstract class Process {
         tempList.addLast(message);
         
         return tempList;
+    }
+    
+    //persoka i kuria nors proceso dali
+    protected void goTo(int index)
+    {
+        nextInstruction = index;
     }
 }
