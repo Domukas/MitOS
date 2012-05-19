@@ -70,24 +70,35 @@ public class OS {
         if (resources == null)
             resources = new LinkedList<ResComponent>();
         
+        //Generuojamas vidinis ID
+        int internalID = generateProcessInternalID(externalID);
+        
+        System.out.println("Kuriamas procesas" + externalID);
+        
+        //Nuoroda i procesoriu null, nes tik sukurtas procesas neturi procesoriaus,
+        //ji gauna, kai jam procesoriu duoda planuotojas
+
+        Process p = null;
         switch (externalID)
         {
             case StartStop:
-                int internalID = generateProcessInternalID();
-                
-                System.out.println("Kuriamas procesas" + externalID);
-                
-                Process p = new StartStop(processes, internalID, externalID,
-                    new ProcessorState(), rm.proc[0], new LinkedList<Resource>(),
-                    resources, state, priority, parent,
-                    new LinkedList<Process>(), this);
-                
-                //Pridedam procesus i reikiamus sarasus
-                addProcessToLlists(p);
-                
-                System.out.println("Procesas sukurtas-------");
-            break;
+                p = new StartStop(processes, internalID, externalID,
+                    new ProcessorState(), null, new LinkedList<Resource>(),   
+                    resources, state, priority, parent, new LinkedList<Process>(), this);
+                break;
+            case Read:
+                p = new Read(processes, internalID, externalID,
+                    new ProcessorState(), null, new LinkedList<Resource>(),   
+                    resources, state, priority, parent, new LinkedList<Process>(), this);
+                break;
         }
+        
+        //Pridedam procesus i reikiamus sarasus
+        addProcessToLlists(p);
+
+        System.out.println("Procesas sukurtas-------");   
+        processManager.Execute();
+        
         
     }
     
@@ -114,22 +125,136 @@ public class OS {
           }
     }
     
+    private void removeProcessesFromLists(Process p)
+    {   
+        //isimam is visu procesu saraso
+        processes.remove(p); 
+        
+        //Paziurim, i koki sarasa be bendro dar itrauktas procesas
+        switch (p.pd.state)
+        {
+            case Ready:
+                readyProcesses.remove(p);
+            break;
+                  
+            case Blocked:
+                blockedProcesses.remove(p);
+            break;
+                    
+            case Run:
+                //Jei naikinam Vykdoma procesa tikriausiai pazkas negerai
+                System.out.println("NAIKINAMAS PROCESAS TURI RUN STATE!");
+            break;
+          }
+        
+    }
+    
     //primityvas naikinimui proceso
-    public void destroyProcess()
+    //TODO reikia pataisymu, gal negerai veiks
+    public void destroyProcess(Process process)
     {
+        System.out.println("Naikinamas procesas: " + process.pd.externalID + " #" + process.pd.internalID);
+        for (Process p:process.pd.children) //Rekursiskai naikiname visus proceso vaikus
+            destroyProcess(p);
+        
+        //naikinam procesu sukurtus resursus
+        
+        //Sudaromas sarasas resursu, kuriuos reikia sunaikinti
+        //Reikalingas tam, kad nenaikintumem resurso is saraso, per kuri dabar einam
+        LinkedList<Resource> resourcesToDestroy = new LinkedList<Resource>();
+        for (Resource r:process.pd.createdResources)
+            resourcesToDestroy.add(r);
+        
+        //Naikinami sukurti resursai
+        for (Resource r:resourcesToDestroy)
+            destroyResource(r);
+        
+        //isimam is tevo sukurtu procesu saraso sita procesa
+        //jei naikinam StartStop, tada jo tevas yra null reiksme
+        if (process.pd.parent != null)
+            process.pd.parent.pd.children.remove(process);
+        
+        //ismetam procesa is visu procesu saraso
+        removeProcessesFromLists(process);
+        
+        for (ResComponent c:process.pd.ownedResources)
+        {
+            //jei resursas pakartotino naudojimo
+            if (c.parent.rd.reusable)
+            {
+                //tai ji atlaisvinam (jei ten atmintis ar irenginio resursas)
+                freeResource(process, c.parent);
+            }
+            else
+            {
+                //jei ne pakartotino naudojimo, tarkim, kad pranesimas
+                //sunaikinam pati resursa
+                
+                //pirma karta paleidus destroy resource, jis ismes visus komponentus is resurso
+                //bet tie komponentai dar bus pas procesa
+                //tada tiesiog tuos komonentus ismetam
+                if (c.parent.rd.components.size() != 0)       
+                    destroyResource(c.parent);
+                //einant toliau per cikla
+                process.pd.ownedResources.remove(c);
+            }
+        }
+        
+        System.out.println("Procesas sunaikintas");
         
     }
     
     //primityvas stabdymui proceso
-    public void stopProcess()
+    public void stopProcess(Process p)
     {
-        
+        switch (p.pd.state)
+        {
+            case Run:
+                //pasalinam is dabar vykdomu saraso
+                runProcesses.remove(p);
+
+                //Issaugom procesoriaus busena ir atimam procesoriaus resursa
+                p.pd.procesorState.saveProcessorState(p.pd.processor);
+                //Nustatom, kad tas procesorius nevykdo proceso
+                p.pd.processor.pd.currentProcess = null;
+                p.pd.processor = null; //Atimam procesoriu
+
+                
+                System.out.println("Procesas " + p.pd.externalID + 
+                        "#" + p.pd.internalID + "perjungtas i ReadyS būsena");   
+                break;
+                
+            case Ready:
+                readyProcesses.remove(p);
+                p.pd.state = ProcessState.ReadyS;
+                
+                System.out.println("Procesas " + p.pd.externalID + 
+                    "#" + p.pd.internalID + "perjungtas i ReadyS būsena");   
+                
+                break;
+            case Blocked:
+                blockedProcesses.remove(p);
+                p.pd.state = ProcessState.BlockedS;
+                System.out.println("Procesas " + p.pd.externalID + 
+                    "#" + p.pd.internalID + "perjungtas i BlockedS būsena");   
+                break;
+        }
     }
     
     //primityvas aktyvavimui proceso
-    public void activateProcess()
+    public void activateProcess(Process p)
     {
-        //TODO
+        //Jei procesas readyS busenos, pakeiciam ja i ready ir pridedam i pasiruosusiu sarasa
+        if (p.pd.state == ProcessState.ReadyS)
+        {
+            p.pd.state = ProcessState.Ready;
+            readyProcesses.add(p);
+        } //Jei ne ready tada jis BlockedS ir ji idedam i blocked sarasa. Pakeiciam i blocked
+        else
+        {
+            p.pd.state = ProcessState.Blocked;
+            blockedProcesses.add(p);
+        }
     }
     
     //Primityvas resurso kurimui
@@ -204,6 +329,8 @@ public class OS {
     //TODO primityvas resurso sunaikinimui
     public void destroyResource(Resource r)
     {
+        System.out.println("Naikinamas resursas " + r.rd.externalID + " #" + r.rd.internalID);
+        
         //istrinam resursa is ji sukurusio proceso sukurtu resursu saraso
         Process creatorProcess = r.rd.creator;
         creatorProcess.pd.createdResources.remove(r);
@@ -212,6 +339,7 @@ public class OS {
         {
             r.rd.components.remove(i);
         }
+        
         //atblokuojami visi procesai laukiantys sio resurso
         for(int i = 0; i < processes.size(); i++)
         {
@@ -226,6 +354,8 @@ public class OS {
         }
         //ismetamas is bendro resursu saraso
         resources.remove(r);
+        
+        System.out.println("Resursas sunaikintas");
     }
     
     //TODO primityvas resurso prasymui
@@ -252,6 +382,9 @@ public class OS {
         //yra kviečiamas resursų paskirstytojas.
         //Resurso elementas pridedamas prie resurso elementų sąrašo.  
 
+        System.out.println("Procesas " + process.pd.externalID + " #" + process.pd.internalID + 
+                "atlaisvina resursa " + r.rd.externalID);
+        
         boolean isInFreeList = false;
         Resource tmpRes = null;
         
@@ -299,12 +432,25 @@ public class OS {
             }
         }
         
+        System.out.println("Resursas atlaisvintas");
         resourceManager.execute();
     }
     
     public void step()
     {
-        System.out.println("Step!");
+        System.out.println("OS Step!");
+        
+        LinkedList<Process> tempList = new LinkedList<Process>();
+        for (Process p:runProcesses)
+            tempList.add(p);
+        
+        for (Process p:tempList)
+        {
+            System.out.println("Suveikia procesas: " + p.pd.externalID + " " + p.pd.internalID);
+            
+            p.step();
+        }
+        
     }
     
     private void initProcesses()
@@ -321,19 +467,24 @@ public class OS {
         System.out.println("Resource manager sukurtas");
         
         System.out.println("Darbo pradzia");
+        
         createProcess(null, OS.ProcessState.Ready, 90, null, ProcName.StartStop);
+
         //TODO
     }
     
-    private int generateProcessInternalID()
+    private int generateProcessInternalID(ProcName procName)
     {
-        return 0;
+        int newId = Process.numberOfInstances;
+        Process.numberOfInstances++;
+        return newId;
         //TODO
     }
     
     private int generateResourceInternalID(ResName resName)
     {
-        //TODDO
-        return 0;
+        int newId = Resource.numberOfInstances;
+        Resource.numberOfInstances++;
+        return newId;
     }
 }

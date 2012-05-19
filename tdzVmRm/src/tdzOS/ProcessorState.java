@@ -4,7 +4,9 @@
  */
 package tdzOS;
 
+import java.awt.color.ICC_ColorSpace;
 import tdzVmRm.Processor;
+import tdzVmRm.RealMachine;
 import tdzVmRm.registers.*;
 
 /**
@@ -22,6 +24,15 @@ class ProcessorState {
     
     public ProcessorState()
     {
+        PLR = new PLRRegister();
+        R1 = new DataRegister();
+        R2 = new DataRegister();
+        IC = new ICRegister();
+        C = new CRegister();
+        timer = new TimerRegister(RealMachine.proc[0].timer.getInterval());
+        mode = new ModeRegister();
+        PI = new INTRegister();
+        SI = new INTRegister();
     }
     
     public void saveProcessorState(Processor processor)

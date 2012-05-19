@@ -16,7 +16,9 @@ import tdzVmRm.Processor;
 public abstract class Process {
     
     public ProcessDescriptor pd;
-    protected int nextInstruction;  
+    protected int nextInstruction; 
+    
+    public static int numberOfInstances = 0;
     
     public Process(LinkedList inList, int internalID, ProcName externalID, 
            ProcessorState ps, Processor p, LinkedList<Resource> cr,
@@ -28,6 +30,7 @@ public abstract class Process {
                 cr, or, state, priority, parent, c, core); 
         
         nextInstruction = 1;
+        numberOfInstances++;
     }
     
     public abstract void step();

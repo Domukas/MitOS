@@ -6,6 +6,7 @@ package tdzOS;
 
 import java.util.Iterator;
 import tdzOS.OS.ProcessState;
+import tdzVmRm.Processor;
 
 /**
  *
@@ -21,23 +22,53 @@ public class ProcessManager { //planuotojas
     
     public void Execute() //planuotojo darbas
     {
-        CurrentProcessState();
-        Process currentProcess = HighestReadyProcess();
-        LoadAndSet(currentProcess);
+        System.out.println("Planuojas pradeda darba");   
+        stopCurrentProcesses();
+        
+        Processor idleProcessor = getIdleProcessor();
+        Process processToRun = highestReadyProcess();
+        
+        while ((idleProcessor != null) && (processToRun != null))
+        {
+            loadAndSet(processToRun, idleProcessor);
+            idleProcessor = getIdleProcessor();
+            processToRun = highestReadyProcess();
+        }
+
+        
+        //Kitu atveju riekia kazka daryt, jei jau nera norinciu dirbt procesu
     }
     
-    public void CurrentProcessState() //jei procesas nera blokuotas tuomet ji stabdom ir pridedam prie pasiruosusiu procesu saraso, jei blokuotas tuomet pridedam prie blokuotu saraso
+    public void stopCurrentProcesses() //jei procesas nera blokuotas tuomet ji stabdom ir pridedam prie pasiruosusiu procesu saraso, jei blokuotas tuomet pridedam prie blokuotu saraso
     {
-        Process currentProcess = getHighestRunningProcess();
-        int index = os.runProcesses.indexOf(currentProcess);
-        os.runProcesses.remove(index);
-        if(currentProcess.pd.state != ProcessState.Blocked)
+        //Jei nera veikianciu procesu
+        if (os.runProcesses.size() == 0)
         {
-            os.readyProcesses.add(currentProcess);
+            System.out.println("Nera vykdomu procesu!");  
+            return;
         }
-        else
+            
+        //Jei yra vykdomu, tada einam per ju sarasa
+        for (Process p:os.runProcesses)
         {
-            os.blockedProcesses.add(currentProcess);
+            Process currentProcess = p;
+             
+            //pasalinam is dabar vykdomu saraso
+            os.runProcesses.remove(currentProcess);
+
+            //Issaugom procesoriaus busena ir atimam procesoriaus resursa
+            currentProcess.pd.procesorState.saveProcessorState(currentProcess.pd.processor);
+            //Nustatom, kad tas procesorius nevykdo proceso
+            currentProcess.pd.processor.pd.currentProcess = null;
+            currentProcess.pd.processor = null; //Atimam procesoriu
+
+            System.out.println("Atimamas procesorius is: " + currentProcess.pd.externalID + 
+                    "#" + currentProcess.pd.internalID);   
+
+            if(currentProcess.pd.state != ProcessState.Blocked)
+                os.readyProcesses.add(currentProcess);
+            else
+                os.blockedProcesses.add(currentProcess);
         }
     }
 
@@ -49,35 +80,25 @@ public class ProcessManager { //planuotojas
         {
             if (os.runProcesses.get(i).pd.priority > priority)
                 {
-		priority = os.runProcesses.get(i).pd.priority;
-                highestRunnningProcess = os.runProcesses.get(i);
+                    priority = os.runProcesses.get(i).pd.priority;
+                    highestRunnningProcess = os.runProcesses.get(i);
                 }
 	}
         return highestRunnningProcess;
     }
         
-    public Process HighestReadyProcess()//jei yra pasiruosusiu tai paima didziausio prioriteto, jei ne tai println
+    public Process highestReadyProcess()//jei yra pasiruosusiu tai paima didziausio prioriteto, jei ne tai println
     {
         Process highestReadyProcess = null;
-        if(AreReadyProccesses() == true)
+        if(os.readyProcesses.size() != 0) //jei yra pasiruosusiu
         {
             highestReadyProcess = getHighestReadyProcess();
         }
         else
         {
-            System.out.println("There is no ready processes");
+            System.out.println("Nera pasiruosusiu procesu");
         }
         return highestReadyProcess;
-    }
-    
-    public boolean AreReadyProccesses() //ar yra pasiruosusiu procesu sarase
-    {
-        boolean areReadyProccesses = false;
-        for (int i = 0; i < os.readyProcesses.size(); i++)
-        {
-            areReadyProccesses = true;
-        }
-        return areReadyProccesses;
     }
     
     public Process getHighestReadyProcess() //pasiima pasiruosusi procesa su didziausiu prioritetu
@@ -88,19 +109,35 @@ public class ProcessManager { //planuotojas
         {
             if (os.readyProcesses.get(i).pd.priority > priority)
                 {
-		priority = os.readyProcesses.get(i).pd.priority;
-                highestReadyProcess = os.readyProcesses.get(i);
+                    priority = os.readyProcesses.get(i).pd.priority;
+                    highestReadyProcess = os.readyProcesses.get(i);
                 }
 	}
         return highestReadyProcess;
     }
     
-    public void LoadAndSet(Process currentProcess)//pakrauna proceso busena RM procesoriui, pasalina ir pasiruosusiu ir ideda i veikianciu procesu sarasa
+    public void loadAndSet(Process currentProcess, Processor idleProcessor)//pakrauna proceso busena RM procesoriui, pasalina ir pasiruosusiu ir ideda i veikianciu procesu sarasa
     {
-        currentProcess.pd.procesorState.loadProcessorState(os.rm.proc[0]); //cia reiktu procesoriu keisti
-        int index = os.readyProcesses.indexOf(currentProcess);
-        os.readyProcesses.remove(index);
+        currentProcess.pd.procesorState.loadProcessorState(idleProcessor); //cia reiktu procesoriu keisti
+        os.readyProcesses.remove(currentProcess);
         os.runProcesses.add(currentProcess);
-        currentProcess.pd.processor = os.rm.proc[0];
+        currentProcess.pd.processor = idleProcessor; //procesui duodamas procesorius
+        
+        //procesoriaus deskriptoriuje nurodom dabar vykdoma procesa
+        idleProcessor.pd.currentProcess = currentProcess;                                                   
+        
+        System.out.println("Procesorius code:" + idleProcessor.hashCode() + 
+                " perduotas procesui " + currentProcess.pd.externalID +  "#" + currentProcess.pd.internalID);
+    }
+    
+    private Processor getIdleProcessor()
+    {
+        for (Processor p:os.rm.proc)
+        {
+            if (p.pd.currentProcess == null)
+                return p;
+        }
+        
+        return null; 
     }
 }

@@ -88,8 +88,7 @@ public class StartStop extends Process {
         System.out.println("StartStop kuria sisteminius procesus");  
         
         System.out.println("Kuriamas procesas Read");  
-        pd.core.createProcess(this, ProcessState.Ready, 80, null, ProcName.Interrupt);
-        System.out.println("Procesas Read sukutas");  
+        pd.core.createProcess(this, ProcessState.Ready, 80, null, ProcName.Read); 
     }
     
     private void blockForExit() //TODO
@@ -104,7 +103,7 @@ public class StartStop extends Process {
     
     private void destroySystemResources() //TODO
     {
-        System.out.println("StartStop naikina resursus");  
+        System.out.println("StartStop naikina resursus");
     }
     
     private void createResourceVartotojoAtmintis()

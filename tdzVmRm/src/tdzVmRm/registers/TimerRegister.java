@@ -41,4 +41,9 @@ public class TimerRegister{
         return time;
     }
     
+    public int getInterval()
+    {
+        return interval;
+    }
+    
 }

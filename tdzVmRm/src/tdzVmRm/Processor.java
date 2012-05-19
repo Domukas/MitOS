@@ -4,6 +4,7 @@
  */
 package tdzVmRm;
 
+import tdzOS.ProcessorDescriptor;
 import tdzVmRm.registers.*;
 
 /**
@@ -21,6 +22,8 @@ public class Processor {
     public  INTRegister PI, SI;
     public  CHRegister CH1, CH2, CH3, CH4;
     
+    public ProcessorDescriptor pd;
+    
     public Processor()
     {
         PLR = new PLRRegister();
@@ -37,6 +40,8 @@ public class Processor {
         CH2 = new CHRegister();
         CH3 = new CHRegister();
         CH4 = new CHRegister();
+        
+        pd = new ProcessorDescriptor(2); //TODO
     }
     
 }
