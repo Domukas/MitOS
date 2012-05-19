@@ -77,10 +77,19 @@ class ResourceManager {
                        
                        //jei davem resursa ir jeigu jam daugiau jokio kito resurso nereikia
                        if (p.pd.waitingCount.size() == 0)
+                       {
                            p.pd.state = OS.ProcessState.Ready;
-                       
-                       //ir ismetam is saraso to resurso isorini ID ir reikalingu komponentu skaiciu
-                       
+                           
+                           //Jei tas procesas blokuotu sarase tai ji idedam i pasiruosusiu sarasa
+                           //Blokuotu sarase jis atsiranda, jei is karto negauna reikalingo resurso
+                           if (os.blockedProcesses.contains(p))
+                           {
+                               System.out.println("TARP BLOKUOTU");
+                               os.blockedProcesses.remove(p);
+                               os.readyProcesses.add(p);
+                           }
+                       }
+                                                
                    }
                } 
                else System.out.println("Resursas " + resNameList.get(i) + " nerastas laisvu sarase");
@@ -200,9 +209,10 @@ class ResourceManager {
     private Resource findResourceByExternalName(ResName name)
     {
         for (Resource r:os.resources)
+        {        
             if (r.rd.externalID == name)
                 return r;
-        
+        }
         return null;
     }
     

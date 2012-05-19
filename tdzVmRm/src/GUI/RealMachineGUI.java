@@ -5,7 +5,7 @@
 package GUI;
 
 import java.awt.Dimension;
-import java.io.File;
+import java.io.*;
 import java.lang.reflect.InvocationTargetException;
 import java.util.LinkedList;
 import java.util.logging.Level;
@@ -341,7 +341,27 @@ public class RealMachineGUI extends javax.swing.JFrame {
             taskName = taskNameField.getText();
             File f = new File("src/tdzVmRm/"+taskName+".tdz");
             
-            if(f.exists()){
+            if(f.exists())
+            {
+                //Cia jau kuriam resursa IvedimoSrautas
+                //Paimam is OS'o startStop tik tam, kad kuriant resursa galetume paduot jo teva teisingai
+                
+                LinkedList<Object> elements = new LinkedList<>();
+                
+                FileInputStream input = null;
+                try {
+                    input = new FileInputStream(f);
+    
+                    elements.add(input);
+                    
+                    os.createResource(os.getMainproc(), OS.ResName.IvedimoSrautas, elements);
+                } catch (IOException ex) {
+                    Logger.getLogger(RealMachineGUI.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                
+                
+                
+                /*
                 if (RealMachine.VM == null)
                 {
                     if (RM.CreateVirtualMachine(taskName))
@@ -355,6 +375,8 @@ public class RealMachineGUI extends javax.swing.JFrame {
                 updateAll();       
                 }else{
                     showMessage("File not found.");
+                    * 
+                    */
             }
     }//GEN-LAST:event_taskButtonActionPerformed
 

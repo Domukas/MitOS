@@ -280,7 +280,7 @@ public class OS {
                 
 
                 
-            break;
+                break;
                 
             case VartotojoAtmintis:
             case SupervizorineAtmintis:  
@@ -293,22 +293,28 @@ public class OS {
                 //creator, externalID, internalID, reusable, components, waitingProcesses, resourceManager
                 r = new Resource(creator, externalID, internalID, true, //Pakartotino naudojimo
                     parameters, resourceManager);     
-            break;    
+                break;    
                 
             case IvedimoIrenginys:
             case IsvedimoIrenginys:
             case GarsiakalbioIrenginys:
                 
-            System.out.println("Kuriamas resursas " + externalID);
+                System.out.println("Kuriamas resursas " + externalID);
 
             //Paduodam:
             //creator, externalID, internalID, reusable, components, waitingProcesses, resourceManager
-            r = new Resource(creator, externalID, internalID, true, //Pakartotino naudojimo
-                parameters, resourceManager);                 
+                r = new Resource(creator, externalID, internalID, true, //Pakartotino naudojimo
+                    parameters, resourceManager);                 
                 
-            break;    
+                break;
                 
+            case IvedimoSrautas:
+                System.out.println("Kuriamas resursas " + externalID);
                 
+                r = new Resource(creator, externalID, internalID, false, //ne pakartotinio naudojimo
+                parameters, resourceManager);    
+                
+                break;
         }
         
         //pridedam tevui i sukurtu resursu sarasa sita resursa
@@ -319,6 +325,8 @@ public class OS {
                 
         System.out.println("Resursas sukurtas-------");
         System.out.println("-------------------------");
+        
+        resourceManager.execute();
     }
     
     //TODO primityvas resurso sunaikinimui
@@ -487,5 +495,15 @@ public class OS {
         int newId = Resource.numberOfInstances;
         Resource.numberOfInstances++;
         return newId;
+    }
+    
+    public Process getMainproc()
+    {
+        for (Process p:processes)
+            if (p.pd.externalID == ProcName.StartStop)
+                return p;
+        
+        System.out.println("NERASTAS StartStop");
+        return  null;
     }
 }
