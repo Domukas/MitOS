@@ -17,12 +17,11 @@ import tdzVmRm.Processor;
 public class StartStop extends Process {
     
     public StartStop(LinkedList inList, int internalID, ProcName externalID, 
-           ProcessorState ps, Processor p, LinkedList<Resource> cr,
-           LinkedList<ResComponent> or, ProcessState state, int priority,
-           Process parent, LinkedList<Process> c, OS core)
+           ProcessorState ps, Processor p, LinkedList<ResComponent> or,
+           ProcessState state, int priority, Process parent, OS core)
     {
-        super(inList, internalID, externalID, ps, p, cr, or, state,
-                priority, parent, c, core);
+        super(inList, internalID, externalID, ps, p, or, state,
+                priority, parent, core);
         
         //TIK testinimui
         //step();
@@ -94,6 +93,7 @@ public class StartStop extends Process {
     private void blockForExit() //TODO
     {
         System.out.println("StartStop blokuojasi del MOS pabaigos resurso");  
+        pd.core.requestResource(this, ResName.MOSPabaiga, 1);
     }
     
     private void destroySystemProcesses() //TODO

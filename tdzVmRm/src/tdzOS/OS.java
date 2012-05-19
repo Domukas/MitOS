@@ -62,14 +62,14 @@ public class OS {
     
     //Primityvas procesu kurimui
     public void createProcess(Process parent, ProcessState state, int priority,
-            LinkedList<ResComponent> resources, ProcName externalID)
+            LinkedList<ResComponent> components, ProcName externalID)
     {
         System.out.println("-------------------------");
         System.out.println("Kurti procesa iskviestas!");
         
-        if (resources == null)
-            resources = new LinkedList<ResComponent>();
-        
+        if (components == null)
+            components = new LinkedList<ResComponent>();
+         
         //Generuojamas vidinis ID
         int internalID = generateProcessInternalID(externalID);
         
@@ -83,13 +83,13 @@ public class OS {
         {
             case StartStop:
                 p = new StartStop(processes, internalID, externalID,
-                    new ProcessorState(), null, new LinkedList<Resource>(),   
-                    resources, state, priority, parent, new LinkedList<Process>(), this);
+                    new ProcessorState(), null, components, state, priority,
+                    parent, this);
                 break;
             case Read:
                 p = new Read(processes, internalID, externalID,
-                    new ProcessorState(), null, new LinkedList<Resource>(),   
-                    resources, state, priority, parent, new LinkedList<Process>(), this);
+                    new ProcessorState(), null, components, state, priority,
+                    parent, this);
                 break;
         }
         
@@ -161,7 +161,7 @@ public class OS {
         
         //Sudaromas sarasas resursu, kuriuos reikia sunaikinti
         //Reikalingas tam, kad nenaikintumem resurso is saraso, per kuri dabar einam
-        LinkedList<Resource> resourcesToDestroy = new LinkedList<Resource>();
+        LinkedList<Resource> resourcesToDestroy = new LinkedList<>();
         for (Resource r:process.pd.createdResources)
             resourcesToDestroy.add(r);
         
@@ -262,12 +262,7 @@ public class OS {
     {
         System.out.println("-------------------------");
         System.out.println("Kurti resursa iskviestas!");
-        
-        
-        //sarasas procesu, kurie laukia sito resurso...
-        //turi but tuscias...
-        LinkedList<Process> waitingProcesses = new LinkedList<Process>();
-        LinkedList<Integer> waitingProcessComponentCount = new LinkedList<Integer>();
+       
         //Generuojam isorini ID pagal tai, koki kuriam
         int internalID = generateResourceInternalID(externalID);
         Resource r = null;
@@ -281,7 +276,7 @@ public class OS {
                 //Paduodam:
                 //creator, externalID, internalID, reusable, components, waitingProcesses, resourceManager
                 r = new Resource(creator, externalID, internalID, false, 
-                    parameters, waitingProcesses, waitingProcessComponentCount, resourceManager); 
+                    parameters, resourceManager); 
                 
 
                 
@@ -297,7 +292,7 @@ public class OS {
                 //Paduodam:
                 //creator, externalID, internalID, reusable, components, waitingProcesses, resourceManager
                 r = new Resource(creator, externalID, internalID, true, //Pakartotino naudojimo
-                    parameters, waitingProcesses, waitingProcessComponentCount, resourceManager);     
+                    parameters, resourceManager);     
             break;    
                 
             case IvedimoIrenginys:
@@ -309,7 +304,7 @@ public class OS {
             //Paduodam:
             //creator, externalID, internalID, reusable, components, waitingProcesses, resourceManager
             r = new Resource(creator, externalID, internalID, true, //Pakartotino naudojimo
-                parameters, waitingProcesses, waitingProcessComponentCount, resourceManager);                 
+                parameters, resourceManager);                 
                 
             break;    
                 
@@ -341,6 +336,8 @@ public class OS {
         }
         
         //atblokuojami visi procesai laukiantys sio resurso
+        //TODO cia negerai......
+        /*
         for(int i = 0; i < processes.size(); i++)
         {
             Process currentProcess = processes.get(i);
@@ -351,7 +348,10 @@ public class OS {
                     currentProcess.pd.state = ProcessState.Ready;
                 }
             }
+           
         }
+        * 
+        */
         //ismetamas is bendro resursu saraso
         resources.remove(r);
         
@@ -359,14 +359,15 @@ public class OS {
     }
     
     //TODO primityvas resurso prasymui
-    public void requestResource(Process currentProcess, Resource r, int count)
+    public void requestResource(Process currentProcess, ResName r, int count)
     {
         //Procesas, iškvietęs šį primityvą, yra užblokuojamas
         currentProcess.pd.state = ProcessState.Blocked;
-        //įtraukiamas į to resurso laukiančių procesų sąrašą.
-        r.rd.waitingProcesses.add(currentProcess);
-        //Itraukiama ir kiek reikia jam butent resurso elementu
-        r.rd.waitingProcessComponentCount.add(count);
+        
+        //proceso deskriptoriuje nurodoma, kiek ir kokio resurso jis laukia
+        currentProcess.pd.waitingFor.add(r);
+        currentProcess.pd.waitingCount.add(count);
+        
         //kvieciamas resurso paskirstytojas.
         resourceManager.execute();
     }
@@ -455,10 +456,11 @@ public class OS {
     
     private void initProcesses()
     {
-        processes = new LinkedList<Process>();
-        runProcesses = new LinkedList<Process>();
-        readyProcesses = new LinkedList<Process>();
-        resources = new LinkedList<Resource>();
+        processes = new LinkedList<>();
+        runProcesses = new LinkedList<>();
+        readyProcesses = new LinkedList<>();
+        blockedProcesses = new LinkedList<>();
+        resources = new LinkedList<>();
      
         processManager = new ProcessManager(this);
         System.out.println("Process manager sukurtas");
@@ -478,7 +480,6 @@ public class OS {
         int newId = Process.numberOfInstances;
         Process.numberOfInstances++;
         return newId;
-        //TODO
     }
     
     private int generateResourceInternalID(ResName resName)

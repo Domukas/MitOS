@@ -7,6 +7,7 @@ package tdzOS;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.Random;
+import tdzOS.OS.ResName;
 
 /**
  *
@@ -40,6 +41,54 @@ class ResourceManager {
     //paskirstytojas visiems procesams visu resursu
     public void execute()
     {
+        System.out.println("Resursu paskirstytojas pradeda darba");
+        
+        //Pasidarom laikina sarasa procesu kurie kokio nors resurso laukia
+        LinkedList<Process> tempList = new LinkedList<Process>();
+        
+        for (Process p:os.processes)
+            //Jei procesas laukia kokio nrs resurso, tai ji ten dedam
+            if (p.pd.waitingFor.size() != 0)
+                tempList.add(p);
+        
+       SortWaitingProcessesList(tempList); 
+       
+       for (Process p:tempList)
+       {
+           LinkedList<ResName> resNameList = new LinkedList<>();
+           LinkedList<Integer> intList = new LinkedList<>();
+           
+           for (int i=0; i<p.pd.waitingFor.size(); i++)
+           {
+               resNameList.add(p.pd.waitingFor.get(i));
+               intList.add(p.pd.waitingCount.get(i));
+           }
+           
+           for (int i=0; i<resNameList.size(); i++)
+           {
+               Resource r = findResourceByExternalName(resNameList.get(i));
+               if (r != null)
+               {//Jei toks resursas jau yra laisvu sarase, tai bandom ji duot
+                   if (giveResourceToProcess(p, r, intList.get(i)))
+                   {
+                       //jei ta resursa davem, tai ismetam is saraso laukiamu....
+                       p.pd.waitingFor.remove(r.rd.externalID);
+                       p.pd.waitingCount.remove(intList.get(i));
+                       
+                       //jei davem resursa ir jeigu jam daugiau jokio kito resurso nereikia
+                       if (p.pd.waitingCount.size() == 0)
+                           p.pd.state = OS.ProcessState.Ready;
+                       
+                       //ir ismetam is saraso to resurso isorini ID ir reikalingu komponentu skaiciu
+                       
+                   }
+               } 
+               else System.out.println("Resursas " + resNameList.get(i) + " nerastas laisvu sarase");
+           }
+       }
+       
+       os.processManager.Execute();
+                /*
         //ziuri visus laisvus resursus
         for(int i = 0; i < os.resources.size(); i++)
         {
@@ -75,10 +124,11 @@ class ResourceManager {
         }
         //kvieciam procesu planuotoja
         os.processManager.Execute();
+        * 
+        */
     }
     
-    private void SortWaitingProcessesList(LinkedList<Process> list,
-            LinkedList<Integer> requestedCountList)
+    private void SortWaitingProcessesList(LinkedList<Process> list)
     {
         for(int i=0; i<(list.size()-1); i++)
         {
@@ -87,7 +137,6 @@ class ResourceManager {
                 if (list.get(i).pd.priority < list.get(j).pd.priority)
                 {
                     Collections.swap(list, i, j);
-                    Collections.swap(requestedCountList, i, j);
                 }
             }
         }
@@ -115,6 +164,8 @@ class ResourceManager {
                     if (r.rd.components.size() == 0)
                         os.resources.remove(r);
                 }
+                
+                
                 
                 return true;
                 /*
@@ -145,7 +196,18 @@ class ResourceManager {
             } 
         else return false;
     }
+    
+    private Resource findResourceByExternalName(ResName name)
+    {
+        for (Resource r:os.resources)
+            if (r.rd.externalID == name)
+                return r;
+        
+        return null;
+    }
+    
     //--------------------------------------
+    /*
     void readyTheProcess(Process tmpProcess)
     {
         if(tmpProcess != null)
@@ -168,5 +230,6 @@ class ResourceManager {
         }
         else System.out.println("Kazkas labai negerai!!!!!");
     }
+    * */
     //---------------------    
 }

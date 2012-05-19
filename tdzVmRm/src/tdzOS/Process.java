@@ -21,13 +21,12 @@ public abstract class Process {
     public static int numberOfInstances = 0;
     
     public Process(LinkedList inList, int internalID, ProcName externalID, 
-           ProcessorState ps, Processor p, LinkedList<Resource> cr,
-           LinkedList<ResComponent> or, ProcessState state, int priority,
-           Process parent, LinkedList<Process> c, OS core)
+           ProcessorState ps, Processor p, LinkedList<ResComponent> or,
+           ProcessState state, int priority, Process parent, OS core)
     {
        
         pd = new ProcessDescriptor(inList, internalID, externalID, ps, p,
-                cr, or, state, priority, parent, c, core); 
+                or, state, priority, parent, core); 
         
         nextInstruction = 1;
         numberOfInstances++;

@@ -6,6 +6,7 @@ package tdzOS;
 
 import java.util.LinkedList;
 import tdzOS.OS.ProcName;
+import tdzOS.OS.ResName;
 import tdzVmRm.Processor;
 
 /**
@@ -14,13 +15,12 @@ import tdzVmRm.Processor;
  */
 public class Read extends Process
 {
-    public Read(LinkedList inList, int internalID, ProcName externalID, 
-           ProcessorState ps, Processor p, LinkedList<Resource> cr,
-           LinkedList<ResComponent> or, OS.ProcessState state, int priority,
-           Process parent, LinkedList<Process> c, OS core)
+    public Read (LinkedList inList, int internalID, ProcName externalID, 
+           ProcessorState ps, Processor p, LinkedList<ResComponent> or,
+           OS.ProcessState state, int priority, Process parent, OS core)
     {
-        super(inList, internalID, externalID, ps, p, cr, or, state,
-                priority, parent, c, core);
+        super(inList, internalID, externalID, ps, p, or, state,
+                priority, parent, core);
     }
     
     public void step()
@@ -58,7 +58,8 @@ public class Read extends Process
     
     private void blockForIvedimoSrautas()
     {
-        
+        System.out.println("Procesas Read blokuojasi del resurso Ivedimo Srautas");
+        pd.core.requestResource(this, ResName.IvedimoSrautas, 1);
     }
     
     private void blockForSupervizorineAtmintis()

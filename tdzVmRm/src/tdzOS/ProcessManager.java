@@ -5,6 +5,7 @@
 package tdzOS;
 
 import java.util.Iterator;
+import java.util.LinkedList;
 import tdzOS.OS.ProcessState;
 import tdzVmRm.Processor;
 
@@ -49,7 +50,15 @@ public class ProcessManager { //planuotojas
         }
             
         //Jei yra vykdomu, tada einam per ju sarasa
+        
+        System.out.println(os.runProcesses.size());
+        
+        //Laikinas sarasas, kad visko neisgadintumem
+        LinkedList<Process> runningProcesses = new LinkedList<>();
         for (Process p:os.runProcesses)
+            runningProcesses.add(p);
+        
+        for (Process p:runningProcesses)
         {
             Process currentProcess = p;
              

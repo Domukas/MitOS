@@ -7,6 +7,7 @@ package tdzOS;
 import java.util.LinkedList;
 import tdzOS.OS.ProcName;
 import tdzOS.OS.ProcessState;
+import tdzOS.OS.ResName;
 import tdzVmRm.Processor;
 
 /**
@@ -21,6 +22,8 @@ public class ProcessDescriptor {
    public Processor processor;
    public LinkedList<Resource> createdResources;
    public LinkedList<ResComponent> ownedResources; //Cia ne patys resursai, o ju komponentai
+   public LinkedList<ResName> waitingFor;          //Resursu isoriniai vardai, kuriu dabar laukia procesas 
+   public LinkedList<Integer> waitingCount;        //Atitinkamo laukiamo resurso reikalingas kiekis 
    public ProcessState state;
    public int priority;
    public Process parent;
@@ -28,20 +31,22 @@ public class ProcessDescriptor {
    public OS core;
    
    public ProcessDescriptor(LinkedList inList, int internalID, ProcName externalID, 
-           ProcessorState ps, Processor p, LinkedList<Resource> cr, LinkedList<ResComponent> or,
-           ProcessState state, int priority, Process parent, LinkedList<Process> c, OS core)
+           ProcessorState ps, Processor p, LinkedList<ResComponent> or,
+           ProcessState state, int priority, Process parent, OS core)
    {
        this.inList = inList;
        this.internalID = internalID;
        this.externalID = externalID;
        this.procesorState = ps;
        this.processor = p;
-       this.createdResources = cr;
+       this.createdResources = new LinkedList<Resource>();
        this.ownedResources = or;
+       this.waitingFor = new LinkedList<ResName>();
+       this.waitingCount = new LinkedList<Integer>();
        this.state = state;
        this.priority = priority;
        this.parent = parent;
-       this.children = c;   
+       this.children = new LinkedList<Process>();   
        this.core = core;
    }
    
