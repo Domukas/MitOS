@@ -70,11 +70,11 @@ public class JCL extends Process
                 break;
                 
             case 9:
-                getBlockFromSupervisor2();
+                getBlockFromSupervisor();
                 break;
                 
             case 10:
-                isCodeBlock();
+                checkCodeBlock();
                 break;
                 
             case 11:
@@ -82,11 +82,11 @@ public class JCL extends Process
                 break;
                 
             case 12:
-                getBlockFromSupervisor3();
+                getBlockFromSupervisor();
                 break;
                 
             case 13:
-                isCodeEndBlock();
+                checkCodeEndBlock();
                 break;
                 
             case 14:
@@ -95,9 +95,11 @@ public class JCL extends Process
                 
             case 15:
                 addCommand();
+                break;
                 
             case 16:
                 blocksLeft();
+                break;
                 
             case 17:
                 codeEndBlockNotFound();
@@ -138,6 +140,8 @@ public class JCL extends Process
         
         System.out.println("JCL paima " + currentBlock + " -taji bloka is saraso. Reiksme: "
                 + block);
+        
+        currentBlock++;
         
         next();
     }
@@ -212,42 +216,68 @@ public class JCL extends Process
                 + "Reikšmė: " + requiredBlockCount);
         pd.core.createResource(this, ResName.ProgramosBlokuSkaicius,
                 createMessage(Integer.toString(requiredBlockCount)));
-    }
-    
-    //9
-    private void getBlockFromSupervisor2()
-    {
         
+        next();
     }
     
+    //9 getBlockFromSupervisor
+
     //10
-    private void isCodeBlock()
+    private void checkCodeBlock()
     {
+        System.out.println("JCL tikrina, ar yra @Code blokas");
+        block = block.replaceAll(" ", "");
+        if (block.startsWith("@Code"))
+        {
+            System.out.println("Blokas yra");
+            goTo(12); //Jei blokas taisyklingas tai einam toliau
+        }
+        else
+        {
+            System.out.println("BLOKAS NERASTAS!");
+            goTo(11); //Jei netaisyklingas, tada einam sukurt pranesima
+        }
         
     }
     
     //11
     private void codeBlockNotFound()
     {
+        System.out.println("JCL kuria pranesima, kad nerastas @Code blokas");
+        pd.core.createResource(this, ResName.EiluteAtmintyje, createMessage("Trūksta @Code bloko"));
+        
+        //Naikinam resursa Uzduotis supervizorineje atmintyje
+        pd.core.destroyResource(pd.ownedResources.getFirst().parent);
         
         goTo(1);
     }
     
-    //12
-    private void getBlockFromSupervisor3()
-    {
-        
-    }
-    
+    //12 getBlockFromSupervisor
+  
     //13
-    private void isCodeEndBlock()
+    private void checkCodeEndBlock()
     {
-        
+        System.out.println("JCL tikrina, ar yra @CodeEnd blokas");
+        block = block.replaceAll(" ", "");
+        if (block.startsWith("@CodeEnd"))
+        {
+            System.out.println("Blokas yra");
+            goTo(14); 
+        }
+        else
+        {
+            System.out.println("Ne visi blokai peržiūrėti. Einama prie kito");
+            goTo(15);
+        }
     }
     
     //14
     private void createTaskInSupervisor()
     {
+        LinkedList<Object> components = new LinkedList();
+        components.add(commandList);
+        //Sukuriam paruosta uzduoti supervizorineje atmintyje
+        pd.core.createResource(this, ResName.ParuostaUzduotis, components);
         
         goTo(1);
     }
@@ -255,19 +285,36 @@ public class JCL extends Process
     //15
     private void addCommand()
     {
-        
+        System.out.println("Blokas pridedamas į sąrašą");
+        commandList.add(block);
+        next();
     }
     
     //16
     private void blocksLeft()
     {
-        
+        //jei perziurejom sarasa
+        if (blocks.size() == currentBlock)
+        {
+            System.out.println("Daugiau blokų nėra");
+            goTo(17);
+        }
+        else
+        {
+            System.out.println("Dar yra blokų");
+            goTo(12);
+        }
     }
     
     //17
     private void codeEndBlockNotFound()
     {
-     
+        System.out.println("JCL kuria pranešimą: Trūksta CodeEnd bloko");
+        pd.core.createResource(this, ResName.EiluteAtmintyje,
+                createMessage("Trūksta @CodeEnd bloko"));
+        
+        //Naikinam resursa Uzduotis supervizorineje atmintyje
+        pd.core.destroyResource(pd.ownedResources.getFirst().parent);     
         goTo(1);
     }
 }

@@ -323,7 +323,8 @@ public class OS {
                 break;
                 
             case UzduotisSupervizorinejeAtmintyje:
-                System.out.println("Kuriamas resursas " + externalID + " bloku skaicius: " + parameters.size());
+            case ParuostaUzduotis:
+                System.out.println("Kuriamas resursas " + externalID);
                 
                 r = new Resource(creator, externalID, internalID, false, //ne pakartotinio naudojimo
                 parameters, resourceManager);                   
