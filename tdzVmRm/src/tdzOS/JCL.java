@@ -5,6 +5,7 @@
 package tdzOS;
 
 import java.util.LinkedList;
+import tdzOS.OS.ResName;
 import tdzVmRm.Processor;
 
 /**
@@ -101,12 +102,18 @@ public class JCL extends Process
         
     }
  
-    //2
+    //1
     private void blockForUzduotisSupervizorinejeAtmintyje()
     {
+        //Prasom resurso uzduotis atmintyje su vienu nuorodu sarasu i blokus
+        //Kuriuose yra nuskaitytos programos komandos
+        System.out.println("JCL blokuojasi del resurso Uzduotis supervisorineje atmintyje");
+        pd.core.requestResource(this, ResName.UzduotisSupervizorinejeAtmintyje, 1);
+        
+        nextInstruction++;
         
     }
-    //3
+    //2
     private void initCommandsList()
     {
         

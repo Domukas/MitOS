@@ -29,7 +29,6 @@ public abstract class Process {
                 or, state, priority, parent, core); 
         
         nextInstruction = 1;
-        numberOfInstances++;
     }
     
     public abstract void step();

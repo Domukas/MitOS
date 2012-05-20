@@ -96,21 +96,25 @@ public class ProcessManager {
         }
     }
     
-    private void stopProcess(Process p) //jei procesas nera blokuotas tuomet ji stabdom ir pridedam prie pasiruosusiu procesu saraso, jei blokuotas tuomet pridedam prie blokuotu saraso
+    private void stopProcess(Process p) //ji stabdom ir pridedam prie pasiruosusiu procesu saraso, jei blokuotas tuomet pridedam prie blokuotu saraso
     {
         Process currentProcess = p;
 
         //pasalinam is dabar vykdomu saraso
         os.runProcesses.remove(currentProcess);
 
+            System.out.println("Atimamas procesorius #"+ currentProcess.pd.processor.pd.number +
+            " is: " + currentProcess.pd.externalID + "#" + currentProcess.pd.internalID);
+            
         //Issaugom procesoriaus busena ir atimam procesoriaus resursa
         currentProcess.pd.procesorState.saveProcessorState(currentProcess.pd.processor);
         //Nustatom, kad tas procesorius nevykdo proceso
         currentProcess.pd.processor.pd.currentProcess = null;
         currentProcess.pd.processor = null; //Atimam procesoriu
-
-        System.out.println("Atimamas procesorius is: " + currentProcess.pd.externalID + 
-                "#" + currentProcess.pd.internalID);        
+        
+        //Jei jis ne blokuotas, tai pridedam prie pasiruosusiu
+        if (currentProcess.pd.state != ProcessState.Blocked)
+            os.readyProcesses.add(currentProcess);
     }
 
     /*
@@ -170,7 +174,7 @@ public class ProcessManager {
         //procesoriaus deskriptoriuje nurodom dabar vykdoma procesa
         idleProcessor.pd.currentProcess = currentProcess;                                                   
         
-        System.out.println("Procesorius code:" + idleProcessor.hashCode() + 
+        System.out.println("Procesorius #" + idleProcessor.pd.number + 
                 " perduotas procesui " + currentProcess.pd.externalID +  "#" + currentProcess.pd.internalID);
     }
     

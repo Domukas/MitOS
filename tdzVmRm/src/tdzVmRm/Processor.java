@@ -23,6 +23,7 @@ public class Processor {
     public  CHRegister CH1, CH2, CH3, CH4;
     
     public ProcessorDescriptor pd;
+    static int numberOfInstances = 0;
     
     public Processor()
     {
@@ -41,7 +42,9 @@ public class Processor {
         CH3 = new CHRegister();
         CH4 = new CHRegister();
         
-        pd = new ProcessorDescriptor(2); //TODO
+        //Kelintas procesorius
+        pd = new ProcessorDescriptor(2, numberOfInstances); //TODO
+        numberOfInstances++;
     }
     
 }

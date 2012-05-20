@@ -113,14 +113,16 @@ public class Read extends Process
             
     private void createResourceUzduotisSupervizorinejeAtmintyje()
     {
-        LinkedList<Object> components = new LinkedList<>();
+        LinkedList<String> blocks = new LinkedList<>();
         
         //Sudedam i komponentu sarasa nuorodas i jau nukopijuotas 
         //Programos tekstinio failo eilutes
         for (ResComponent r:pd.ownedResources)
             if (r.value instanceof String)
-                components.add(r.value);
+                blocks.add((String)r.value);
         
+        LinkedList<Object> components = new LinkedList<>();
+        components.add(blocks);
         //Kuriamas resursas...
         pd.core.createResource(this, ResName.UzduotisSupervizorinejeAtmintyje, components);
         

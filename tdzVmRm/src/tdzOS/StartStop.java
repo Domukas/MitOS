@@ -88,6 +88,9 @@ public class StartStop extends Process {
         
         System.out.println("Kuriamas procesas Read");  
         pd.core.createProcess(this, ProcessState.Ready, 80, null, ProcName.Read); 
+        
+        System.out.println("Kuriamas procesas JCL");  
+        pd.core.createProcess(this, ProcessState.Ready, 79, null, ProcName.JCL); 
     }
     
     private void blockForExit() //TODO

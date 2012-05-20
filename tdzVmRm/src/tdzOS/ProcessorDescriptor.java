@@ -11,11 +11,13 @@ package tdzOS;
 public class ProcessorDescriptor {
     
     int CPUcount;
+    public int number;
     public Process currentProcess;
     
-    public ProcessorDescriptor(int CPUcount)
+    public ProcessorDescriptor(int CPUcount, int number)
     {
         this.CPUcount = CPUcount;   
+        this.number = number;
     }
     
 }

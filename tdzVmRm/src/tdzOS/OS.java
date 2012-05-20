@@ -91,6 +91,11 @@ public class OS {
                     new ProcessorState(), null, components, state, priority,
                     parent, this);
                 break;
+            case JCL:
+                p = new JCL(processes, internalID, externalID,
+                    new ProcessorState(), null, components, state, priority,
+                    parent, this);
+                break;
         }
         
         //Pridedam procesus i reikiamus sarasus
@@ -456,7 +461,7 @@ public class OS {
     
     public void step()
     {
-        System.out.println("OS Step!");
+        System.out.println("++++++++++++++++ OS Step! ++++++++++++++++++++++++");
         
         LinkedList<Process> tempList = new LinkedList<Process>();
         for (Process p:runProcesses)
