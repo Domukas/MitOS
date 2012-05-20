@@ -47,6 +47,6 @@ public abstract class Process {
     //persoka i kuria nors proceso dali
     protected void goTo(int index)
     {
-        nextInstruction = index;
+        nextInstruction = index-1;
     }
 }

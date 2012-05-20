@@ -19,6 +19,9 @@ import tdzVmRm.RealMachine;
  */
 public class Read extends Process
 {
+    FileInputStream stream;
+    LinkedList<String> fileData;
+    
     public Read (LinkedList inList, int internalID, ProcName externalID, 
            ProcessorState ps, Processor p, LinkedList<ResComponent> or,
            OS.ProcessState state, int priority, Process parent, OS core)
@@ -40,24 +43,15 @@ public class Read extends Process
                 break;
                 
             case 3:
-                copyLine();
+                copyLines();
                 break;
                 
             case 4:
-                checkIfDoneCopying();
-                break;
-                
-            case 5:
                 createResourceUzduotisSupervizorinejeAtmintyje();
                 break;
         }
         
         nextInstruction++;
-        
-        if (nextInstruction > 5)
-        {
-            nextInstruction = 1;
-        }
     }
     
     private void blockForIvedimoSrautas()
@@ -71,37 +65,71 @@ public class Read extends Process
         System.out.println("Procesas Read blokuojasi del resurso Supervizorine atmintis");
         
         //Susirandam input stream'a turimu resursu sarase
-        
-        FileInputStream stream = null;
         for (ResComponent r:pd.ownedResources)
             if (r.value instanceof FileInputStream)
             {
                 stream = (FileInputStream) r.value;
             }
-                
+        
+        //suskaicuojam eilutes ir...
+        //Pasidedam failo turini i string'u masyva
+        //Tik tam, kad veliau kas kart kopinuojant eilutes nereiktu pastoviai atidarinet failo
+        //ir skaityt po eilute
+        fileData = new LinkedList<>();
+        int count = getLineCount(stream, fileData);
+        
         
         //Papraso supervizorines atminties, tiek, kokio dydzio programa
-        pd.core.requestResource(this, ResName.SupervizorineAtmintis, getLineCount(stream));
-    }
-    
-    private void copyLine()
-    {
+        pd.core.requestResource(this, ResName.SupervizorineAtmintis, count);
+        
+
         
     }
     
-    private void checkIfDoneCopying()
+    private void copyLines()
     {
+        //Cia jau kopijuojam eilute is saraso i supervizorines atminties elementus
         
+        System.out.println(fileData.size());
+        
+        for(String s:fileData)
+        {
+            for (ResComponent r:pd.ownedResources)
+            {
+                if (r.value instanceof String)
+                {
+                    String temp = (String) r.value;
+                    if (temp.length() == 0)
+                    {
+                        System.out.println("Kopijuojama eilute " + s);
+                        temp = s;
+                        break;
+                    }
+                }
+            }
+        }
     }
+    
             
     private void createResourceUzduotisSupervizorinejeAtmintyje()
     {
+        LinkedList<Object> components = new LinkedList<>();
         
+        //Sudedam i komponentu sarasa nuorodas i jau nukopijuotas 
+        //Programos tekstinio failo eilutes
+        for (ResComponent r:pd.ownedResources)
+            if (r.value instanceof String)
+                components.add(r.value);
+        
+        //Kuriamas resursas...
+        pd.core.createResource(this, ResName.UzduotisSupervizorinejeAtmintyje, components);
+        
+        //Pereinam i proceso pradine busena
+        goTo(1);
     }
     
-    
-    private int getLineCount (FileInputStream input)
-    {
+    private int getLineCount(FileInputStream input, LinkedList<String> tempList)
+    {        
         BufferedReader br = new BufferedReader(new InputStreamReader(input));
         String line;
         int count = 0;
@@ -109,11 +137,12 @@ public class Read extends Process
         try {
             while ((line = br.readLine()) != null)
             {
+                tempList.add(line);
                 count++;
             }
             
         } catch (IOException ex) {
-            System.out.println("KLAIDA SKAICIUOJANT EILUTES!");
+            System.out.println("KLAIDA KOPIJUOJANT EILUTES!");
         }
         
         return count;

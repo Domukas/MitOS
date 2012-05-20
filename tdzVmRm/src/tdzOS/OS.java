@@ -315,6 +315,15 @@ public class OS {
                 parameters, resourceManager);    
                 
                 break;
+                
+            case UzduotisSupervizorinejeAtmintyje:
+                System.out.println("Kuriamas resursas " + externalID + " bloku skaicius: " + parameters.size());
+                
+                r = new Resource(creator, externalID, internalID, false, //ne pakartotinio naudojimo
+                parameters, resourceManager);                   
+                
+                
+                break;
         }
         
         //pridedam tevui i sukurtu resursu sarasa sita resursa
