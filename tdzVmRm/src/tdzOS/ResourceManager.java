@@ -84,7 +84,6 @@ class ResourceManager {
                            //Blokuotu sarase jis atsiranda, jei is karto negauna reikalingo resurso
                            if (os.blockedProcesses.contains(p))
                            {
-                               System.out.println("TARP BLOKUOTU");
                                os.blockedProcesses.remove(p);
                                os.readyProcesses.add(p);
                            }
@@ -158,25 +157,41 @@ class ResourceManager {
                 
                 //Is saraso dalinam resursus atsitiktinai
                 Random randomGenerator = new Random();
-                for (int i=0; i<count; i++)
-                {
-                    //generuojam atsitiktini skaciu 
-                    int randomInt = randomGenerator.nextInt(r.rd.components.size());
-                    tmpProcess.pd.ownedResources.add(r.rd.components.get(randomInt));
-                    r.rd.components.remove(randomInt);
-                    
-                    System.out.println("Procesui " + tmpProcess.pd.externalID + 
-                            " skiriamas resurso " + r.rd.externalID + " " + randomInt + 
-                            " -tasis elementas");
-                    
-                    //Jei to resurso nebeliko laisvu komponentu, tai ji pasalinam is laisvu saraso
-                    if (r.rd.components.size() == 0)
-                        os.resources.remove(r);
-                }
                 
+                //Vartotojo atminti dalinam atsitiktinai
+                if (r.rd.externalID == ResName.VartotojoAtmintis)
+                {
+                    for (int i=0; i<count; i++)
+                    {
+                        //generuojam atsitiktini skaciu 
+                        int randomInt = randomGenerator.nextInt(r.rd.components.size());
+                        tmpProcess.pd.ownedResources.add(r.rd.components.get(randomInt));
+                        r.rd.components.remove(randomInt);
+
+                        System.out.println("Procesui " + tmpProcess.pd.externalID + 
+                                " skiriamas resurso " + r.rd.externalID + " " + randomInt + 
+                                " -tasis elementas");
+                    }
+                }
+                else //Visa kita is eiles dalinam
+                {                 
+                    for (int i=0; i<count; i++)
+                    {
+                        tmpProcess.pd.ownedResources.add(r.rd.components.get(i));
+                        r.rd.components.remove(i);
+                    }
+                    System.out.println("Procesui " + tmpProcess.pd.externalID + 
+                        " skirta resurso " + r.rd.externalID + " " + count + " elementu");
+                    
+                }
+                //Jei to resurso nebeliko laisvu komponentu, tai ji pasalinam is laisvu saraso
+                if (r.rd.components.size() == 0)
+                    os.resources.remove(r);
                 
                 
                 return true;
+              } 
+                else return false;
                 /*
                 //sukuriam tuscia komponentu sarasa
                 LinkedList<ResComponent> newComponents = new LinkedList<ResComponent>();
@@ -202,8 +217,7 @@ class ResourceManager {
                 }
                 * 
                 */
-            } 
-        else return false;
+
     }
     
     private Resource findResourceByExternalName(ResName name)

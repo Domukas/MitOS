@@ -4,7 +4,6 @@
  */
 package tdzOS;
 
-import java.util.Iterator;
 import java.util.LinkedList;
 import tdzOS.OS.ProcessState;
 import tdzVmRm.Processor;
@@ -13,9 +12,9 @@ import tdzVmRm.Processor;
  *
  * @author Tomas
  */
-public class ProcessManager { //planuotojas
-    
-    OS os;
+public class ProcessManager {
+ 
+        OS os;
     public ProcessManager(OS os)
     {
         this.os = os;
@@ -23,64 +22,98 @@ public class ProcessManager { //planuotojas
     
     public void Execute() //planuotojo darbas
     {
-        System.out.println("Planuojas pradeda darba");   
-        stopCurrentProcesses();
+        System.out.println("Planuojas pradeda darba");
+        
+        //Sutvarkom blokuotus procesus. Galima situacija, kad procesas prase resurso ir jo negavo.
+        //Todel turim is jo atimt procesoriu
+        handleBlockedProcesses();
         
         Processor idleProcessor = getIdleProcessor();
-        Process processToRun = highestReadyProcess();
+        Process highestReady = getHighestPriorityReadyProcess();
         
-        while ((idleProcessor != null) && (processToRun != null))
+        //Kol yra laisvu procesoriu, juos dalinam procesam
+        while ((idleProcessor != null) && (highestReady != null))
         {
-            loadAndSet(processToRun, idleProcessor);
+            loadAndSet(highestReady, idleProcessor);
+            
             idleProcessor = getIdleProcessor();
-            processToRun = highestReadyProcess();
+            highestReady = getHighestPriorityReadyProcess();
         }
-
         
-        //Kitu atveju riekia kazka daryt, jei jau nera norinciu dirbt procesu
+        //Atimam procesoriu is procesu, kurie turi maziausia prioriteta
+        //Ir atiduodam tiem, kurie turi didziausia prioriteta is pasiruosusiu.
+        Process lowestRunning = getLeastPriorityRunningProcess();
+        while ((highestReady != null) && (lowestRunning != null))
+        {
+            if (highestReady.pd.priority > lowestRunning.pd.priority)
+            {
+                stopProcess(lowestRunning);
+                loadAndSet(highestReady, getIdleProcessor());
+
+                lowestRunning = getLeastPriorityRunningProcess();
+                highestReady = getHighestPriorityReadyProcess();
+            }
+            else break;
+        }
+        
     }
     
-    public void stopCurrentProcesses() //jei procesas nera blokuotas tuomet ji stabdom ir pridedam prie pasiruosusiu procesu saraso, jei blokuotas tuomet pridedam prie blokuotu saraso
-    {
-        //Jei nera veikianciu procesu
-        if (os.runProcesses.size() == 0)
+    
+    private Process getLeastPriorityRunningProcess()
+    {   
+        Process p = null;
+        
+        if (os.runProcesses.size() != 0)
         {
-            System.out.println("Nera vykdomu procesu!");  
-            return;
+            int priority = os.runProcesses.get(0).pd.priority;
+            p = os.runProcesses.get(0);
+            for (int i = 1; i<os.runProcesses.size(); i++)
+            {
+                if (os.runProcesses.get(i).pd.priority < priority)
+                {
+                    p = os.runProcesses.get(i);
+                    priority = p.pd.priority; 
+                }
+            }    
         }
-            
-        //Jei yra vykdomu, tada einam per ju sarasa
         
-        System.out.println(os.runProcesses.size());
-        
-        //Laikinas sarasas, kad visko neisgadintumem
-        LinkedList<Process> runningProcesses = new LinkedList<>();
+        return p;
+    }
+    
+    private void handleBlockedProcesses()
+    {        
+        LinkedList<Process> tempList = new LinkedList<>();
         for (Process p:os.runProcesses)
-            runningProcesses.add(p);
+            tempList.add(p);
         
-        for (Process p:runningProcesses)
+        for (Process p:tempList)
         {
-            Process currentProcess = p;
-             
-            //pasalinam is dabar vykdomu saraso
-            os.runProcesses.remove(currentProcess);
-
-            //Issaugom procesoriaus busena ir atimam procesoriaus resursa
-            currentProcess.pd.procesorState.saveProcessorState(currentProcess.pd.processor);
-            //Nustatom, kad tas procesorius nevykdo proceso
-            currentProcess.pd.processor.pd.currentProcess = null;
-            currentProcess.pd.processor = null; //Atimam procesoriu
-
-            System.out.println("Atimamas procesorius is: " + currentProcess.pd.externalID + 
-                    "#" + currentProcess.pd.internalID);   
-
-            if(currentProcess.pd.state != ProcessState.Blocked)
-                os.readyProcesses.add(currentProcess);
-            else
-                os.blockedProcesses.add(currentProcess);
+            if (p.pd.state == ProcessState.Blocked)
+            {
+                stopProcess(p);
+                os.blockedProcesses.add(p);
+            }   
         }
     }
+    
+    private void stopProcess(Process p) //jei procesas nera blokuotas tuomet ji stabdom ir pridedam prie pasiruosusiu procesu saraso, jei blokuotas tuomet pridedam prie blokuotu saraso
+    {
+        Process currentProcess = p;
 
+        //pasalinam is dabar vykdomu saraso
+        os.runProcesses.remove(currentProcess);
+
+        //Issaugom procesoriaus busena ir atimam procesoriaus resursa
+        currentProcess.pd.procesorState.saveProcessorState(currentProcess.pd.processor);
+        //Nustatom, kad tas procesorius nevykdo proceso
+        currentProcess.pd.processor.pd.currentProcess = null;
+        currentProcess.pd.processor = null; //Atimam procesoriu
+
+        System.out.println("Atimamas procesorius is: " + currentProcess.pd.externalID + 
+                "#" + currentProcess.pd.internalID);        
+    }
+
+    /*
     public Process getHighestRunningProcess() //randa ir grazina didziausio prioriteto dabar vykdoma procesa
     {
         int priority = 0;
@@ -95,13 +128,15 @@ public class ProcessManager { //planuotojas
 	}
         return highestRunnningProcess;
     }
+    * 
+    */
         
     public Process highestReadyProcess()//jei yra pasiruosusiu tai paima didziausio prioriteto, jei ne tai println
     {
         Process highestReadyProcess = null;
         if(os.readyProcesses.size() != 0) //jei yra pasiruosusiu
         {
-            highestReadyProcess = getHighestReadyProcess();
+            highestReadyProcess = getHighestPriorityReadyProcess();
         }
         else
         {
@@ -110,7 +145,7 @@ public class ProcessManager { //planuotojas
         return highestReadyProcess;
     }
     
-    public Process getHighestReadyProcess() //pasiima pasiruosusi procesa su didziausiu prioritetu
+    public Process getHighestPriorityReadyProcess() //pasiima pasiruosusi procesa su didziausiu prioritetu
     {
         int priority = 0;
         Process highestReadyProcess = null;
