@@ -50,14 +50,14 @@ public class Read extends Process
                 createResourceUzduotisSupervizorinejeAtmintyje();
                 break;
         }
-        
-        nextInstruction++;
     }
     
     private void blockForIvedimoSrautas()
     {
         System.out.println("Procesas Read blokuojasi del resurso Ivedimo Srautas");
         pd.core.requestResource(this, ResName.IvedimoSrautas, 1);
+        
+        next();
     }
     
     private void blockForSupervizorineAtmintis()
@@ -82,8 +82,7 @@ public class Read extends Process
         //Papraso supervizorines atminties, tiek, kokio dydzio programa
         pd.core.requestResource(this, ResName.SupervizorineAtmintis, count);
         
-
-        
+        next();
     }
     
     private void copyLines()
@@ -102,12 +101,14 @@ public class Read extends Process
                     if (temp.length() == 0)
                     {
                         System.out.println("Kopijuojama eilute " + s);
-                        temp = s;
+                        r.value = s; //reikia butinai priskirt r.value ta reiksme. jei priskiriam temp'ui, tai reiksme neissaugoma
                         break;
                     }
                 }
             }
         }
+        
+        next();
     }
     
             
@@ -119,10 +120,13 @@ public class Read extends Process
         //Programos tekstinio failo eilutes
         for (ResComponent r:pd.ownedResources)
             if (r.value instanceof String)
+            {
                 blocks.add((String)r.value);
+            }
         
         LinkedList<Object> components = new LinkedList<>();
         components.add(blocks);
+               
         //Kuriamas resursas...
         pd.core.createResource(this, ResName.UzduotisSupervizorinejeAtmintyje, components);
         

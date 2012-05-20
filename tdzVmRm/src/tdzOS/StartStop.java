@@ -52,13 +52,6 @@ public class StartStop extends Process {
                 destroySystemResources();
                 break;
         }
-        
-        nextInstruction++;
-        
-        if (nextInstruction > 5)
-        {
-            nextInstruction = 1;
-        }
                 
     }
  
@@ -80,6 +73,8 @@ public class StartStop extends Process {
         pd.core.createResource(this, ResName.GarsiakalbioIrenginys, new LinkedList<Object>());
         pd.core.createResource(this, ResName.GarsiakalbioIrenginys, new LinkedList<Object>());
         System.out.println("Garsiakalbio irenginio resursai sukurti");
+        
+        next();
     }
     
     private void createSystemProcesses() //TODO
@@ -91,22 +86,30 @@ public class StartStop extends Process {
         
         System.out.println("Kuriamas procesas JCL");  
         pd.core.createProcess(this, ProcessState.Ready, 79, null, ProcName.JCL); 
+        
+        next();
     }
     
     private void blockForExit() //TODO
     {
         System.out.println("StartStop blokuojasi del MOS pabaigos resurso");  
         pd.core.requestResource(this, ResName.MOSPabaiga, 1);
+        
+        next();
     }
     
     private void destroySystemProcesses() //TODO
     {
         System.out.println("StartStop naikina procesus");  
+        
+        next();
     }
     
     private void destroySystemResources() //TODO
     {
         System.out.println("StartStop naikina resursus");
+        
+        next();
     }
     
     private void createResourceVartotojoAtmintis()
@@ -126,6 +129,7 @@ public class StartStop extends Process {
                 memoryBlocks.size());
         
         pd.core.createResource(this, ResName.VartotojoAtmintis, memoryBlocks);
+        
     }
     
     

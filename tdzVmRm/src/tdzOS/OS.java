@@ -274,7 +274,8 @@ public class OS {
                 
         switch (externalID)
         {
-            case EiluteAtmintyje:         
+            case EiluteAtmintyje:
+            case ProgramosBlokuSkaicius:
                 System.out.println("Kuriamas resursas " + externalID +
                         " su parametru " + (String)parameters.getFirst());
                 
