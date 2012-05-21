@@ -50,7 +50,7 @@ public class SharedMemoryControl extends Process{
                 break;
                 
             case 7:
-                isBlockUnlocked();
+                isBlockUnlocked2();
                 break;
                 
             case 8:
@@ -102,6 +102,7 @@ public class SharedMemoryControl extends Process{
     //2
     private void isBlockLocking()
     {
+        System.out.println("SharedMemoryControl tikrina ar bloką bando užrakinti");
         if((String)pd.ownedResources.getFirst().value == "LCK")
         {
             next();
@@ -115,52 +116,61 @@ public class SharedMemoryControl extends Process{
     //3
     private void isBlockUnlocked1()
     {
-      /*  if(ar tas blokas atrakintas)
-        {
+        System.out.println("SharedMemoryControl tikrina tas blokas atrakintas");
+        if(!pd.core.rm.proc[0].S.isBitSet((int)pd.ownedResources.get(2).value)) //0 ar 1 nesvarbu, nes ir tas ir tas turetu ta pati rodyti
+        {                                                                   //laikau kad antrasis komponentas yra adresas, o pirmas pati komanda 
             goTo(5);
         }
         else
         {
-            next();
-        }*/
+            next(); 
+        }
     }
     
     //4
     private void blockWhileIsUnlocked()
     {
-        next();
+        System.out.println("SharedMemoryControl blokuojasi kol bus atblokuotas tas blokas");
+        if(!pd.core.rm.proc[0].S.isBitSet((int)pd.ownedResources.get(2).value))
+        {
+            next();
+        }
     }
     
     //5
     private void blocking()
     {
+        System.out.println("SharedMemoryControl rakina bloką");
+        pd.core.rm.proc[0].S.setBit((int)pd.ownedResources.get(2).value);
         goTo(13);
     }
     
     //6
     private void isBlockUnlocking()
     {
-     /*   if(ar atrakinamas blokas)
+        System.out.println("SharedMemoryControl tikrina ar bandomas atrakinti blokas");
+        if((String)pd.ownedResources.getFirst().value == "ULC")
         {
             next();
         }
         else
         {
             goTo(10);
-        }*/
+        }
     }
     
     //7
-    private void isBlockUnlocked() //doke klaida pagal mane
+    private void isBlockUnlocked2() //doke klaida pagal mane
     {
-      /*  if(ar tas blokas atrakintas)
+        System.out.println("SharedMemoryControl tikrina tas blokas atrakintas");
+        if(!pd.core.rm.proc[0].S.isBitSet((int)pd.ownedResources.get(2).value))
         {
             goTo(13);
         }
         else
         {
             next();
-        }*/
+        }
     }
     
     //8
