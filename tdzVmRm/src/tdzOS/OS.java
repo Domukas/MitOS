@@ -106,11 +106,21 @@ public class OS {
                     new ProcessorState(), null, components, state, priority,
                     parent, this);
                 break;
+            case GetLine:
+                p = new PrintLine(processes, internalID, externalID,
+                    new ProcessorState(), null, components, state, priority,
+                    parent, this);
+                break;
             case MainProc:
                 p = new MainProc(processes, internalID, externalID,
                     new ProcessorState(), null, components, state, priority,
                     parent, this);
-                break;    
+                break; 
+            case SoundControl:
+                p = new PrintLine(processes, internalID, externalID,
+                    new ProcessorState(), null, components, state, priority,
+                    parent, this);
+                break;
         }
         
         //Pridedam procesus i reikiamus sarasus
