@@ -91,7 +91,7 @@ public class PrintLine extends Process
         LinkedList<Object> components = new LinkedList();
         components.add("isvesta");
           
-        //Kuriamas resursas...
+        //Kuriamas resursas..
         pd.core.createResource(this, ResName.IsvestaEilute, components);
         
         //Pereinam i proceso pradine busena
