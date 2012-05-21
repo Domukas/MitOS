@@ -13,7 +13,7 @@ import tdzOS.OS.ResName;
  */
 public class ResourceDescriptor {
     int internalID;
-    ResName externalID;
+    public ResName externalID;
     boolean reusable;
     Process creator;          //DOKUMENTE PARASYTA, KAD VIDINIS KUREJO VARDAS, O NE ID
     LinkedList<ResComponent> components; 

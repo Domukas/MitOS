@@ -11,7 +11,7 @@ import tdzOS.OS.ResName;
  *
  * @author Tomas
  */
-class Resource {
+public class Resource {
     public ResourceDescriptor rd;
     public static int numberOfInstances = 0;
     
