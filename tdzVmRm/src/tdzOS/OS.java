@@ -101,6 +101,16 @@ public class OS {
                     new ProcessorState(), null, components, state, priority,
                     parent, this);
                 break;
+            case PrintLine:
+                p = new PrintLine(processes, internalID, externalID,
+                    new ProcessorState(), null, components, state, priority,
+                    parent, this);
+                break;
+            case MainProc:
+                p = new MainProc(processes, internalID, externalID,
+                    new ProcessorState(), null, components, state, priority,
+                    parent, this);
+                break;    
         }
         
         //Pridedam procesus i reikiamus sarasus
@@ -260,11 +270,12 @@ public class OS {
             p.pd.state = ProcessState.Ready;
             readyProcesses.add(p);
         } //Jei ne ready tada jis BlockedS ir ji idedam i blocked sarasa. Pakeiciam i blocked
-        else
+        else if (p.pd.state == ProcessState.BlockedS)
         {
             p.pd.state = ProcessState.Blocked;
             blockedProcesses.add(p);
         }
+        else System.out.println("AKTYVUOJAMAS NE SUSPENDED PROCESAS!");
     }
     
     //Primityvas resurso kurimui
@@ -330,6 +341,7 @@ public class OS {
             case UzduotisSupervizorinejeAtmintyje:
             case ParuostaUzduotis:
             case UzduotisHDD:
+            case IsvestaEilute:
                 System.out.println("Kuriamas resursas " + externalID);
                 
                 r = new Resource(creator, externalID, internalID, false, //ne pakartotinio naudojimo

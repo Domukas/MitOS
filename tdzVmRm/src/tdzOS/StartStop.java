@@ -65,13 +65,13 @@ public class StartStop extends Process {
         createResourceHDD(256);
         
         System.out.println("Kuria IO irenginio resursus");  
-        pd.core.createResource(this, ResName.IvedimoIrenginys, new LinkedList<Object>());
-        pd.core.createResource(this, ResName.IsvedimoIrenginys, new LinkedList<Object>());
+        pd.core.createResource(this, ResName.IvedimoIrenginys, createMessage("IvedimoIrenginys"));
+        pd.core.createResource(this, ResName.IsvedimoIrenginys, createMessage("IsvedimoIrenginys"));
         System.out.println("IO irenginiu resursai sukurti");  
         
         System.out.println("StartStop kuria garsiakalbio irenginio resursus");
-        pd.core.createResource(this, ResName.GarsiakalbioIrenginys, new LinkedList<Object>());
-        pd.core.createResource(this, ResName.GarsiakalbioIrenginys, new LinkedList<Object>());
+        pd.core.createResource(this, ResName.GarsiakalbioIrenginys, createMessage("Garsiakalbis#1"));
+        pd.core.createResource(this, ResName.GarsiakalbioIrenginys, createMessage("Garsiakalbis#2"));
         System.out.println("Garsiakalbio irenginio resursai sukurti");
         
         next();
@@ -89,6 +89,12 @@ public class StartStop extends Process {
         
         System.out.println("Kuriamas procesas JobToHDD");  
         pd.core.createProcess(this, ProcessState.Ready, 78, null, ProcName.JobToHDD); 
+        
+        System.out.println("Kuriamas procesas PrintLine");  
+        pd.core.createProcess(this, ProcessState.Ready, 60, null, ProcName.PrintLine); 
+        
+        System.out.println("Kuriamas procesas MainProc");  
+        pd.core.createProcess(this, ProcessState.Ready, 77, null, ProcName.MainProc); 
         
         next();
     }
