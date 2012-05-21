@@ -5,6 +5,7 @@
 package tdzOS;
 
 import java.util.LinkedList;
+import tdzVmRm.Processor;
 import tdzVmRm.RealMachine;
 
 /**
@@ -405,6 +406,7 @@ public class OS {
     {
         //Procesas, iškvietęs šį primityvą, yra užblokuojamas
         currentProcess.pd.state = ProcessState.Blocked;
+        System.out.println(currentProcess.pd.externalID + "-->Blocked");
         
         //proceso deskriptoriuje nurodoma, kiek ir kokio resurso jis laukia
         currentProcess.pd.waitingFor.add(r);
@@ -483,15 +485,20 @@ public class OS {
     {
         System.out.println("++++++++++++++++ OS Step! ++++++++++++++++++++++++");
         
+
         LinkedList<Process> tempList = new LinkedList<Process>();
         for (Process p:runProcesses)
             tempList.add(p);
         
-        for (Process p:tempList)
+        for (Processor p:rm.proc)
         {
-            System.out.println("Suveikia procesas: " + p.pd.externalID + " " + p.pd.internalID);
-            
-            p.step();
+            if (p.pd.currentProcess != null)
+            {
+                System.out.println("Suveikia procesas: " + p.pd.currentProcess.pd.externalID
+                        + " " + p.pd.currentProcess.pd.internalID);
+
+                p.pd.currentProcess.step();
+            }
         }
         
     }
