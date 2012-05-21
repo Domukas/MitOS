@@ -87,6 +87,9 @@ public class StartStop extends Process {
         System.out.println("Kuriamas procesas JCL");  
         pd.core.createProcess(this, ProcessState.Ready, 79, null, ProcName.JCL); 
         
+        System.out.println("Kuriamas procesas JobToHDD");  
+        pd.core.createProcess(this, ProcessState.Ready, 78, null, ProcName.JobToHDD); 
+        
         next();
     }
     

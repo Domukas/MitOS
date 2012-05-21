@@ -96,6 +96,11 @@ public class OS {
                     new ProcessorState(), null, components, state, priority,
                     parent, this);
                 break;
+            case JobToHDD:
+                p = new JobToHDD(processes, internalID, externalID,
+                    new ProcessorState(), null, components, state, priority,
+                    parent, this);
+                break;
         }
         
         //Pridedam procesus i reikiamus sarasus
@@ -324,6 +329,7 @@ public class OS {
                 
             case UzduotisSupervizorinejeAtmintyje:
             case ParuostaUzduotis:
+            case UzduotisHDD:
                 System.out.println("Kuriamas resursas " + externalID);
                 
                 r = new Resource(creator, externalID, internalID, false, //ne pakartotinio naudojimo

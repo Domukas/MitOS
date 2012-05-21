@@ -115,6 +115,8 @@ public class JCL extends Process
         System.out.println("JCL blokuojasi del resurso Uzduotis supervizorineje atmintyje");
         pd.core.requestResource(this, ResName.UzduotisSupervizorinejeAtmintyje, 1);
         
+        currentBlock = 0;
+        
         next();
     }
     
