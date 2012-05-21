@@ -27,7 +27,6 @@ public class TdzVmRm {
         RealMachine RM = new RealMachine(0x65);
         
         OS os = new OS(RM);
-        
         RealMachineGUI rmGUI = new RealMachineGUI(RM, os);
         RM.addGui(rmGUI);
     }

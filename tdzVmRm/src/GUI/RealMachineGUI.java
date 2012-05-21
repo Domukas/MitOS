@@ -69,6 +69,9 @@ public class RealMachineGUI extends javax.swing.JFrame {
         {
             memoryTable.getColumn(memoryTable.getColumnName(i)).setCellRenderer(cr);
         }
+        
+        processesJList.setModel(new ProcessesListModel(os));
+        resourcesJList.setModel(new ResourcesListModel(os));
     }
     
     private void createVMTab()
@@ -81,7 +84,7 @@ public class RealMachineGUI extends javax.swing.JFrame {
         vm1MemoryTable.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         vm1MemoryTable.getColumnModel().getColumn(0).setMaxWidth(32);
         vm1MemoryTable.getColumnModel().getColumn(0).setMinWidth(32);
-        
+          
         MemoryTableRenderer cr=new MemoryTableRenderer();
         MemoryTableFirstColumnRenderer cfr = new MemoryTableFirstColumnRenderer(RM);
         memoryTable.getColumn(memoryTable.getColumnName(0)).setCellRenderer(cfr);
@@ -94,6 +97,8 @@ public class RealMachineGUI extends javax.swing.JFrame {
     public void updateAll()
     {
         updateProcessorJPanels();
+        System.out.println(">>>>>"+processesJList.getModel().getSize());
+        processesJList.repaint();
         this.paint(this.getGraphics());
         memoryTable.repaint();
         if (RealMachine.VM != null)
@@ -139,6 +144,7 @@ public class RealMachineGUI extends javax.swing.JFrame {
         infoLabel = new javax.swing.JLabel();
         infoJScrollPane = new javax.swing.JScrollPane();
         infoJTextArea = new javax.swing.JTextArea();
+        rightSidePanel = new javax.swing.JPanel();
         memoryTabbedPane = new javax.swing.JTabbedPane();
         memoryPanel = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
@@ -176,12 +182,6 @@ public class RealMachineGUI extends javax.swing.JFrame {
         processesJScrollPane.setPreferredSize(new java.awt.Dimension(32, 400));
 
         processesJList.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
-        processesJList.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public Object getElementAt(int i) { return strings[i]; }
-        });
-        processesJList.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         processesJList.setMaximumSize(new java.awt.Dimension(32000, 32000));
         processesJScrollPane.setViewportView(processesJList);
 
@@ -247,6 +247,8 @@ public class RealMachineGUI extends javax.swing.JFrame {
 
         getContentPane().add(operationsPanel);
 
+        rightSidePanel.setLayout(new javax.swing.BoxLayout(rightSidePanel, javax.swing.BoxLayout.Y_AXIS));
+
         memoryPanel.setLayout(new javax.swing.BoxLayout(memoryPanel, javax.swing.BoxLayout.Y_AXIS));
 
         memoryTable.setModel(new MemoryTableModel(RM, this));
@@ -262,6 +264,10 @@ public class RealMachineGUI extends javax.swing.JFrame {
         memoryTable.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
 
         memoryPanel.add(jScrollPane1);
+
+        memoryTabbedPane.addTab("RM", memoryPanel);
+
+        rightSidePanel.add(memoryTabbedPane);
 
         buttonPanel.setMaximumSize(new java.awt.Dimension(30000, 16));
         buttonPanel.setMinimumSize(new java.awt.Dimension(128, 16));
@@ -313,11 +319,9 @@ public class RealMachineGUI extends javax.swing.JFrame {
         });
         buttonPanel.add(taskButton);
 
-        memoryPanel.add(buttonPanel);
+        rightSidePanel.add(buttonPanel);
 
-        memoryTabbedPane.addTab("RM", memoryPanel);
-
-        getContentPane().add(memoryTabbedPane);
+        getContentPane().add(rightSidePanel);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -382,6 +386,7 @@ public class RealMachineGUI extends javax.swing.JFrame {
 
     private void osStepButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_osStepButtonActionPerformed
         os.step();
+        updateAll();
     }//GEN-LAST:event_osStepButtonActionPerformed
 
     private void taskNameFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_taskNameFieldActionPerformed
@@ -412,6 +417,7 @@ public class RealMachineGUI extends javax.swing.JFrame {
     private javax.swing.JLabel resourcesJLabel;
     private javax.swing.JList resourcesJList;
     private javax.swing.JScrollPane resourcesJScrollPane;
+    private javax.swing.JPanel rightSidePanel;
     private javax.swing.JButton runButton;
     private javax.swing.JButton stepButton;
     private javax.swing.ButtonGroup tableDataTypeButtonGroup;

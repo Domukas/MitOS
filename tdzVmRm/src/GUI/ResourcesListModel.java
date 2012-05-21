@@ -4,8 +4,6 @@
  */
 package GUI;
 
-import java.util.LinkedList;
-import java.util.Random;
 import javax.swing.ListModel;
 import javax.swing.event.ListDataListener;
 import tdzOS.OS;
@@ -14,22 +12,21 @@ import tdzOS.OS;
  *
  * @author Domukas
  */
-public class ProcessesListModel implements ListModel {
+public class ResourcesListModel implements ListModel {
     
-    public LinkedList<tdzOS.Process> processes;
-    Random rnd;
+    OS os;
     
-    public ProcessesListModel(OS os)
+    public ResourcesListModel(OS os)
     {
-        processes = os.processes;
+        this.os = os;
     }
 
     public int getSize() {
-        return processes.size();
+        return os.resources.size();
     }
 
     public Object getElementAt(int index) {
-        return index;
+        return os.resources.get(index);
     }
 
     public void addListDataListener(ListDataListener l) {
@@ -37,6 +34,5 @@ public class ProcessesListModel implements ListModel {
 
     public void removeListDataListener(ListDataListener l) {
     }
-        
-
+    
 }

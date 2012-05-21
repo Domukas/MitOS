@@ -105,7 +105,7 @@ public class OS {
         
         //Pridedam procesus i reikiamus sarasus
         addProcessToLlists(p);
-
+        
         System.out.println("Procesas sukurtas-------");   
         processManager.Execute();
         
@@ -115,7 +115,7 @@ public class OS {
     private void addProcessToLlists(Process p)
     {
         //pridedam i visu procesu sarasa
-        processes.add(p); 
+        processes.add(p);
         
         //Paziurim, i koki sarasa be bendro dar itraukt
         switch (p.pd.state)
@@ -491,7 +491,7 @@ public class OS {
         readyProcesses = new LinkedList<>();
         blockedProcesses = new LinkedList<>();
         resources = new LinkedList<>();
-     
+
         processManager = new ProcessManager(this);
         System.out.println("Process manager sukurtas");
         
