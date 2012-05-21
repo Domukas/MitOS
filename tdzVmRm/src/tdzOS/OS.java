@@ -260,11 +260,12 @@ public class OS {
             p.pd.state = ProcessState.Ready;
             readyProcesses.add(p);
         } //Jei ne ready tada jis BlockedS ir ji idedam i blocked sarasa. Pakeiciam i blocked
-        else
+        else if (p.pd.state == ProcessState.BlockedS)
         {
             p.pd.state = ProcessState.Blocked;
             blockedProcesses.add(p);
         }
+        else System.out.println("AKTYVUOJAMAS NE SUSPENDED PROCESAS!");
     }
     
     //Primityvas resurso kurimui
