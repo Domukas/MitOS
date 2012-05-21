@@ -15,7 +15,6 @@ import tdzVmRm.Processor;
  */
 public class PrintLine extends Process
 {
-    LinkedList<Object> isvestaEilute;
     
     public PrintLine (LinkedList inList, int internalID, OS.ProcName externalID, 
            ProcessorState ps, Processor p, LinkedList<ResComponent> or,
@@ -86,10 +85,10 @@ public class PrintLine extends Process
     //5
     private void createResourceIsvestaEilute()
     {
-        System.out.println("PrintLine kuria resursą išvesta eilutė");
+        System.out.println("PrintLine kuria resursą [išvesta eilutė]");
         
         LinkedList<Object> components = new LinkedList();
-        components.add("isvesta");
+        components.add("išvesta");
           
         //Kuriamas resursas..
         pd.core.createResource(this, ResName.IsvestaEilute, components);

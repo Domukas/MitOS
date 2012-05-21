@@ -36,8 +36,8 @@ public class OS {
         ProgramosBlokuSkaicius, //ProgramosBlokuSkaiciusSupervizorinejeAtmintyje
         UzduotisSupervizorinejeAtmintyje,
         PranesimasJobGovernor, PranesimasSharedMemorycontrolProcesui, 
-        PranesimasLoaderProcesui //REIKIA SUTVARKYT DOKUMENTE, BUS PAKEITIMU DEL TO
-        
+        PranesimasLoaderProcesui, //REIKIA SUTVARKYT DOKUMENTE, BUS PAKEITIMU DEL TO
+        IvestaEiluteSupervizorinejeAtmintyje //prikuriau nzn ar reikia
     }
     
     public LinkedList<Process> processes;
@@ -342,6 +342,7 @@ public class OS {
             case ParuostaUzduotis:
             case UzduotisHDD:
             case IsvestaEilute:
+            case IvestaEiluteSupervizorinejeAtmintyje:
                 System.out.println("Kuriamas resursas " + externalID);
                 
                 r = new Resource(creator, externalID, internalID, false, //ne pakartotinio naudojimo
