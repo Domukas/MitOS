@@ -106,6 +106,11 @@ public class OS {
                     new ProcessorState(), null, components, state, priority,
                     parent, this);
                 break;
+            case MainProc:
+                p = new MainProc(processes, internalID, externalID,
+                    new ProcessorState(), null, components, state, priority,
+                    parent, this);
+                break;    
         }
         
         //Pridedam procesus i reikiamus sarasus
