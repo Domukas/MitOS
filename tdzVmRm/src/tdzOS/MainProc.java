@@ -5,6 +5,7 @@
 package tdzOS;
 
 import java.util.LinkedList;
+import tdzOS.OS.ProcessState;
 import tdzVmRm.Processor;
 
 /**
@@ -12,7 +13,7 @@ import tdzVmRm.Processor;
  * @author Tomas
  */
 public class MainProc extends Process
-{
+{   
     public MainProc (LinkedList inList, int internalID, OS.ProcName externalID, 
            ProcessorState ps, Processor p, LinkedList<ResComponent> or,
            OS.ProcessState state, int priority, Process parent, OS core)
@@ -51,6 +52,7 @@ public class MainProc extends Process
     //2
     private void isRuntimeZero()
     {
+        //Laikinai pasidedam nuorodas i programos bloku sarasa
         //Patikrinam ar vykdymo laikas yra nulinis
         LinkedList<String> tempList = (LinkedList<String>)pd.ownedResources.getFirst().value;
         
@@ -70,6 +72,8 @@ public class MainProc extends Process
     private void createJobGovernor()
     {
         System.out.println("MainProc kuria JobGovernor");
+        //Paduodam JobGovernor nuorodas i programa HDD
+        pd.core.createProcess(this, ProcessState.Ready, 80, pd.ownedResources, OS.ProcName.JobGovernor);
         
         goTo(1);
     }

@@ -356,7 +356,8 @@ public class RealMachineGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_memoryTableInputMethodTextChanged
 
     private void runButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_runButtonActionPerformed
-        RM.VM.run();
+        os.run();
+        //RM.VM.run();
         updateAll();
     }//GEN-LAST:event_runButtonActionPerformed
 

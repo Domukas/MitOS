@@ -69,7 +69,7 @@ public class OS {
         System.out.println("Kurti procesa iskviestas!");
         
         if (components == null)
-            components = new LinkedList<ResComponent>();
+            components = new LinkedList<>();
          
         //Generuojamas vidinis ID
         int internalID = generateProcessInternalID(externalID);
@@ -108,7 +108,7 @@ public class OS {
                     parent, this);
                 break;
             case GetLine:
-                p = new PrintLine(processes, internalID, externalID,
+                p = new GetLine(processes, internalID, externalID,
                     new ProcessorState(), null, components, state, priority,
                     parent, this);
                 break;
@@ -118,7 +118,12 @@ public class OS {
                     parent, this);
                 break; 
             case SoundControl:
-                p = new PrintLine(processes, internalID, externalID,
+                p = new SoundControl(processes, internalID, externalID,
+                    new ProcessorState(), null, components, state, priority,
+                    parent, this);
+                break;
+            case JobGovernor:
+                p = new JobGovernor(processes, internalID, externalID,
                     new ProcessorState(), null, components, state, priority,
                     parent, this);
                 break;
@@ -354,7 +359,9 @@ public class OS {
             case UzduotisHDD:
             case IsvestaEilute:
             case IvestaEiluteSupervizorinejeAtmintyje:
+            case PranesimasLoaderProcesui:
                 System.out.println("Kuriamas resursas " + externalID);
+            
                 
                 r = new Resource(creator, externalID, internalID, false, //ne pakartotinio naudojimo
                 parameters, resourceManager);                   
@@ -512,6 +519,14 @@ public class OS {
             }
         }
         
+    }
+    
+    public void run()
+    {
+        while (runProcesses.size() != 0)
+        {
+            step();
+        }
     }
     
     private void initProcesses()
