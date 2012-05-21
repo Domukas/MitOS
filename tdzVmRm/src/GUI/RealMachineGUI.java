@@ -14,8 +14,11 @@ import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.SwingUtilities;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import tdzOS.OS;
+import tdzOS.ProcessDescriptor;
 import tdzVmRm.RealMachine;
 import tdzVmRm.VirtualMachine;
 import tdzVmRm.Word;
@@ -70,8 +73,9 @@ public class RealMachineGUI extends javax.swing.JFrame {
             memoryTable.getColumn(memoryTable.getColumnName(i)).setCellRenderer(cr);
         }
         
-        processesJList.setModel(new ProcessesListModel(os));
-        resourcesJList.setModel(new ResourcesListModel(os));
+        processesJTable.setModel(new ProcessesTableModel(os));
+        resourcesJTable.setModel(new ResourcesTableModel(os));
+         
     }
     
     private void createVMTab()
@@ -94,15 +98,32 @@ public class RealMachineGUI extends javax.swing.JFrame {
         }
     }
     
-    public void updateAll()
-    {
+    public void updateAll(){
         updateProcessorJPanels();
-        System.out.println(">>>>>"+processesJList.getModel().getSize());
-        processesJList.repaint();
         this.paint(this.getGraphics());
         memoryTable.repaint();
         if (RealMachine.VM != null)
             vm1MemoryTable.repaint();
+    }
+    
+    private void processSelected(int index){
+        ProcessDescriptor pd = os.processes.get(index).pd;
+        String text = "";
+        text += "Process name: "+pd.externalID;
+        text += "\nID: "+pd.internalID;
+        if (pd.processor != null)
+            text += "\nProcessor: "+pd.processor.pd.number;
+        else
+            text += "\nProcessor: null";
+        text += "\nState: "+pd.state;
+        text += "\nPriority: "+pd.priority;
+        if (pd.parent != null)
+            text += "\nParent: "+pd.parent.pd.externalID;
+        infoJTextArea.setText(text);
+    }
+    
+    private void resourceSelected(int index){
+        infoJTextArea.setText(os.resources.get(index).toString());
     }
     
     private void updateProcessorJPanels(){
@@ -128,18 +149,15 @@ public class RealMachineGUI extends javax.swing.JFrame {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-        java.awt.GridBagConstraints gridBagConstraints;
 
         tableDataTypeButtonGroup = new javax.swing.ButtonGroup();
         operationsPanel = new javax.swing.JPanel();
         processorsTabbedPane = new javax.swing.JTabbedPane();
         procResJPanel = new javax.swing.JPanel();
-        processesJLabel = new javax.swing.JLabel();
         processesJScrollPane = new javax.swing.JScrollPane();
-        processesJList = new javax.swing.JList();
-        resourcesJLabel = new javax.swing.JLabel();
+        processesJTable = new javax.swing.JTable();
         resourcesJScrollPane = new javax.swing.JScrollPane();
-        resourcesJList = new javax.swing.JList();
+        resourcesJTable = new javax.swing.JTable();
         infoJPanel = new javax.swing.JPanel();
         infoLabel = new javax.swing.JLabel();
         infoJScrollPane = new javax.swing.JScrollPane();
@@ -166,60 +184,63 @@ public class RealMachineGUI extends javax.swing.JFrame {
         operationsPanel.setLayout(new java.awt.GridLayout(0, 1));
         operationsPanel.add(processorsTabbedPane);
 
-        procResJPanel.setLayout(new java.awt.GridBagLayout());
+        procResJPanel.setLayout(new java.awt.GridLayout(1, 0));
 
-        processesJLabel.setText("Processes");
-        processesJLabel.setMaximumSize(new java.awt.Dimension(128, 14));
-        processesJLabel.setMinimumSize(new java.awt.Dimension(128, 14));
-        processesJLabel.setPreferredSize(new java.awt.Dimension(128, 14));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        procResJPanel.add(processesJLabel, gridBagConstraints);
+        processesJScrollPane.setMinimumSize(new java.awt.Dimension(128, 128));
+        processesJScrollPane.setPreferredSize(new java.awt.Dimension(128, 400));
 
-        processesJScrollPane.setMinimumSize(new java.awt.Dimension(128, 100));
-        processesJScrollPane.setPreferredSize(new java.awt.Dimension(32, 400));
+        processesJTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        processesJTable.setColumnSelectionAllowed(true);
+        processesJTable.setFillsViewportHeight(true);
+        processesJTable.setPreferredSize(new java.awt.Dimension(128, 100));
+        processesJTable.getTableHeader().setReorderingAllowed(false);
+        processesJTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                processesJTableMouseClicked(evt);
+            }
+        });
+        processesJScrollPane.setViewportView(processesJTable);
+        processesJTable.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
 
-        processesJList.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
-        processesJList.setMaximumSize(new java.awt.Dimension(32000, 32000));
-        processesJScrollPane.setViewportView(processesJList);
+        procResJPanel.add(processesJScrollPane);
 
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weighty = 0.5;
-        procResJPanel.add(processesJScrollPane, gridBagConstraints);
-
-        resourcesJLabel.setText("Resources");
-        resourcesJLabel.setMaximumSize(new java.awt.Dimension(128, 14));
-        resourcesJLabel.setMinimumSize(new java.awt.Dimension(128, 14));
-        resourcesJLabel.setPreferredSize(new java.awt.Dimension(128, 14));
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        procResJPanel.add(resourcesJLabel, gridBagConstraints);
-
-        resourcesJScrollPane.setMinimumSize(new java.awt.Dimension(128, 100));
+        resourcesJScrollPane.setMinimumSize(new java.awt.Dimension(128, 128));
         resourcesJScrollPane.setPreferredSize(new java.awt.Dimension(128, 400));
 
-        resourcesJList.setFont(new java.awt.Font("Tahoma", 0, 10)); // NOI18N
-        resourcesJList.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5", "jhjh", "kjgk", "jkk" };
-            public int getSize() { return strings.length; }
-            public Object getElementAt(int i) { return strings[i]; }
+        resourcesJTable.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null},
+                {null, null, null, null}
+            },
+            new String [] {
+                "Title 1", "Title 2", "Title 3", "Title 4"
+            }
+        ));
+        resourcesJTable.setColumnSelectionAllowed(true);
+        resourcesJTable.setFillsViewportHeight(true);
+        resourcesJTable.setPreferredSize(new java.awt.Dimension(128, 100));
+        resourcesJTable.getTableHeader().setReorderingAllowed(false);
+        resourcesJTable.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                resourcesJTableMouseClicked(evt);
+            }
         });
-        resourcesJList.setMaximumSize(new java.awt.Dimension(30, 32000));
-        resourcesJScrollPane.setViewportView(resourcesJList);
+        resourcesJScrollPane.setViewportView(resourcesJTable);
+        resourcesJTable.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
 
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weighty = 0.5;
-        procResJPanel.add(resourcesJScrollPane, gridBagConstraints);
+        procResJPanel.add(resourcesJScrollPane);
 
         operationsPanel.add(procResJPanel);
 
@@ -237,7 +258,6 @@ public class RealMachineGUI extends javax.swing.JFrame {
 
         infoJTextArea.setColumns(20);
         infoJTextArea.setRows(5);
-        infoJTextArea.setText("asdasdasdasd\n");
         infoJTextArea.setMinimumSize(new java.awt.Dimension(128, 128));
         infoJScrollPane.setViewportView(infoJTextArea);
 
@@ -397,6 +417,14 @@ public class RealMachineGUI extends javax.swing.JFrame {
         taskNameField.setText("");
     }//GEN-LAST:event_taskNameFieldMouseClicked
 
+    private void processesJTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_processesJTableMouseClicked
+        processSelected(processesJTable.getSelectedRow());
+    }//GEN-LAST:event_processesJTableMouseClicked
+
+    private void resourcesJTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_resourcesJTableMouseClicked
+        resourceSelected(resourcesJTable.getSelectedRow());
+    }//GEN-LAST:event_resourcesJTableMouseClicked
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel buttonPanel;
     private javax.swing.JPanel infoJPanel;
@@ -410,13 +438,11 @@ public class RealMachineGUI extends javax.swing.JFrame {
     private javax.swing.JPanel operationsPanel;
     private javax.swing.JButton osStepButton;
     private javax.swing.JPanel procResJPanel;
-    private javax.swing.JLabel processesJLabel;
-    private javax.swing.JList processesJList;
     private javax.swing.JScrollPane processesJScrollPane;
+    private javax.swing.JTable processesJTable;
     private javax.swing.JTabbedPane processorsTabbedPane;
-    private javax.swing.JLabel resourcesJLabel;
-    private javax.swing.JList resourcesJList;
     private javax.swing.JScrollPane resourcesJScrollPane;
+    private javax.swing.JTable resourcesJTable;
     private javax.swing.JPanel rightSidePanel;
     private javax.swing.JButton runButton;
     private javax.swing.JButton stepButton;
