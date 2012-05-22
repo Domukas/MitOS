@@ -127,11 +127,7 @@ public class OS {
                     new ProcessorState(), null, components, state, priority,
                     parent, this);
                 break;
-            case SharedMemoryControl:
-                p = new PrintLine(processes, internalID, externalID,
-                    new ProcessorState(), null, components, state, priority,
-                    parent, this);
-                break;
+
         }
         
         //Pridedam procesus i reikiamus sarasus

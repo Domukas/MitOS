@@ -16,7 +16,7 @@ import tdzVmRm.Processor;
 public abstract class Process {
     
     public ProcessDescriptor pd;
-    protected int nextInstruction; 
+    public int nextInstruction; 
     
     public static int numberOfInstances = 0;
     
