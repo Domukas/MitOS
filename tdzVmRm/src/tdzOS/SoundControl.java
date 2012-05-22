@@ -71,7 +71,7 @@ public class SoundControl extends Process{
     private void isCommandPlay()
     {
         //tikrina ar grojimas ar garsumo nustatymas
-        if((String)pd.ownedResources.getFirst().value == "GNR")
+        if(((String)pd.ownedResources.getFirst().value == "GNR1") || ((String)pd.ownedResources.getFirst().value == "GNR2"))
         {
             next();
         }
@@ -85,7 +85,15 @@ public class SoundControl extends Process{
     private void sendFreaquencyToSoundSpeaker()
     {
         System.out.println("Į garsiakalbį siunčiamas pranešimas groti nurodyto dažnio garsą");
-        pd.core.rm.speakers.play((int)pd.ownedResources.get(2).value);
+        if((String)pd.ownedResources.getFirst().value == "GNR1")
+        {
+            pd.core.rm.speakers[0].play((int)pd.ownedResources.get(2).value);   
+        }
+        else
+        {
+            pd.core.rm.speakers[1].play((int)pd.ownedResources.get(2).value);   
+        }
+        
         next();
     }
     
@@ -101,7 +109,14 @@ public class SoundControl extends Process{
     private void sendVolumeToSoundSpeaker()
     {
         System.out.println("Į garsiakalbį siunčiamas pranešimas nustatyti nurodytą garso lygį");
-        pd.core.rm.speakers.setVolume((int)pd.ownedResources.getFirst().value);
+        if((String)pd.ownedResources.getFirst().value == "GGR1")
+        {
+            pd.core.rm.speakers[0].setVolume((int)pd.ownedResources.getFirst().value);
+        }
+        else
+        {
+            pd.core.rm.speakers[1].setVolume((int)pd.ownedResources.getFirst().value);  
+        }
         goTo(5);
     }
     
