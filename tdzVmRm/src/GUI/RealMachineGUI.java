@@ -120,6 +120,7 @@ public class RealMachineGUI extends javax.swing.JFrame {
         text += "\nPriority: "+pd.priority;
         if (pd.parent != null)
             text += "\nParent: "+pd.parent.pd.externalID+"#"+pd.parent.pd.internalID;
+        text += "\nInstruction: "+os.processes.get(index).nextInstruction;
         infoJTextArea.setText(text);
     }
     
