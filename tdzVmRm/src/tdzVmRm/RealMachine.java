@@ -44,7 +44,7 @@ public class RealMachine {
     */
     public static Processor[] proc = new Processor[2];
     
-    public static Speaker speakers;
+    public static Speaker[] speakers;
     public static Input in;
     public static Output out;
     
@@ -82,7 +82,8 @@ public class RealMachine {
         proc[0] = new Processor();
         proc[1] = new Processor();
         
-        speakers = new Speaker();
+        speakers[0] = new Speaker();
+        speakers[1] = new Speaker();
         in = new Input();
         out = new Output();
         

@@ -11,7 +11,7 @@ import tdzVmRm.Processor;
  *
  * @author Zory
  */
-public class SharedMemoryControl extends Process{
+public class SharedMemoryControl extends Process{ //TODO NEBAIGTAS IR NEPATIKRINTAS
     
     public SharedMemoryControl (LinkedList inList, int internalID, OS.ProcName externalID, 
            ProcessorState ps, Processor p, LinkedList<ResComponent> or,
@@ -176,6 +176,8 @@ public class SharedMemoryControl extends Process{
     //8
     private void isBlockedByThisVM1()
     {
+        
+       // if(pd.core.rm.VM. == )
      /*   if(ar ta blokas uzrakino ta pati VM)
         {
             next();
@@ -189,20 +191,23 @@ public class SharedMemoryControl extends Process{
     //9
     private void unblocking()
     {
+        System.out.println("SharedMemoryControl atrakinamas blokas");
+        pd.core.rm.proc[0].S.unsetBit((int)pd.ownedResources.get(2).value);
         goTo(13);
     }
     
     //10
     private void isBlockLocked()
     {
-    /*    if(ar ta blokas uzrakintas)
+        System.out.println("SharedMemoryControl tikrina tas blokas užrakintas");
+        if(pd.core.rm.proc[0].S.isBitSet((int)pd.ownedResources.get(2).value))
         {
             next();
         }
         else
         {
             goTo(15);
-        }*/
+        }
     }
     
     //11
@@ -221,30 +226,68 @@ public class SharedMemoryControl extends Process{
     //12
     private void readingOrWriting()
     {
+        System.out.println("SharedMemoryControl atlieka rašymą arba skaitymą");
+        if((String)pd.ownedResources.getFirst().value == "X1")
+        {
+        }
+        else if((String)pd.ownedResources.getFirst().value == "X2")
+        {
+        }
+        else if((String)pd.ownedResources.getFirst().value == "Z1")
+        {
+        }
+        else if((String)pd.ownedResources.getFirst().value == "Z2")
+        {
+        }
         next();
     }
     
     //13
     private void createResourcePranesimasJobGovernor0()
     {
+        System.out.println("SharedMemoryControl kuria resursą [PrnesimasJobGovernor] su parametru [rezultatas = 0]");
+        LinkedList<Object> components = new LinkedList();
+        components.add("rezultatas = 0");
+          
+        //Kuriamas resursas..
+        pd.core.createResource(this, OS.ResName.PranesimasJobGovernor, components);
+        
         goTo(1);
     }
     
     //14
     private void createResourceEiluteAtmintyje1()
     {
+        System.out.println("SharedMemoryControl kuria resursą [EiluteAtmintyje] su parametru [Bandoma atrakinti kitos VM užrakintą bloką]");
+        LinkedList<Object> components = new LinkedList();
+        components.add("Bandoma atrakinti kitos VM užrakintą bloką");
+          
+        //Kuriamas resursas..
+        pd.core.createResource(this, OS.ResName.EiluteAtmintyje, components);
         next();
     }
     
     //15
     private void createResourcePranesimasJobGovernor1()
     {
+        System.out.println("SharedMemoryControl kuria resursą [PrnesimasJobGovernor] su parametru [rezultatas = 1]");
+        LinkedList<Object> components = new LinkedList();
+        components.add("rezultatas = 1");
+          
+        //Kuriamas resursas..
+        pd.core.createResource(this, OS.ResName.PranesimasJobGovernor, components);
         goTo(1);
     }
     
     //16
     private void createResourceEiluteAtmintyje2()
     {
+        System.out.println("SharedMemoryControl kuria resursą [EiluteAtmintyje] su parametru [Atmintis neprieinama]");
+        LinkedList<Object> components = new LinkedList();
+        components.add("Atmintis neprieinama");
+          
+        //Kuriamas resursas..
+        pd.core.createResource(this, OS.ResName.EiluteAtmintyje, components);
         goTo(15);
     }
 }

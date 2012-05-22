@@ -615,7 +615,7 @@ public class VirtualMachine {
         pause(WAIT_TIME);
         
         int volume = RealMachine.proc[0].R1.getValue().getIntValue();
-        RealMachine.speakers.setVolume(volume);
+        RealMachine.speakers[0].setVolume(volume);
         
         RealMachine.proc[0].CH4.setOpen();
         RealMachine.proc[0].SI.setValue(0);
@@ -631,7 +631,7 @@ public class VirtualMachine {
         pause(WAIT_TIME);
         
         int volume = RealMachine.proc[0].R2.getValue().getIntValue();
-        RealMachine.speakers.setVolume(volume);
+        RealMachine.speakers[1].setVolume(volume);
         
         RealMachine.proc[0].CH4.setOpen();
         RealMachine.proc[0].SI.setValue(0);
@@ -647,7 +647,7 @@ public class VirtualMachine {
         pause(WAIT_TIME);
         
         int volume = RealMachine.proc[0].R1.getValue().getIntValue();
-        RealMachine.speakers.setLength(volume);
+        RealMachine.speakers[0].setLength(volume);
         
         RealMachine.proc[0].CH4.setOpen();
         RealMachine.proc[0].SI.setValue(0);
@@ -663,7 +663,7 @@ public class VirtualMachine {
         pause(WAIT_TIME);
 
         int volume = RealMachine.proc[0].R2.getValue().getIntValue();
-        RealMachine.speakers.setLength(volume);
+        RealMachine.speakers[1].setLength(volume);
         
         RealMachine.proc[0].CH4.setOpen();
         RealMachine.proc[0].SI.setValue(0);
@@ -679,7 +679,7 @@ public class VirtualMachine {
         pause(WAIT_TIME);
         
         int value = RealMachine.proc[0].R1.getValue().getIntValue();
-        RealMachine.speakers.play(value);
+        RealMachine.speakers[0].play(value);
         
         RealMachine.proc[0].CH4.setOpen();
         RealMachine.proc[0].SI.setValue(0);
@@ -696,7 +696,7 @@ public class VirtualMachine {
         pause(WAIT_TIME);
         
         int value = RealMachine.proc[0].R2.getValue().getIntValue();
-        RealMachine.speakers.play(value);
+        RealMachine.speakers[1].play(value);
         
         RealMachine.proc[0].CH4.setOpen();
         RealMachine.proc[0].SI.setValue(0);
