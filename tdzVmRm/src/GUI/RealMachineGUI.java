@@ -19,6 +19,7 @@ import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import tdzOS.OS;
 import tdzOS.ProcessDescriptor;
+import tdzOS.ResourceDescriptor;
 import tdzVmRm.RealMachine;
 import tdzVmRm.VirtualMachine;
 import tdzVmRm.Word;
@@ -118,12 +119,19 @@ public class RealMachineGUI extends javax.swing.JFrame {
         text += "\nState: "+pd.state;
         text += "\nPriority: "+pd.priority;
         if (pd.parent != null)
-            text += "\nParent: "+pd.parent.pd.externalID;
+            text += "\nParent: "+pd.parent.pd.externalID+"#"+pd.parent.pd.internalID;
+        text += "\nInstruction: "+os.processes.get(index).nextInstruction;
         infoJTextArea.setText(text);
     }
     
     private void resourceSelected(int index){
-        infoJTextArea.setText(os.resources.get(index).toString());
+        ResourceDescriptor rd = os.resources.get(index).rd;
+        String text = "";
+        text += "Resource name: "+rd.externalID;
+        text += "\nID: "+rd.internalID;
+        text += "\nCreator: "+rd.creator.pd.externalID+"#"+rd.creator.pd.internalID;
+        text += "\nComponent count: "+rd.components.size();
+        infoJTextArea.setText(text);
     }
     
     private void updateProcessorJPanels(){
@@ -246,7 +254,7 @@ public class RealMachineGUI extends javax.swing.JFrame {
 
         infoJPanel.setLayout(new javax.swing.BoxLayout(infoJPanel, javax.swing.BoxLayout.Y_AXIS));
 
-        infoLabel.setText("Infomation");
+        infoLabel.setText("Information");
         infoLabel.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         infoLabel.setMaximumSize(new java.awt.Dimension(256, 14));
         infoLabel.setMinimumSize(new java.awt.Dimension(256, 14));
@@ -257,6 +265,7 @@ public class RealMachineGUI extends javax.swing.JFrame {
         infoJScrollPane.setPreferredSize(new java.awt.Dimension(256, 128));
 
         infoJTextArea.setColumns(20);
+        infoJTextArea.setEditable(false);
         infoJTextArea.setRows(5);
         infoJTextArea.setMinimumSize(new java.awt.Dimension(128, 128));
         infoJScrollPane.setViewportView(infoJTextArea);
@@ -419,11 +428,13 @@ public class RealMachineGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_taskNameFieldMouseClicked
 
     private void processesJTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_processesJTableMouseClicked
-        processSelected(processesJTable.getSelectedRow());
+        if (processesJTable.getSelectedRow() >= 0)
+            processSelected(processesJTable.getSelectedRow());
     }//GEN-LAST:event_processesJTableMouseClicked
 
     private void resourcesJTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_resourcesJTableMouseClicked
-        resourceSelected(resourcesJTable.getSelectedRow());
+        if (resourcesJTable.getSelectedRow() >= 0)
+            resourceSelected(resourcesJTable.getSelectedRow());
     }//GEN-LAST:event_resourcesJTableMouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
