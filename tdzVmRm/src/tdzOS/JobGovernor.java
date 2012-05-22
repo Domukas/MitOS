@@ -11,6 +11,7 @@ import tdzOS.OS.ResName;
 import tdzVmRm.Memory;
 import tdzVmRm.MemoryBlock;
 import tdzVmRm.Processor;
+import tdzVmRm.RealMachine;
 
 /**
  *
@@ -18,7 +19,13 @@ import tdzVmRm.Processor;
  */
 public class JobGovernor extends Process
 {
-     LinkedList<String> programInHDD;
+    LinkedList<String> programInHDD;
+    LinkedList<Object> tempList;
+    
+     //del patogumo
+    int PI, SI, commandParameter;
+    String OPC;
+     
     
     public JobGovernor (LinkedList inList, int internalID, OS.ProcName externalID, 
            ProcessorState ps, Processor p, LinkedList<ResComponent> or,
@@ -194,28 +201,50 @@ public class JobGovernor extends Process
         pd.ownedResources.getLast().value = temp;
         toGive.add(pd.ownedResources.getLast());
         
-        System.out.println("\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\" + (String)toGive.getFirst().value);
+        //System.out.println("\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\" + (String)toGive.getFirst().value);
         
         pd.core.createProcess(this, ProcessState.Ready, 50, toGive, ProcName.VirtualMachine);
         
-        pd.core.requestResource(this, ResName.MOSPabaiga, 1);
+        next();
     }
     
     //7
     private void blockForInterrupt()
     {
+        System.out.println("JobGovernor blokuojasi dėl resurso [Pertraukimas]");
+        pd.core.requestResource(this, ResName.Pertraukimas, 1);
         
+        next();
     }
     
     //8
     private void stopVirtualMachine()
     {
+        System.out.println("JobGovernor stabdo VM");
+        pd.children.getLast().pd.state = ProcessState.BlockedS;
         
+        next();
     }
     
     //9
     private void isIOorSoundInt()
     {
+        for (ResComponent rc: pd.ownedResources)
+            System.out.println(rc.value);
+        tempList = (LinkedList<Object>)pd.ownedResources.getLast().value;
+        
+        
+        if (((String)tempList.getFirst() == "DG") || ((String)tempList.getFirst() == "DP") ||
+                ((String)tempList.getFirst() == "Gartsiakalbis"))
+        {
+            System.out.println("IO arba garso pertraukimas");
+            goTo(16);
+        }
+        else
+        {
+            System.out.println("Ne IO arba garso pertraukimas");
+            goTo(10);
+        }
         
     }
     //10
@@ -257,7 +286,16 @@ public class JobGovernor extends Process
     //16
     private void isIOInterrupt()
     {
-        
+        if (((String)tempList.getFirst() == "DG") || ((String)tempList.getFirst() == "DP"))
+        {
+            System.out.println("IO pertraukimas");
+            goTo(18);
+        }
+        else
+        {
+            System.out.println("Garso pertraukimas");
+            goTo(17);
+        }   
     }
     
     //17
@@ -269,13 +307,38 @@ public class JobGovernor extends Process
     //18
     private void isDPInterrupt()
     {
-        
+        if ((String)tempList.getFirst() == "DP")
+        {
+            System.out.println("DP komanda");
+            goTo(19);
+        }
+        else
+        {
+            System.out.println("DG komanda");
+            goTo(21);
+        }
     }
     
     //19
     private void createLineInMemory()
     {
+        String temp = "";
+        commandParameter = (Integer)tempList.get(1);
+
+        MemoryBlock block = RealMachine.memory.getBlock(commandParameter);
         
+        
+        for (int i = 0; i < 16; i++)
+        {
+            String s = block.getWord(i).getValue();
+            if (!s.equals("0"))
+                temp = temp.concat(s);
+        }
+        
+        pd.core.createResource(this, ResName.EiluteAtmintyje, createMessage(temp));
+        RealMachine.out.send(temp);
+        
+        goTo(7); //Reikia eit i aktyvavima VM'o
     }
     
     //20
@@ -287,12 +350,22 @@ public class JobGovernor extends Process
     //21
     private void createMessageForGetLine()
     {
+        System.out.print("JobGovernor kuria resursą [Pranešimas GetLine procesui]");
+        commandParameter = (Integer)tempList.get(1);
         
+        pd.core.createResource(this, ResName.PranesimasGetLineProcesui,
+                createMessage(Integer.toString(commandParameter)));
+        
+        next();
     }
     
     //22
     private void blockForEnteredLineInSupervisor()
     {
+        System.out.print("JobGovernor blokuojasi dėl resurso [Įvesta eilutė atmintyje]");
+        pd.core.requestResource(this, ResName.IvestaEiluteSupervizorinejeAtmintyje, 1);
+        
+        goTo(7);
         
     }
     //23

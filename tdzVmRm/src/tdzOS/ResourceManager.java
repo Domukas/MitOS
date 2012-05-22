@@ -153,14 +153,13 @@ class ResourceManager {
     private boolean giveResourceToProcess(Process tmpProcess, Resource r, int count)
     {
         if((r.rd.components.size() >= count) && (tmpProcess != null))
-            {
-                
-                //Is saraso dalinam resursus atsitiktinai
-                Random randomGenerator = new Random();
-                
+            {                
                 //Vartotojo atminti dalinam atsitiktinai
                 if (r.rd.externalID == ResName.VartotojoAtmintis)
                 {
+                    //Is saraso dalinam resursus atsitiktinai
+                    Random randomGenerator = new Random();
+                    
                     for (int i=0; i<count; i++)
                     {
                         //generuojam atsitiktini skaciu 
@@ -174,14 +173,30 @@ class ResourceManager {
                     }
                 }
                 else //Visa kita is eiles dalinam
-                {                    
-                    for (int i=0; i<count; i++)
+                {   
+                    boolean give = true;
+                    
+                    if (r.rd.externalID == ResName.Pertraukimas) //dalinant pertraukimus reikia patikrint, ar jis tam JG skirtas
                     {
-                        tmpProcess.pd.ownedResources.add(r.rd.components.getFirst());
-                        r.rd.components.removeFirst();
+                        LinkedList<Object> contents = (LinkedList<Object>) r.rd.components.getFirst().value;
+                        
+                        if ((Process)contents.getLast() != tmpProcess)
+                            give = false;
                     }
-                    System.out.println("Procesui " + tmpProcess.pd.externalID + 
-                        " skirta resurso " + r.rd.externalID + " " + count + " elementu");
+                    
+                    if (give)
+                    {
+                        for (int i=0; i<count; i++)
+                        {
+                            tmpProcess.pd.ownedResources.add(r.rd.components.getFirst());
+                            r.rd.components.removeFirst();
+                        }
+                        System.out.println("Procesui " + tmpProcess.pd.externalID + 
+                            " skirta resurso " + r.rd.externalID + " " + count + " elementu");
+                        
+                        
+                    }
+                    else return false;
                     
                 }
                 //Jei to resurso nebeliko laisvu komponentu, tai ji pasalinam is laisvu saraso

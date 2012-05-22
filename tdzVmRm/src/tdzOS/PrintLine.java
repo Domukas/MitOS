@@ -43,10 +43,6 @@ public class PrintLine extends Process
             case 4:
                 freeResourceIsvedimoIrenginys();
                 break;
-                
-            case 5:
-                createResourceIsvestaEilute();
-                break;
         }
     }
     
@@ -80,8 +76,12 @@ public class PrintLine extends Process
         System.out.println("PrintLine atlaisvina resursą [išvedimo įrenginys]");
         pd.core.freeResource(this, pd.ownedResources.getFirst().parent);
         next();
+        
+        goTo(1);
     }
     
+    
+    /*
     //5
     private void createResourceIsvestaEilute()
     {
@@ -96,4 +96,5 @@ public class PrintLine extends Process
         //Pereinam i proceso pradine busena
         goTo(1);
     }
+    * */
 }

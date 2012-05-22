@@ -38,7 +38,8 @@ public class OS {
         UzduotisSupervizorinejeAtmintyje,
         PranesimasJobGovernor, PranesimasSharedMemorycontrolProcesui, 
         PranesimasLoaderProcesui, //REIKIA SUTVARKYT DOKUMENTE, BUS PAKEITIMU DEL TO
-        IvestaEiluteSupervizorinejeAtmintyje //prikuriau nzn ar reikia
+        IvestaEiluteSupervizorinejeAtmintyje, //prikuriau nzn ar reikia
+        PratestiVMDarba
     }
     
     public LinkedList<Process> processes;
@@ -136,9 +137,16 @@ public class OS {
                 p = new VirtualMachine(processes, internalID, externalID,
                     new ProcessorState(), null, components, state, priority,
                     parent, this);
-                break;                
-                
+                break;  
+            case Interrupt:
+                p = new Interrupt(processes, internalID, externalID,
+                    new ProcessorState(), null, components, state, priority,
+                    parent, this);
+                break;       
         }
+        
+        if (externalID != ProcName.StartStop)
+            parent.pd.children.add(p);
         
         //Pridedam procesus i reikiamus sarasus
         addProcessToLlists(p);
@@ -372,6 +380,9 @@ public class OS {
             case IsvestaEilute:
             case IvestaEiluteSupervizorinejeAtmintyje:
             case PranesimasLoaderProcesui:
+            case PranesimasApiePertraukima:
+            case Pertraukimas:
+            case PranesimasGetLineProcesui:
                 System.out.println("Kuriamas resursas " + externalID);
                 
                 r = new Resource(creator, externalID, internalID, false, //ne pakartotinio naudojimo

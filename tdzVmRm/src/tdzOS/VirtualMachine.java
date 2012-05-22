@@ -58,6 +58,9 @@ public class VirtualMachine extends Process
     
     public VirtualMemory memory;
     
+    String OPC = "";
+    int commandParameter = 0;
+    
     public VirtualMachine (LinkedList inList, int internalID, OS.ProcName externalID, 
            ProcessorState ps, Processor p, LinkedList<ResComponent> or,
            OS.ProcessState state, int priority, Process parent, OS core)
@@ -123,16 +126,36 @@ public class VirtualMachine extends Process
     //3
     private void createInterruptMessage()
     {
-        pd.processor.mode.SetSupervisor();
-        pd.core.requestResource(this, ResName.MOSPabaiga, 1);
-
+        System.out.println("VirtualMachine pranešimą apie pertraukimą");
         
+        pd.processor.mode.SetSupervisor();
+        
+        LinkedList<Object> parameters = new LinkedList<>();
+        
+        parameters.add(pd.processor.PI.getValue());
+        parameters.add(pd.processor.SI.getValue());
+        parameters.add(OPC); //Paskutines komandos opkodas
+
+        if ((OPC.equals("DGT")) || (OPC.equals("DPT")))
+        {
+            System.out.println("////////////////////"+OPC);
+            commandParameter = getRealBlockAdress(commandParameter);
+        }
+            
+        parameters.add(commandParameter);
+        
+        pd.core.createResource(this, ResName.PranesimasApiePertraukima, parameters);
+        //pd.core.requestResource(this, ResName.MOSPabaiga, 1);
+
+        next();
     }
     
     //4
     private void blockForResume()
     {
-        
+        System.out.println("VirtualMachine blokuojasi dėl resurso [Pratęsti VM darbą]");
+        pd.core.requestResource(this, ResName.PratestiVMDarba, 1);
+        goTo(1);
     }
     
     
@@ -176,7 +199,6 @@ public class VirtualMachine extends Process
        
     private void processCommand(Word currentWord)
     {
-        String OPC = "";
         int xx;
         
         OPC = encodeBytes3and2(currentWord);
@@ -494,6 +516,7 @@ public class VirtualMachine extends Process
     public void LCK (int x)
     {
         pd.processor.SI.setValue(4);
+        commandParameter = x;
         goTo(3);
         
         /*
@@ -519,6 +542,7 @@ public class VirtualMachine extends Process
     public void X1 (int xx)
     {
         pd.processor.SI.setValue(4);
+        commandParameter = xx;
         goTo(3);
         
         /*
@@ -537,6 +561,7 @@ public class VirtualMachine extends Process
     public void X2 (int xx)
     {
         pd.processor.SI.setValue(4);
+        commandParameter = xx;
         goTo(3);
         /*
         int x = xx/0x10;
@@ -553,6 +578,7 @@ public class VirtualMachine extends Process
     public void Z1 (int xx)
     {
         pd.processor.SI.setValue(4);
+        commandParameter = xx;
         goTo(3);
         /*
         int x = xx/0x10;
@@ -570,6 +596,7 @@ public class VirtualMachine extends Process
     public void Z2 (int xx)
     {   
         pd.processor.SI.setValue(4);
+        commandParameter = xx;
         goTo(3);
         /*
         int x = xx/0x10;
@@ -587,6 +614,7 @@ public class VirtualMachine extends Process
     public void ULC (int x)
     {
         pd.processor.SI.setValue(4);
+        commandParameter = x;
         goTo(3);
         /*
         if (!pd.processor.S.isBitSet(x)){
@@ -656,6 +684,7 @@ public class VirtualMachine extends Process
     public void DGT (int x)
     {
         pd.processor.SI.setValue(1);
+        commandParameter = x;
         goTo(3);
         /*
         pd.processor.CH2.setClosed();
@@ -684,6 +713,7 @@ public class VirtualMachine extends Process
     public void DPT (int x)
     {
         pd.processor.SI.setValue(2); 
+        commandParameter = x;
         goTo(3);
         /*
         pd.processor.CH1.setClosed();
@@ -961,8 +991,12 @@ public class VirtualMachine extends Process
             pd.procesorState.PLR.setA0((byte) 0);
         else
             pd.procesorState.PLR.setA0((byte) val);
-        
-        System.out.println("//////////////PLR: " + pd.procesorState.PLR.getValue());
+    }
+    
+    private int getRealBlockAdress(int adress)
+    {
+        return RealMachine.memory.getBlock(pd.processor.PLR.getA2()*0x10
+                + pd.processor.PLR.getA3()).getWord(adress).getIntValue();
     }
 
 }

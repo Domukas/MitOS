@@ -5,13 +5,18 @@
 package tdzOS;
 
 import java.util.LinkedList;
+import tdzVmRm.MemoryBlock;
 import tdzVmRm.Processor;
+import tdzVmRm.RealMachine;
+import tdzVmRm.Word;
 
 /**
  *
  * @author Zory
  */
 public class GetLine extends Process{
+    
+    String line;
     
     public GetLine (LinkedList inList, int internalID, OS.ProcName externalID, 
            ProcessorState ps, Processor p, LinkedList<ResComponent> or,
@@ -71,20 +76,27 @@ public class GetLine extends Process{
     private void blockForVartotojoIvestaEilute()
     {
         System.out.println("GetLine blokuojasi dėl resurso [Vartotojo įvesta eilutė]");
-        pd.core.requestResource(this, OS.ResName.IsvestaEilute, 1);
+        line = pd.core.rm.in.get();
         next();
     }
     
     //4
     private void createEiluteAtmintyje()
     { 
-        System.out.println("GetLine kuria resursą [Eilutė atmintyje], kurio parametras yra vartotojo įvesta eilutė");
+        System.out.println("GetLine įrašo eilute į atmintį");
+        String adress = (String)pd.ownedResources.get(0).value;
         
-        LinkedList<Object> components = new LinkedList();
-        components.add(pd.core.rm.in.get());
-          
-        //Kuriamas resursas..
-        pd.core.createResource(this, OS.ResName.EiluteAtmintyje, components);
+        MemoryBlock block = RealMachine.memory.getBlock(Integer.parseInt(adress));
+        
+        for (int i = 0; i < line.length() / 4 + 1; i++)
+        {
+            int end = i*4+4;
+            if (end > line.length())
+                end = line.length();
+            
+           block.setWord(i, new Word(line.substring(i*4, end))); 
+        }
+        
         next();
     }
     
