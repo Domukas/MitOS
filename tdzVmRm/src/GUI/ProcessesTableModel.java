@@ -37,7 +37,7 @@ public class ProcessesTableModel extends AbstractTableModel {
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-        return os.processes.get(rowIndex).pd.externalID;
+        return os.processes.get(rowIndex).pd.externalID+"#"+os.processes.get(rowIndex).pd.internalID;
     }
 
     public String getColumnName(int column) {
