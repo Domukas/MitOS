@@ -105,33 +105,43 @@ public class RealMachineGUI extends javax.swing.JFrame {
         memoryTable.repaint();
         if (RealMachine.VM != null)
             vm1MemoryTable.repaint();
+        processSelected();
+        resourceSelected();
     }
     
-    private void processSelected(int index){
-        ProcessDescriptor pd = os.processes.get(index).pd;
-        String text = "";
-        text += "Process name: "+pd.externalID;
-        text += "\nID: "+pd.internalID;
-        if (pd.processor != null)
-            text += "\nProcessor: "+pd.processor.pd.number;
-        else
-            text += "\nProcessor: null";
-        text += "\nState: "+pd.state;
-        text += "\nPriority: "+pd.priority;
-        if (pd.parent != null)
-            text += "\nParent: "+pd.parent.pd.externalID+"#"+pd.parent.pd.internalID;
-        text += "\nInstruction: "+os.processes.get(index).nextInstruction;
-        infoJTextArea.setText(text);
+    private void processSelected(){
+        int index = processesJTable.getSelectedRow(); 
+        if (index >= 0)
+        {
+            ProcessDescriptor pd = os.processes.get(index).pd;
+            String text = "";
+            text += "Process name: "+pd.externalID;
+            text += "\nID: "+pd.internalID;
+            if (pd.processor != null)
+                text += "\nProcessor: "+pd.processor.pd.number;
+            else
+                text += "\nProcessor: null";
+            text += "\nState: "+pd.state;
+            text += "\nPriority: "+pd.priority;
+            if (pd.parent != null)
+                text += "\nParent: "+pd.parent.pd.externalID+"#"+pd.parent.pd.internalID;
+            text += "\nInstruction: "+os.processes.get(index).nextInstruction;
+            infoJTextArea.setText(text);
+        }
     }
     
-    private void resourceSelected(int index){
-        ResourceDescriptor rd = os.resources.get(index).rd;
-        String text = "";
-        text += "Resource name: "+rd.externalID;
-        text += "\nID: "+rd.internalID;
-        text += "\nCreator: "+rd.creator.pd.externalID+"#"+rd.creator.pd.internalID;
-        text += "\nComponent count: "+rd.components.size();
-        infoJTextArea.setText(text);
+    private void resourceSelected(){
+        int index = resourcesJTable.getSelectedRow();
+        if (index >= 0)
+        {
+            ResourceDescriptor rd = os.resources.get(index).rd;
+            String text = "";
+            text += "Resource name: "+rd.externalID;
+            text += "\nID: "+rd.internalID;
+            text += "\nCreator: "+rd.creator.pd.externalID+"#"+rd.creator.pd.internalID;
+            text += "\nComponent count: "+rd.components.size();
+            infoJTextArea.setText(text);
+        }
     }
     
     private void updateProcessorJPanels(){
@@ -428,13 +438,13 @@ public class RealMachineGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_taskNameFieldMouseClicked
 
     private void processesJTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_processesJTableMouseClicked
-        if (processesJTable.getSelectedRow() >= 0)
-            processSelected(processesJTable.getSelectedRow());
+        processSelected();
+        resourcesJTable.clearSelection();
     }//GEN-LAST:event_processesJTableMouseClicked
 
     private void resourcesJTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_resourcesJTableMouseClicked
-        if (resourcesJTable.getSelectedRow() >= 0)
-            resourceSelected(resourcesJTable.getSelectedRow());
+        resourceSelected();
+        processesJTable.clearSelection();
     }//GEN-LAST:event_resourcesJTableMouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

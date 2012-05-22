@@ -86,12 +86,11 @@ public class ProcessorJPanel extends javax.swing.JPanel {
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-        java.awt.GridBagConstraints gridBagConstraints;
 
-        jLabel1 = new javax.swing.JLabel();
-        PLRTextField = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         R1TextField = new javax.swing.JTextField();
+        jLabel1 = new javax.swing.JLabel();
+        PLRTextField = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
         R2TextField = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
@@ -125,16 +124,6 @@ public class ProcessorJPanel extends javax.swing.JPanel {
         setPreferredSize(new java.awt.Dimension(256, 128));
         setLayout(new java.awt.GridLayout(0, 4));
 
-        jLabel1.setText("PLR");
-        add(jLabel1);
-
-        PLRTextField.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                PLRTextFieldActionPerformed(evt);
-            }
-        });
-        add(PLRTextField);
-
         jLabel2.setText("R1");
         add(jLabel2);
 
@@ -144,6 +133,16 @@ public class ProcessorJPanel extends javax.swing.JPanel {
             }
         });
         add(R1TextField);
+
+        jLabel1.setText("PLR");
+        add(jLabel1);
+
+        PLRTextField.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                PLRTextFieldActionPerformed(evt);
+            }
+        });
+        add(PLRTextField);
 
         jLabel3.setText("R2");
         add(jLabel3);
