@@ -174,11 +174,11 @@ class ResourceManager {
                     }
                 }
                 else //Visa kita is eiles dalinam
-                {                 
+                {                    
                     for (int i=0; i<count; i++)
                     {
-                        tmpProcess.pd.ownedResources.add(r.rd.components.get(i));
-                        r.rd.components.remove(i);
+                        tmpProcess.pd.ownedResources.add(r.rd.components.getFirst());
+                        r.rd.components.removeFirst();
                     }
                     System.out.println("Procesui " + tmpProcess.pd.externalID + 
                         " skirta resurso " + r.rd.externalID + " " + count + " elementu");

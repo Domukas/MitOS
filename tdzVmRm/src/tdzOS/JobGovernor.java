@@ -149,7 +149,7 @@ public class JobGovernor extends Process
             memoryBlocks.add((MemoryBlock) pd.ownedResources.get(i).value);
         
         components.add(memoryBlocks);
-          
+        
         pd.core.createResource(this, ResName.PranesimasLoaderProcesui, components);
         
         next();
