@@ -36,7 +36,7 @@ public class ResourcesTableModel extends AbstractTableModel {
     
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-        return os.resources.get(rowIndex).rd.externalID;
+        return os.resources.get(rowIndex).rd.externalID+"#"+os.resources.get(rowIndex).rd.internalID;
     }
 
     public String getColumnName(int column) {
