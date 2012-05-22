@@ -44,7 +44,7 @@ public class RealMachine {
     */
     public static Processor[] proc = new Processor[2];
     
-    public static Speaker[] speakers;
+    public static Speaker[] speakers = new Speaker[2];
     public static Input in;
     public static Output out;
     
