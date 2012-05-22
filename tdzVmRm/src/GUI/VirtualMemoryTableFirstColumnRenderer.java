@@ -9,7 +9,7 @@ import java.awt.Component;
 import java.awt.Font;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
-import tdzVmRm.VirtualMachine;
+import tdzOS.VirtualMachine;
 
 /**
  *
@@ -17,7 +17,7 @@ import tdzVmRm.VirtualMachine;
  */
 public class VirtualMemoryTableFirstColumnRenderer extends DefaultTableCellRenderer {
     VirtualMachine vm;
-    public VirtualMemoryTableFirstColumnRenderer(VirtualMachine rm) {
+    public VirtualMemoryTableFirstColumnRenderer(VirtualMachine vm) {
         super(); 
         this.vm = vm;
     }

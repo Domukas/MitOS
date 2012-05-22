@@ -91,7 +91,7 @@ class ResourceManager {
                                                 
                    }
                } 
-               else System.out.println("Resursas " + resNameList.get(i) + " nerastas laisvu sarase");
+               //else System.out.println("Resursas " + resNameList.get(i) + " nerastas laisvu sarase");
            }
        }
        

@@ -9,6 +9,7 @@ import tdzOS.OS.ProcName;
 import tdzOS.OS.ProcessState;
 import tdzOS.OS.ResName;
 import tdzVmRm.Processor;
+import tdzVmRm.RealMachine;
 
 /**
  *
@@ -132,7 +133,7 @@ public class StartStop extends Process {
         int totalBlocks = pd.core.rm.memory.getMaxMemoryBlocks();
         
         //Pridedam i komponentu sarasa nuorodas i jau egzistuojancia atminti
-        for (int i = 0; i < totalBlocks; i++)
+        for (int i = 0; i < RealMachine.SHARED_MEMORY_BLOCK_OFFSET; i++)
         {
             memoryBlocks.add(pd.core.rm.memory.getBlock(i));
         }

@@ -114,7 +114,11 @@ public class ProcessManager {
         
         //Jei jis ne blokuotas, tai pridedam prie pasiruosusiu
         if (currentProcess.pd.state != ProcessState.Blocked)
-            os.readyProcesses.add(currentProcess);
+        {
+            os.readyProcesses.add(currentProcess); 
+            currentProcess.pd.state = ProcessState.Ready;
+        }
+            
     }
 
     /*
@@ -166,10 +170,11 @@ public class ProcessManager {
     
     public void loadAndSet(Process currentProcess, Processor idleProcessor)//pakrauna proceso busena RM procesoriui, pasalina ir pasiruosusiu ir ideda i veikianciu procesu sarasa
     {
-        currentProcess.pd.procesorState.loadProcessorState(idleProcessor); //cia reiktu procesoriu keisti
+        currentProcess.pd.procesorState.loadProcessorState(idleProcessor); 
         os.readyProcesses.remove(currentProcess);
         os.runProcesses.add(currentProcess);
         currentProcess.pd.processor = idleProcessor; //procesui duodamas procesorius
+        currentProcess.pd.state = ProcessState.Run;
         
         //procesoriaus deskriptoriuje nurodom dabar vykdoma procesa
         idleProcessor.pd.currentProcess = currentProcess;                                                   

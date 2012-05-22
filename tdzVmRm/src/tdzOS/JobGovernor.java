@@ -5,6 +5,8 @@
 package tdzOS;
 
 import java.util.LinkedList;
+import tdzOS.OS.ProcName;
+import tdzOS.OS.ProcessState;
 import tdzOS.OS.ResName;
 import tdzVmRm.Memory;
 import tdzVmRm.MemoryBlock;
@@ -160,18 +162,43 @@ public class JobGovernor extends Process
     {
         System.out.println("JobGovernor blokuojasi dėl resurso [Užduoties pakrovimas į vartotojo atmintį baigtas]");
         pd.core.requestResource(this, ResName.UzduotiesPakrovimasBaigtas, 1);
+        
+        next();
     }
     
     //5
     private void createSharedMemoryControl()
     {
+        System.out.println("JobGovernor kuria SharedMemoryControl");
+        //TODO
         
+        next();
     }
     
     //6
     private void createVM()
     {
+        System.out.println("JobGovernor kuria Virtualią mašiną");
         
+        LinkedList<ResComponent> toGive = new LinkedList<>();
+        
+        //for (ResComponent rc:pd.ownedResources)
+        //    System.out.println(rc.value.toString());
+        
+        String temp = (String)pd.ownedResources.getLast().value;
+        if (temp.length() == 1)
+            temp = "0".concat(temp);
+        if (programInHDD.getFirst().length() == 1) //Butinai turi but 2 simboliai
+            temp += "0";
+        temp += programInHDD.getFirst(); //Reikia perduot 2 skaicius...
+        pd.ownedResources.getLast().value = temp;
+        toGive.add(pd.ownedResources.getLast());
+        
+        System.out.println("\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\" + (String)toGive.getFirst().value);
+        
+        pd.core.createProcess(this, ProcessState.Ready, 50, toGive, ProcName.VirtualMachine);
+        
+        pd.core.requestResource(this, ResName.MOSPabaiga, 1);
     }
     
     //7

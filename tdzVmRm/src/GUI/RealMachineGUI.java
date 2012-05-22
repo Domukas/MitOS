@@ -20,8 +20,8 @@ import javax.swing.table.DefaultTableModel;
 import tdzOS.OS;
 import tdzOS.ProcessDescriptor;
 import tdzOS.ResourceDescriptor;
+import tdzOS.VirtualMachine;
 import tdzVmRm.RealMachine;
-import tdzVmRm.VirtualMachine;
 import tdzVmRm.Word;
 
 /**
@@ -79,7 +79,7 @@ public class RealMachineGUI extends javax.swing.JFrame {
          
     }
     
-    private void createVMTab()
+    public void createVMTab(VirtualMachine vm)
     {
         vm1MemoryTable = new JTable();
         vm1MemoryTable.setModel(new VirtualMemoryTableModel(RM,this));
@@ -103,8 +103,11 @@ public class RealMachineGUI extends javax.swing.JFrame {
         updateProcessorJPanels();
         this.paint(this.getGraphics());
         memoryTable.repaint();
+        /*
         if (RealMachine.VM != null)
             vm1MemoryTable.repaint();
+            * */
+            
         processSelected();
         resourceSelected();
     }
@@ -366,8 +369,8 @@ public class RealMachineGUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void stepButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_stepButtonActionPerformed
-        RM.VM.step();
-        updateAll();
+        //RM.VM.step();
+        //updateAll();
     }//GEN-LAST:event_stepButtonActionPerformed
 
     private void memoryTableInputMethodTextChanged(java.awt.event.InputMethodEvent evt) {//GEN-FIRST:event_memoryTableInputMethodTextChanged

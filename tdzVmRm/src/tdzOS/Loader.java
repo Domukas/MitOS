@@ -4,10 +4,12 @@
  */
 package tdzOS;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import tdzOS.OS.ResName;
 import tdzVmRm.MemoryBlock;
 import tdzVmRm.Processor;
+import tdzVmRm.RealMachine;
 import tdzVmRm.Word;
 
 /**
@@ -16,6 +18,8 @@ import tdzVmRm.Word;
  */
 public class Loader extends Process
 {
+    int PagingAdress;
+    
     public Loader (LinkedList inList, int internalID, OS.ProcName externalID, 
            ProcessorState ps, Processor p, LinkedList<ResComponent> or,
            OS.ProcessState state, int priority, Process parent, OS core)
@@ -62,9 +66,12 @@ public class Loader extends Process
         LinkedList<String> inHDDList = (LinkedList<String>)pd.ownedResources.getFirst().value;
         LinkedList<MemoryBlock> inMemoryList = (LinkedList<MemoryBlock>)pd.ownedResources.getLast().value;
         
+        //Sudarom PLR
+        PagingAdress = CreatePagingTable(inMemoryList);
+        
         
         //Pirmo nekopijuojam, nes ten yra nurodyta, kiek bloku reiks
-        int i = 0;
+        int i = 1; //Pradedam nuo 1, nes nulinaime yra PLR
         int m = 1; //kelintas einamasis blokas is HDD
         
         System.out.println(inMemoryList.size() + " " + inMemoryList.get(i).getBlockSize());
@@ -85,13 +92,46 @@ public class Loader extends Process
         }
         
         //tik testavimui
-        pd.core.requestResource(this, ResName.MOSPabaiga, 1);
+        next();
         
     }
     
     //3
     private void createResourceLoadingFinished()
     {
+        System.out.println("Loader kuria resursą [Užduoties pakrovimas į vartotojo atmintį baigtas]");
+        
+        //Dar paduodam puslapiavimo lenteles adresa
+        pd.core.createResource(this, ResName.UzduotiesPakrovimasBaigtas,
+                createMessage(Integer.toHexString(PagingAdress)));
+        
+        goTo(1);
+    }
+    
+    private int CreatePagingTable(LinkedList<MemoryBlock> memory)
+    {
+        int tableAdress = getBlockAbsoluteAdress(memory.getFirst());
+        
+        //nulinio nelieciam, nes ten bus pati lentete
+        for (int i = 1; i<memory.size(); i++)
+        {
+            //Irasom bloko adresa i PLR
+            memory.getFirst().setWord(i-1, new Word(getBlockAbsoluteAdress(memory.get(i))));
+        }
+        
+        return tableAdress;
+    }
+    
+    private int getBlockAbsoluteAdress(MemoryBlock block)
+    {
+        for (int i=0; i< RealMachine.memory.getMaxMemoryBlocks(); i++)
+        {
+            if (RealMachine.memory.getBlock(i) == block)
+                return i;
+        }
+        
+        //Nerastas blokas atminty!
+        return -1;
         
     }
 }

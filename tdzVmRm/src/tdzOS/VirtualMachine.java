@@ -2,12 +2,15 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-package tdzVmRm;
+package tdzOS;
 
-import java.lang.reflect.InvocationTargetException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.SwingUtilities;
+
+import java.util.LinkedList;
+import tdzOS.OS.ResName;
+import tdzVmRm.Processor;
+import tdzVmRm.RealMachine;
+import tdzVmRm.VirtualMemory;
+import tdzVmRm.Word;
 import tdzVmRm.registers.ICRegister;
 import tdzVmRm.registers.DataRegister;
 import tdzVmRm.registers.CRegister;
@@ -44,7 +47,8 @@ OF = 1 – priešingu atveju.
  */
 
 
-public class VirtualMachine {
+public class VirtualMachine extends Process
+{
 
     static final int WAIT_TIME = 3000;
     
@@ -54,15 +58,85 @@ public class VirtualMachine {
     
     public VirtualMemory memory;
     
-    public VirtualMachine(DataRegister R1, DataRegister R2, ICRegister IC, CRegister C, VirtualMemory memory)
+    public VirtualMachine (LinkedList inList, int internalID, OS.ProcName externalID, 
+           ProcessorState ps, Processor p, LinkedList<ResComponent> or,
+           OS.ProcessState state, int priority, Process parent, OS core)
     {
-        this.R1 = R1;
-        this.R2 = R2;
-        this.IC = IC;
-        this.C = C;
-        this.memory = memory;   
+        super(inList, internalID, externalID, ps, p, or, state,
+            priority, parent, core);
+        
+        setPLR();
+        
+        memory = new VirtualMemory(pd.procesorState.PLR, RealMachine.memory);
+        RealMachine.gui.createVMTab(this);
+    }
+
+    
+    public void step()
+    {
+        switch (nextInstruction)
+        {
+            case 1:
+                switchToUser();
+                break;
+                
+            case 2:
+                runProgram();
+                break;
+                
+            case 3:
+                createInterruptMessage();
+                break;
+                
+            case 4:
+                blockForResume();
+                break;
+        }
     }
     
+    //1
+    private void switchToUser()
+    {
+        System.out.println("VirtualMachine perjungia procesorių į supervizoriaus rėžimą");
+        pd.processor.mode.setUser();
+        
+        IC = pd.processor.IC;
+        R1 = pd.processor.R1;
+        R2 = pd.processor.R2;
+        C = pd.processor.C;
+
+        next();
+    }
+    
+    //2
+    private void runProgram()
+    {
+        System.out.println("VirtualMachine suveikia");
+        stepVM();
+
+        
+        if (nextInstruction != 3)
+            goTo(2);
+        
+    }
+    
+    //3
+    private void createInterruptMessage()
+    {
+        pd.processor.mode.SetSupervisor();
+        pd.core.requestResource(this, ResName.MOSPabaiga, 1);
+
+        
+    }
+    
+    //4
+    private void blockForResume()
+    {
+        
+    }
+    
+    
+    //TODO
     public void run()
     {
         do
@@ -70,19 +144,19 @@ public class VirtualMachine {
             step();
             //RealMachine.gui.updateAll();
             //pause(500);
-        } while ((RealMachine.proc[0].SI.getValue() != 5) && (RealMachine.proc[0].PI.getValue() == 0));
+        } while ((pd.processor.SI.getValue() != 5) && (pd.processor.PI.getValue() == 0));
     }
     
-    public void step()
+    public void stepVM()
     {    
-        if ((RealMachine.proc[0].SI.getValue() != 5) && (RealMachine.proc[0].PI.getValue() == 0))
+        if ((pd.processor.SI.getValue() != 5) && (pd.processor.PI.getValue() == 0))
         {
             Word currentCommand = getCurrentCommand();
             goToNextCommand();
             processCommand(currentCommand);          
         }
         else
-            RealMachine.gui.showMessage("Program halted");
+            goTo(3);
     }
     
     
@@ -97,7 +171,7 @@ public class VirtualMachine {
         val++;
         IC.setValue(val);
         
-        RealMachine.proc[0].timer.timePass(1);
+        pd.processor.timer.timePass(1);
     }
        
     private void processCommand(Word currentWord)
@@ -304,10 +378,8 @@ public class VirtualMachine {
                             default:
                             {
                                 //Opkodas neegzistuoja
-                                RealMachine.proc[0].PI.setValue(2);
-                                RealMachine.proc[0].mode.SetSupervisor();
-                                RealMachine.gui.showMessage("Opcode: " + OPC + " does not exist");
-
+                                pd.processor.PI.setValue(2);
+                                goTo(3);
                             }
                         }
                     }
@@ -421,90 +493,121 @@ public class VirtualMachine {
     
     public void LCK (int x)
     {
-        if (RealMachine.proc[0].S.isBitSet(x)){
+        pd.processor.SI.setValue(4);
+        goTo(3);
+        
+        /*
+        if (pd.processor.S.isBitSet(x)){
             RealMachine.gui.showMessage(x+" block is already locked.");
-            RealMachine.proc[0].PI.setValue(1);
+            pd.processor.PI.setValue(1);
         } else {
-            RealMachine.proc[0].SI.setValue(4);
-            RealMachine.proc[0].mode.SetSupervisor();
-            RealMachine.proc[0].S.setBit(x);         
+            pd.processor.SI.setValue(4);
+            pd.processor.mode.SetSupervisor();
+            pd.processor.S.setBit(x);         
 
             RealMachine.gui.updateAll();
             pause(WAIT_TIME);
 
-            RealMachine.proc[0].SI.setValue(0);
-            RealMachine.proc[0].mode.setUser(); 
+            pd.processor.SI.setValue(0);
+            pd.processor.mode.setUser(); 
 
             RealMachine.gui.updateAll();
         }
+        * */
     }
     
     public void X1 (int xx)
     {
+        pd.processor.SI.setValue(4);
+        goTo(3);
+        
+        /*
         int x = xx/0x10;
-        if (!RealMachine.proc[0].S.isBitSet(x))
+        if (!pd.processor.S.isBitSet(x))
         {
-            RealMachine.proc[0].PI.setValue(1); 
+            pd.processor.PI.setValue(1); 
             RealMachine.gui.showMessage("Accessing unavailable memory!");
         }
         else 
             R1.setValue(memory.getSharedMemoryWord(xx));
+            * 
+            */
     }
     
     public void X2 (int xx)
     {
+        pd.processor.SI.setValue(4);
+        goTo(3);
+        /*
         int x = xx/0x10;
-        if (!RealMachine.proc[0].S.isBitSet(x))
+        if (!pd.processor.S.isBitSet(x))
         {
-            RealMachine.proc[0].PI.setValue(1); 
+            pd.processor.PI.setValue(1); 
             RealMachine.gui.showMessage("Accessing unavailable memory!");
         }
         else 
              R2.setValue(memory.getSharedMemoryWord(xx));
+             * */
     }
     
     public void Z1 (int xx)
     {
+        pd.processor.SI.setValue(4);
+        goTo(3);
+        /*
         int x = xx/0x10;
-        if (!RealMachine.proc[0].S.isBitSet(x))
+        if (!pd.processor.S.isBitSet(x))
         {
-            RealMachine.proc[0].PI.setValue(1); 
+            pd.processor.PI.setValue(1); 
             RealMachine.gui.showMessage("Accessing unavailable memory!");
         }
         else 
             memory.setSharedMemoryWord(xx, R1.getValue());
+            * 
+            */
     }
 
     public void Z2 (int xx)
-    {
+    {   
+        pd.processor.SI.setValue(4);
+        goTo(3);
+        /*
         int x = xx/0x10;
-        if (!RealMachine.proc[0].S.isBitSet(x))
+        if (!pd.processor.S.isBitSet(x))
         {
-            RealMachine.proc[0].PI.setValue(1); 
+            pd.processor.PI.setValue(1); 
             RealMachine.gui.showMessage("Accessing unavailable memory!");
         }
         else 
             memory.setSharedMemoryWord(xx, R2.getValue());
+            * 
+            */
     }
     
     public void ULC (int x)
     {
-        if (!RealMachine.proc[0].S.isBitSet(x)){
+        pd.processor.SI.setValue(4);
+        goTo(3);
+        /*
+        if (!pd.processor.S.isBitSet(x)){
             RealMachine.gui.showMessage(x+" block is already unlocked.");
-            RealMachine.proc[0].PI.setValue(1);
+            pd.processor.PI.setValue(1);
         } else {
-            RealMachine.proc[0].SI.setValue(4);
-            RealMachine.proc[0].mode.SetSupervisor(); 
-            RealMachine.proc[0].S.unsetBit(x);   
+            pd.processor.SI.setValue(4);
+            pd.processor.mode.SetSupervisor(); 
+            pd.processor.S.unsetBit(x);   
        
             RealMachine.gui.updateAll();
             pause(WAIT_TIME);
        
-            RealMachine.proc[0].SI.setValue(0);
-            RealMachine.proc[0].mode.setUser();
+            pd.processor.SI.setValue(0);
+            pd.processor.mode.setUser();
        
             RealMachine.gui.updateAll();
+            
         }
+        * 
+        */
     }    
     
     //Valdymo perdavimo komandos
@@ -552,14 +655,16 @@ public class VirtualMachine {
     
     public void DGT (int x)
     {
-        RealMachine.proc[0].SI.setValue(1);
-        RealMachine.proc[0].mode.SetSupervisor();
-        RealMachine.proc[0].CH2.setClosed();
+        pd.processor.SI.setValue(1);
+        goTo(3);
+        /*
+        pd.processor.CH2.setClosed();
+        
 
         RealMachine.gui.updateAll();
         pause(WAIT_TIME);
 
-        RealMachine.proc[0].timer.timePass(2);
+        pd.processor.timer.timePass(2);
         
         String temp = RealMachine.in.get();
         for (int i = 0; i < temp.length() / 4 + 1; i++)
@@ -571,21 +676,22 @@ public class VirtualMachine {
            setWord(x * 0x10 + i, new Word(temp.substring(i*4, end)));
         }
         
-        RealMachine.proc[0].CH2.setOpen();
-        RealMachine.proc[0].SI.setValue(0);
-        RealMachine.proc[0].mode.setUser();
+        pd.processor.CH2.setOpen();
+        * 
+        */
     }
     
     public void DPT (int x)
     {
-        RealMachine.proc[0].SI.setValue(2);      
-        RealMachine.proc[0].mode.SetSupervisor();
-        RealMachine.proc[0].CH1.setClosed();
+        pd.processor.SI.setValue(2); 
+        goTo(3);
+        /*
+        pd.processor.CH1.setClosed();
            
         RealMachine.gui.updateAll();
         pause(WAIT_TIME);
 
-        RealMachine.proc[0].timer.timePass(2);
+        pd.processor.timer.timePass(2);
         
         
         String temp = "";
@@ -599,116 +705,125 @@ public class VirtualMachine {
         
         RealMachine.out.send(temp);
         
-        RealMachine.proc[0].CH1.setOpen();
-        RealMachine.proc[0].mode.setUser();
-        RealMachine.proc[0].SI.setValue(0);
+        pd.processor.CH1.setOpen();
+        * 
+        */
     }    
     
     //Garsiakalbio komandos
     
     public void GGR1(){
-        RealMachine.proc[0].SI.setValue(3);
-        RealMachine.proc[0].mode.SetSupervisor();
-        RealMachine.proc[0].CH4.setClosed();
+        pd.processor.SI.setValue(3);
+        goTo(3);
+        /*
+        pd.processor.CH4.setClosed();
         
         RealMachine.gui.updateAll();
         pause(WAIT_TIME);
         
-        int volume = RealMachine.proc[0].R1.getValue().getIntValue();
+        int volume = pd.processor.R1.getValue().getIntValue();
         RealMachine.speakers[0].setVolume(volume);
         
-        RealMachine.proc[0].CH4.setOpen();
-        RealMachine.proc[0].SI.setValue(0);
-        RealMachine.proc[0].mode.setUser();       
+        pd.processor.CH4.setOpen();
+        * 
+        */
     }
     
     public void GGR2(){
-        RealMachine.proc[0].SI.setValue(3);
-        RealMachine.proc[0].mode.SetSupervisor();
-        RealMachine.proc[0].CH4.setClosed();
+        pd.processor.SI.setValue(3);
+        goTo(3);
+        /*
+        pd.processor.CH4.setClosed();
         
         RealMachine.gui.updateAll();
         pause(WAIT_TIME);
         
-        int volume = RealMachine.proc[0].R2.getValue().getIntValue();
+        int volume = pd.processor.R2.getValue().getIntValue();
         RealMachine.speakers[1].setVolume(volume);
         
-        RealMachine.proc[0].CH4.setOpen();
-        RealMachine.proc[0].SI.setValue(0);
-        RealMachine.proc[0].mode.setUser();
+        pd.processor.CH4.setOpen();
+        * 
+        */
     }
     
     public void GLR1(){
-        RealMachine.proc[0].SI.setValue(3);
-        RealMachine.proc[0].mode.SetSupervisor();
-        RealMachine.proc[0].CH4.setClosed();
+        pd.processor.SI.setValue(3);
+        
+        /*
+        pd.processor.CH4.setClosed();
         
         RealMachine.gui.updateAll();
         pause(WAIT_TIME);
         
-        int volume = RealMachine.proc[0].R1.getValue().getIntValue();
+        int volume = pd.processor.R1.getValue().getIntValue();
         RealMachine.speakers[0].setLength(volume);
         
-        RealMachine.proc[0].CH4.setOpen();
-        RealMachine.proc[0].SI.setValue(0);
-        RealMachine.proc[0].mode.setUser();
+        pd.processor.CH4.setOpen();
+        * 
+        */
     }
     
     public void GLR2(){
-        RealMachine.proc[0].SI.setValue(3);
-        RealMachine.proc[0].mode.SetSupervisor();
-        RealMachine.proc[0].CH4.setClosed();
+        pd.processor.SI.setValue(3);
+        goTo(3);
+        
+        /*
+        pd.processor.CH4.setClosed();
         
         RealMachine.gui.updateAll();
         pause(WAIT_TIME);
 
-        int volume = RealMachine.proc[0].R2.getValue().getIntValue();
+        int volume = pd.processor.R2.getValue().getIntValue();
         RealMachine.speakers[1].setLength(volume);
         
-        RealMachine.proc[0].CH4.setOpen();
-        RealMachine.proc[0].SI.setValue(0);
-        RealMachine.proc[0].mode.setUser();
+        pd.processor.CH4.setOpen();
+        * 
+        */
     }
     
     public void GNR1(){
-        RealMachine.proc[0].SI.setValue(3);
-        RealMachine.proc[0].mode.SetSupervisor();
-        RealMachine.proc[0].CH4.setClosed();
+        pd.processor.SI.setValue(3);
+        goTo(3);
+        
+        /*
+        pd.processor.CH4.setClosed();
         
         RealMachine.gui.updateAll();
         pause(WAIT_TIME);
         
-        int value = RealMachine.proc[0].R1.getValue().getIntValue();
+        int value = pd.processor.R1.getValue().getIntValue();
         RealMachine.speakers[0].play(value);
         
-        RealMachine.proc[0].CH4.setOpen();
-        RealMachine.proc[0].SI.setValue(0);
-        RealMachine.proc[0].mode.setUser();
+        pd.processor.CH4.setOpen();
+        * 
+        */
     }
     
     public void GNR2(){
-        RealMachine.proc[0].SI.setValue(3);
-        RealMachine.proc[0].mode.SetSupervisor();
-        RealMachine.proc[0].CH4.setClosed();
+        pd.processor.SI.setValue(3);
+        goTo(3);
+        /*
+        pd.processor.CH4.setClosed();
         
         
         RealMachine.gui.updateAll();
         pause(WAIT_TIME);
         
-        int value = RealMachine.proc[0].R2.getValue().getIntValue();
+        int value = pd.processor.R2.getValue().getIntValue();
         RealMachine.speakers[1].play(value);
         
-        RealMachine.proc[0].CH4.setOpen();
-        RealMachine.proc[0].SI.setValue(0);
-        RealMachine.proc[0].mode.setUser();
+        pd.processor.CH4.setOpen();
+        * 
+        */
     }
     
     //Programos pabaigos komadna
     
     public void HALT ()
     {
-        RealMachine.proc[0].SI.setValue(5);
-        RealMachine.proc[0].mode.SetSupervisor();
+        pd.processor.SI.setValue(5);
+        goTo(3);
+        
     }
     
     //Pagalbinės (ne virtualios mašinos)
@@ -829,4 +944,25 @@ public class VirtualMachine {
          } 
          catch (InterruptedException ex) {}
     }
+
+    private void setPLR()
+    {
+        String message = (String)pd.ownedResources.getFirst().value;
+        
+        int val = Character.digit(message.charAt(0), 16);
+        pd.procesorState.PLR.setA2((byte)val);
+        
+        val = Character.digit(message.charAt(1), 16);
+        pd.procesorState.PLR.setA3((byte)val);
+        
+        val = Integer.parseInt(message.substring(2, message.length()));
+        
+        if (val >= 0x10)
+            pd.procesorState.PLR.setA0((byte) 0);
+        else
+            pd.procesorState.PLR.setA0((byte) val);
+        
+        System.out.println("//////////////PLR: " + pd.procesorState.PLR.getValue());
+    }
+
 }
