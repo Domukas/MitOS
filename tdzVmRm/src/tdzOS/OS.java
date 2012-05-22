@@ -127,6 +127,11 @@ public class OS {
                     new ProcessorState(), null, components, state, priority,
                     parent, this);
                 break;
+            case Loader:
+                p = new Loader(processes, internalID, externalID,
+                    new ProcessorState(), null, components, state, priority,
+                    parent, this);
+                break;                
         }
         
         //Pridedam procesus i reikiamus sarasus
@@ -361,7 +366,6 @@ public class OS {
             case IvestaEiluteSupervizorinejeAtmintyje:
             case PranesimasLoaderProcesui:
                 System.out.println("Kuriamas resursas " + externalID);
-            
                 
                 r = new Resource(creator, externalID, internalID, false, //ne pakartotinio naudojimo
                 parameters, resourceManager);                   

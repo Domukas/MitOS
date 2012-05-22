@@ -73,7 +73,14 @@ public class MainProc extends Process
     {
         System.out.println("MainProc kuria JobGovernor");
         //Paduodam JobGovernor nuorodas i programa HDD
-        pd.core.createProcess(this, ProcessState.Ready, 80, pd.ownedResources, OS.ProcName.JobGovernor);
+        
+        //Paduodam job governoriui paskutini turima resursa 
+        //Kuriame issaugota nuorodos i HDD, kur programa
+        
+        LinkedList<ResComponent> toGive = new LinkedList<>();
+        toGive.add(pd.ownedResources.getLast());
+        
+        pd.core.createProcess(this, ProcessState.Ready, 80, toGive, OS.ProcName.JobGovernor);
         
         goTo(1);
     }

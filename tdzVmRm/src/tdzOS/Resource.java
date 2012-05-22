@@ -20,7 +20,7 @@ public class Resource {
             ResourceManager resourceManager)
     {
         
-        LinkedList<ResComponent> resComponents = new LinkedList<ResComponent>();
+        LinkedList<ResComponent> resComponents = new LinkedList<>();
         for (Object o: components)
             resComponents.add(new ResComponent(o, this));
             
