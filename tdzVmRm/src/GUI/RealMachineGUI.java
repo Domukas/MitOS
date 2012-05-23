@@ -40,6 +40,7 @@ public class RealMachineGUI extends javax.swing.JFrame {
     
     //Reikalinga nusakyti lenteles reiksmiu tipui
     TableDataTypes tableDataType = TableDataTypes.Hex;
+    
     public enum TableDataTypes {
         Int,
         Hex,
@@ -74,8 +75,15 @@ public class RealMachineGUI extends javax.swing.JFrame {
             memoryTable.getColumn(memoryTable.getColumnName(i)).setCellRenderer(cr);
         }
         
-        processesJTable.setModel(new ProcessesTableModel(os));
-        resourcesJTable.setModel(new ResourcesTableModel(os));
+        infoJTable.setModel(new InfoTableModel(os));
+        
+        ListSelectionListener infoJTableListener = new ListSelectionListener()
+        {
+            public void valueChanged(ListSelectionEvent e) {
+                updateInfoJTable();
+            }
+        };
+        infoJTable.getSelectionModel().addListSelectionListener(infoJTableListener);
          
     }
     
@@ -107,14 +115,12 @@ public class RealMachineGUI extends javax.swing.JFrame {
         if (RealMachine.VM != null)
             vm1MemoryTable.repaint();
             * */
-            
-        processSelected();
-        resourceSelected();
+        updateInfoJTable();
     }
     
     private void processSelected(){
-        int index = processesJTable.getSelectedRow(); 
-        if (index >= 0)
+        int index = infoJTable.getSelectedRow(); 
+        if (index >= 0 && index < os.processes.size())
         {
             ProcessDescriptor pd = os.processes.get(index).pd;
             String text = "";
@@ -134,8 +140,8 @@ public class RealMachineGUI extends javax.swing.JFrame {
     }
     
     private void resourceSelected(){
-        int index = resourcesJTable.getSelectedRow();
-        if (index >= 0)
+        int index = infoJTable.getSelectedRow();
+        if (index >= 0 && index < os.resources.size())
         {
             ResourceDescriptor rd = os.resources.get(index).rd;
             String text = "";
@@ -145,6 +151,13 @@ public class RealMachineGUI extends javax.swing.JFrame {
             text += "\nComponent count: "+rd.components.size();
             infoJTextArea.setText(text);
         }
+    }
+    
+    private void updateInfoJTable() {
+        if (infoJTable.getSelectedColumn()==0)
+                    processSelected();
+                else
+                    resourceSelected();
     }
     
     private void updateProcessorJPanels(){
@@ -175,10 +188,8 @@ public class RealMachineGUI extends javax.swing.JFrame {
         operationsPanel = new javax.swing.JPanel();
         processorsTabbedPane = new javax.swing.JTabbedPane();
         procResJPanel = new javax.swing.JPanel();
-        processesJScrollPane = new javax.swing.JScrollPane();
-        processesJTable = new javax.swing.JTable();
-        resourcesJScrollPane = new javax.swing.JScrollPane();
-        resourcesJTable = new javax.swing.JTable();
+        infoTableJScrollPane = new javax.swing.JScrollPane();
+        infoJTable = new javax.swing.JTable();
         infoJPanel = new javax.swing.JPanel();
         infoLabel = new javax.swing.JLabel();
         infoJScrollPane = new javax.swing.JScrollPane();
@@ -207,10 +218,10 @@ public class RealMachineGUI extends javax.swing.JFrame {
 
         procResJPanel.setLayout(new java.awt.GridLayout(1, 0));
 
-        processesJScrollPane.setMinimumSize(new java.awt.Dimension(128, 128));
-        processesJScrollPane.setPreferredSize(new java.awt.Dimension(128, 400));
+        infoTableJScrollPane.setMinimumSize(new java.awt.Dimension(128, 128));
+        infoTableJScrollPane.setPreferredSize(new java.awt.Dimension(128, 400));
 
-        processesJTable.setModel(new javax.swing.table.DefaultTableModel(
+        infoJTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -221,48 +232,20 @@ public class RealMachineGUI extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        processesJTable.setColumnSelectionAllowed(true);
-        processesJTable.setFillsViewportHeight(true);
-        processesJTable.setMaximumSize(new java.awt.Dimension(2147483647, 2147483647));
-        processesJTable.setPreferredSize(new java.awt.Dimension(128, 100));
-        processesJTable.getTableHeader().setReorderingAllowed(false);
-        processesJTable.addMouseListener(new java.awt.event.MouseAdapter() {
+        infoJTable.setColumnSelectionAllowed(true);
+        infoJTable.setFillsViewportHeight(true);
+        infoJTable.setMaximumSize(new java.awt.Dimension(2147483647, 2147483647));
+        infoJTable.setPreferredSize(new java.awt.Dimension(128, 100));
+        infoJTable.getTableHeader().setReorderingAllowed(false);
+        infoJTable.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                processesJTableMouseClicked(evt);
+                infoJTableMouseClicked(evt);
             }
         });
-        processesJScrollPane.setViewportView(processesJTable);
-        processesJTable.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        infoTableJScrollPane.setViewportView(infoJTable);
+        infoJTable.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
 
-        procResJPanel.add(processesJScrollPane);
-
-        resourcesJScrollPane.setMinimumSize(new java.awt.Dimension(128, 128));
-        resourcesJScrollPane.setPreferredSize(new java.awt.Dimension(128, 400));
-
-        resourcesJTable.setModel(new javax.swing.table.DefaultTableModel(
-            new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
-            },
-            new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
-            }
-        ));
-        resourcesJTable.setColumnSelectionAllowed(true);
-        resourcesJTable.setFillsViewportHeight(true);
-        resourcesJTable.setPreferredSize(new java.awt.Dimension(128, 100));
-        resourcesJTable.getTableHeader().setReorderingAllowed(false);
-        resourcesJTable.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                resourcesJTableMouseClicked(evt);
-            }
-        });
-        resourcesJScrollPane.setViewportView(resourcesJTable);
-        resourcesJTable.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-
-        procResJPanel.add(resourcesJScrollPane);
+        procResJPanel.add(infoTableJScrollPane);
 
         operationsPanel.add(procResJPanel);
 
@@ -441,22 +424,18 @@ public class RealMachineGUI extends javax.swing.JFrame {
         taskNameField.setText("");
     }//GEN-LAST:event_taskNameFieldMouseClicked
 
-    private void processesJTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_processesJTableMouseClicked
-        processSelected();
-        resourcesJTable.clearSelection();
-    }//GEN-LAST:event_processesJTableMouseClicked
-
-    private void resourcesJTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_resourcesJTableMouseClicked
-        resourceSelected();
-        processesJTable.clearSelection();
-    }//GEN-LAST:event_resourcesJTableMouseClicked
+    private void infoJTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_infoJTableMouseClicked
+        updateInfoJTable();
+    }//GEN-LAST:event_infoJTableMouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel buttonPanel;
     private javax.swing.JPanel infoJPanel;
     private javax.swing.JScrollPane infoJScrollPane;
+    private javax.swing.JTable infoJTable;
     private javax.swing.JTextArea infoJTextArea;
     private javax.swing.JLabel infoLabel;
+    private javax.swing.JScrollPane infoTableJScrollPane;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JPanel memoryPanel;
     private javax.swing.JTabbedPane memoryTabbedPane;
@@ -464,11 +443,7 @@ public class RealMachineGUI extends javax.swing.JFrame {
     private javax.swing.JPanel operationsPanel;
     private javax.swing.JButton osStepButton;
     private javax.swing.JPanel procResJPanel;
-    private javax.swing.JScrollPane processesJScrollPane;
-    private javax.swing.JTable processesJTable;
     private javax.swing.JTabbedPane processorsTabbedPane;
-    private javax.swing.JScrollPane resourcesJScrollPane;
-    private javax.swing.JTable resourcesJTable;
     private javax.swing.JPanel rightSidePanel;
     private javax.swing.JButton runButton;
     private javax.swing.JButton stepButton;
