@@ -33,7 +33,7 @@ public class Processor {
         IC = new ICRegister();
         C = new CRegister();
         S = new SemaphoreRegister();
-        timer = new TimerRegister(50); 
+        timer = new TimerRegister(3); 
         mode  = new ModeRegister();
         PI = new INTRegister();
         SI = new INTRegister();

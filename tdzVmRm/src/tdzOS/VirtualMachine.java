@@ -51,12 +51,14 @@ OF = 1 – priešingu atveju.
 
 public class VirtualMachine extends Process
 {
-
     static final int WAIT_TIME = 3000;
     
     public DataRegister R1, R2;
     public ICRegister IC;
     public CRegister C;
+    
+    boolean timerInt = false;
+    
     
     public VirtualMemory memory;
     
@@ -102,7 +104,7 @@ public class VirtualMachine extends Process
     //1
     private void switchToUser()
     {
-        System.out.println("VirtualMachine perjungia procesorių į supervizoriaus rėžimą");
+        System.out.println("VirtualMachine perjungia procesorių į vartotojo rėžimą");
         pd.processor.mode.setUser();
         
         IC = pd.processor.IC;
@@ -148,7 +150,7 @@ public class VirtualMachine extends Process
         pd.core.createResource(this, ResName.PranesimasApiePertraukima, parameters);
         //pd.core.requestResource(this, ResName.MOSPabaiga, 1);
 
-        resetInterruptReginsters();
+        resetInterruptRegisters();
         
         next();
     }
@@ -175,7 +177,7 @@ public class VirtualMachine extends Process
     
     public void stepVM()
     {    
-        if ((pd.processor.SI.getValue() != 5) && (pd.processor.PI.getValue() == 0))
+        if ((pd.processor.SI.getValue() != 5) && (pd.processor.PI.getValue() == 0) && !timerInt)
         {
             Word currentCommand = getCurrentCommand();
             goToNextCommand();
@@ -197,7 +199,10 @@ public class VirtualMachine extends Process
         val++;
         IC.setValue(val);
         
-        pd.processor.timer.timePass(1);
+        if (pd.processor.timer.timePass(1))
+            timerInt = true;
+            
+            
     }
        
     private void processCommand(Word currentWord)
@@ -1004,7 +1009,7 @@ public class VirtualMachine extends Process
                 + pd.processor.PLR.getA3()).getWord(adress).getIntValue();
     }
 
-    private void resetInterruptReginsters()
+    private void resetInterruptRegisters()
     {
         
         if (pd.processor != null)

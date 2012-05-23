@@ -99,6 +99,7 @@ public class Interrupt extends Process
             case 4:
                 parameters.add("Bendra atmintis");
                 parameters.add(OPC);
+                parameters.add(commandParameter);
                 break;
                 
             case 5:

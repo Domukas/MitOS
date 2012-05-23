@@ -143,6 +143,12 @@ public class OS {
                     new ProcessorState(), null, components, state, priority,
                     parent, this);
                 break;       
+            case SharedMemoryControl:
+                p = new SharedMemoryControl(processes, internalID, externalID,
+                    new ProcessorState(), null, components, state, priority,
+                    parent, this);
+                break;       
+                
         }
         
         if (externalID != ProcName.StartStop)
@@ -389,6 +395,7 @@ public class OS {
             case PranesimasGetLineProcesui:
             case PratestiVMDarba:
             case PranesimasSharedMemorycontrolProcesui:
+            case PranesimasJobGovernor:
                 System.out.println("Kuriamas resursas " + externalID);
                 
                 r = new Resource(creator, externalID, internalID, false, //ne pakartotinio naudojimo
@@ -546,11 +553,25 @@ public class OS {
             if (p.pd.currentProcess != null)
             {
                 System.out.println("Suveikia procesas: " + p.pd.currentProcess.pd.externalID
-                        + " " + p.pd.currentProcess.pd.internalID);
+                        + " #" + p.pd.currentProcess.pd.internalID);
 
                 p.pd.currentProcess.step();
             }
         }
+        
+    }
+    
+    public void stepToVM()
+    {
+        boolean stop = false;
+        while (!stop && (runProcesses.size()!= 0))
+        {
+            step();
+            for (Process p:processes)
+                if (p instanceof VirtualMachine)
+                    stop = true;
+        }
+        
         
     }
     
