@@ -9,6 +9,7 @@ import java.awt.Component;
 import java.awt.Font;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
+import tdzVmRm.Processor;
 import tdzVmRm.RealMachine;
 
 /**
@@ -38,16 +39,16 @@ public Component getTableCellRendererComponent(JTable table, Object value,boolea
             setBackground(table.getBackground());
             setForeground(table.getForeground());
             //Spalvinam virtualios masinos atminties blokus geltonai
-            for (int procID = 0; procID < rm.proc.length; procID++)
+            for (Processor p : rm.proc)
             {
                 int blockCount = 0x10;
-                if (rm.proc[procID].PLR.getA1() != 0)
-                    blockCount = rm.proc[procID].PLR.getA1();
+                if (p.PLR.getA1() != 0)
+                    blockCount = p.PLR.getA1();
                 for (int i = 0; i <= blockCount-1; i++){
-                    if (row == rm.memory.getBlock(rm.proc[procID].PLR.getA2()*0x10 + rm.proc[procID].PLR.getA3()).getWord(i).getIntValue())
+                    if (row == rm.memory.getBlock(p.PLR.getA2()*0x10 + p.PLR.getA3()).getWord(i).getIntValue())
                     {
                         setBackground(new Color(0xFFFF00));
-                        setToolTipText("Processor "+procID+" Block "+(i+1));
+                        setToolTipText("Processor "+p.pd.number+" Block "+(i+1));
                     }
                 }
                 //Spalvinam bendros atminties blokus zaliai
@@ -57,9 +58,9 @@ public Component getTableCellRendererComponent(JTable table, Object value,boolea
                     setBackground(new Color(0x77FF77));
                 }
                 //Spalvinam PLR registro naudojama bloka raudonai
-                if (row == rm.proc[procID].PLR.getA2()*0x10+rm.proc[procID].PLR.getA3())
+                if (row == p.PLR.getA2()*0x10+p.PLR.getA3())
                 {
-                    setToolTipText("Processor "+procID+" Page table");
+                    setToolTipText("Processor "+p.pd.number+" Page table");
                     setBackground(new Color(0xFF0000));
                 }
             }

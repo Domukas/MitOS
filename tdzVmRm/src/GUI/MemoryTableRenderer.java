@@ -9,6 +9,11 @@ import java.awt.Component;
 import java.awt.Font;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
+import tdzOS.OS;
+import tdzOS.OS.ProcessState;
+import tdzOS.ProcessDescriptor;
+import tdzOS.VirtualMachine;
+import tdzVmRm.Processor;
 import tdzVmRm.RealMachine;
 
 /**
@@ -37,14 +42,25 @@ public Component getTableCellRendererComponent(JTable table, Object value,boolea
             //Spalvinam IC reiksme
             if (table.getModel() instanceof  VirtualMemoryTableModel)
             {
-                if ((row == RealMachine.proc[0].IC.getValue() / 16)&&(column-1 == RealMachine.proc[0].IC.getValue() % 16))
-                    setBackground(new Color(0xFFFF00));
-            } else if (table.getModel() instanceof  MemoryTableModel)
+                ProcessDescriptor pd = ((VirtualMemoryTableModel) table.getModel()).vm.pd;
+                int icValue = pd.procesorState.IC.getValue();
+                if (pd.state == ProcessState.Run)
+                    icValue = pd.processor.IC.getValue();
+                if ((row ==  icValue / 16)&&(column-1 == icValue % 16))
+                    setBackground(new Color(0xFFFF00));   
+            } 
+            /* Nebespalvinam RM'e IC reiksmes, ju per daug
+            else if (table.getModel() instanceof  MemoryTableModel)
             {
-                if ((column-1 == (RealMachine.proc[0].IC.getValue() % 16)) &&
-                    (row == RealMachine.memory.getBlock(RealMachine.proc[0].PLR.getA2()*0x10 + RealMachine.proc[0].PLR.getA3()).getWord(RealMachine.proc[0].IC.getValue() / 16).getIntValue()))
+                for (Processor p:RealMachine.proc)
+                {
+                    if ((column-1 == (p.IC.getValue() % 16)) &&
+                        (row == RealMachine.memory.getBlock(p.PLR.getA2()*0x10 + p.PLR.getA3()).getWord(p.IC.getValue() / 16).getIntValue()))
+                    {
                         setBackground(new Color(0xFFFF00));
-            }
+                    }
+                }
+            }*/
         }
          return this;
      }

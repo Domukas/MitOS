@@ -13,7 +13,7 @@ import tdzVmRm.registers.*;
  *
  * @author Tomas
  */
-class ProcessorState {
+public class ProcessorState {
     public  PLRRegister PLR;
     public  DataRegister R1, R2;
     public  ICRegister IC;

@@ -82,9 +82,9 @@ public class RealMachineGUI extends javax.swing.JFrame {
     public void createVMTab(VirtualMachine vm)
     {
         vm1MemoryTable = new JTable();
-        vm1MemoryTable.setModel(new VirtualMemoryTableModel(RM,this));
+        vm1MemoryTable.setModel(new VirtualMemoryTableModel(RM,vm,this));
         vm1MemoryTable.setFillsViewportHeight(true);
-        memoryTabbedPane.add("VM1", new JScrollPane(vm1MemoryTable));
+        memoryTabbedPane.add("VM#"+vm.pd.internalID, new JScrollPane(vm1MemoryTable));
         vm1MemoryTable.setColumnSelectionAllowed(true);
         vm1MemoryTable.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
         vm1MemoryTable.getColumnModel().getColumn(0).setMaxWidth(32);
