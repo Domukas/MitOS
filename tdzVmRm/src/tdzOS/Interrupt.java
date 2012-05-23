@@ -58,6 +58,11 @@ public class Interrupt extends Process
     {   
         System.out.println("Interrupt nustato pertraukino tipą");
         
+        for (ResComponent rc: pd.ownedResources)
+        {
+            System.out.print(rc.value);
+        }
+        
         PI = (Integer)pd.ownedResources.get(0).value;
         SI = (Integer)pd.ownedResources.get(1).value;
         commandParameter = (Integer)pd.ownedResources.get(3).value;
@@ -120,6 +125,8 @@ public class Interrupt extends Process
         tempList.add(parameters);
         
         pd.core.createResource(this, ResName.Pertraukimas, tempList);
+        
+        pd.ownedResources.clear();
         goTo(1);
         
     }

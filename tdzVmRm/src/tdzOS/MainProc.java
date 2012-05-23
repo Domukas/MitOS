@@ -82,6 +82,8 @@ public class MainProc extends Process
         
         pd.core.createProcess(this, ProcessState.Ready, 80, toGive, OS.ProcName.JobGovernor);
         
+        pd.ownedResources.clear();
+        
         goTo(1);
     }
     
@@ -95,6 +97,8 @@ public class MainProc extends Process
 
         //Naikinam jobGovernor'iu
         pd.core.destroyProcess(parent);
+        
+        pd.ownedResources.clear();
 
         goTo(1); 
     }  

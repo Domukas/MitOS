@@ -39,7 +39,7 @@ public class OS {
         PranesimasJobGovernor, PranesimasSharedMemorycontrolProcesui, 
         PranesimasLoaderProcesui, //REIKIA SUTVARKYT DOKUMENTE, BUS PAKEITIMU DEL TO
         IvestaEiluteSupervizorinejeAtmintyje, //prikuriau nzn ar reikia
-        PratestiVMDarba
+        PratestiVMDarba, Neegzistuojantis
     }
     
     public LinkedList<Process> processes;
@@ -232,7 +232,11 @@ public class OS {
         //ismetam procesa is visu procesu saraso
         removeProcessesFromLists(process);
         
+        LinkedList<ResComponent> tempList = new LinkedList<>();
         for (ResComponent c:process.pd.ownedResources)
+            tempList.add(c);
+        
+        for (ResComponent c:tempList)
         {
             //jei resursas pakartotino naudojimo
             if (c.parent.rd.reusable)
@@ -383,6 +387,8 @@ public class OS {
             case PranesimasApiePertraukima:
             case Pertraukimas:
             case PranesimasGetLineProcesui:
+            case PratestiVMDarba:
+            case PranesimasSharedMemorycontrolProcesui:
                 System.out.println("Kuriamas resursas " + externalID);
                 
                 r = new Resource(creator, externalID, internalID, false, //ne pakartotinio naudojimo
@@ -485,13 +491,18 @@ public class OS {
                 tmpRes = resources.get(i);
                 break;
             }
+        
         }
+        
+        LinkedList<ResComponent> tmpList = new LinkedList<>();
+        for (ResComponent c:process.pd.ownedResources)
+            tmpList.add(c);
         
         if (isInFreeList)
         {   
             //reiks prideti jo komponentus
 
-            for (ResComponent c:process.pd.ownedResources)
+            for (ResComponent c: tmpList)
             {
                 //neaisku ar suveiks.... //TODO
                 //atiduodam komponentus...
@@ -510,7 +521,7 @@ public class OS {
             resources.add(r);
             
             //Grazinam jam komponentus
-            for (ResComponent c:process.pd.ownedResources)
+            for (ResComponent c:tmpList)
             {
                 tmpRes.rd.components.add(c);
                 process.pd.ownedResources.remove(c);

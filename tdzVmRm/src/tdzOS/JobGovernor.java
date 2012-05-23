@@ -221,7 +221,7 @@ public class JobGovernor extends Process
     private void stopVirtualMachine()
     {
         System.out.println("JobGovernor stabdo VM");
-        pd.children.getLast().pd.state = ProcessState.BlockedS;
+        pd.children.getLast().pd.state = ProcessState.ReadyS;
         
         next();
     }
@@ -250,36 +250,64 @@ public class JobGovernor extends Process
     //10
     private void isSharedMemoryInterrupt()
     {
+        if ((String)tempList.getFirst() == "Bendra atmintis")
+        {
+            System.out.println("Darbo su bendra atmintimi pertraukimas");
+            goTo(23);
+        }
+        else
+        {
+            System.out.println("Ne darbo su bendra atmintimi pertraukimas. Naikinama VM");
+            goTo(11);
+        }         
         
     }
     
     //11
     private void destroyVM()
     {
+        System.out.println("JobGovernor naikina VM");
+        pd.core.destroyProcess(pd.children.getLast());
+        next();
         
     }
     
     //12
     private void freeMemory()
     {
+        System.out.println("JobGovernor atlaisvina atmintį");
+        pd.core.freeResource(this, pd.ownedResources.get(2).parent);
         
+        next();
     }
     
     //13
     private void destroySharedMemoryControl()
     {
+        System.out.println("JobGovernor naikina procesą SharedMemoryControl");
         
+        next();
     }
     
     //14
     private void createJobInHDD()
     {
+        System.out.println("JobGovernor kuria fiktyvų užduoties resursą");
+        LinkedList<String> tmp = new LinkedList<>();
+        LinkedList<Object> parameter = new LinkedList<>();
         
+        parameter.add(tmp);
+        
+        pd.core.createResource(this, ResName.UzduotisHDD, parameter);
+        
+        next();
     }
     
     //15
     private void blockForUnexistingResource()
     {
+        System.out.println();
+        pd.core.requestResource(this, ResName.Neegzistuojantis, 1);
         
     }
     
@@ -322,6 +350,8 @@ public class JobGovernor extends Process
     //19
     private void createLineInMemory()
     {
+        //sukuriam eilute ir ja pasiunciam isvedimo procesui
+        
         String temp = "";
         commandParameter = (Integer)tempList.get(1);
 
@@ -338,7 +368,7 @@ public class JobGovernor extends Process
         pd.core.createResource(this, ResName.EiluteAtmintyje, createMessage(temp));
         RealMachine.out.send(temp);
         
-        goTo(7); //Reikia eit i aktyvavima VM'o
+        goTo(26); //Reikia eit i aktyvavima VM'o
     }
     
     //20
@@ -365,36 +395,73 @@ public class JobGovernor extends Process
         System.out.print("JobGovernor blokuojasi dėl resurso [Įvesta eilutė atmintyje]");
         pd.core.requestResource(this, ResName.IvestaEiluteSupervizorinejeAtmintyje, 1);
         
-        goTo(7);
+        goTo(26);
         
     }
     //23
     private void messageToSharedMemoryControl()
     {
+        System.out.print("JobGovernor kuria resursą [Pranešimas SharedMemoryControl]");
+        LinkedList<Object> tempParameters = new LinkedList<>();
+        
+        tempParameters.add(OPC);
+        tempParameters.add(commandParameter);
+        tempParameters.add(pd.children.getLast());
+        
+        LinkedList<Object> parameters = new LinkedList<>();
+        parameters.add(tempParameters);
+        
+        pd.core.createResource(this, ResName.PranesimasSharedMemorycontrolProcesui, parameters);
+        
+        next();
         
     }
     
     //24
     private void blockForResult()
     {
+        System.out.print("JobGovernor blokuojasi dėl resurso [Pranešimas JobGovernor procesui]");
+        pd.core.requestResource(this, ResName.PranesimasJobGovernor, 1);
+        
+        next();
         
     }
     
     //25
     private void isResultZero()
     {
+        String result = (String)pd.ownedResources.getLast().value;
+        
+        if (Integer.parseInt(result) == 0)
+        {
+            System.out.print("Rezultatas = 0");
+            goTo(26);
+        }
+        else 
+        {
+            System.out.print("Rezultatas = 1");
+            goTo(11);
+        }
         
     }
     
     //26
     private void activateVirtualMachine()
     {
+        System.out.println("JobGovernor aktyvuoja VM");
+        pd.children.getLast().pd.state = ProcessState.Ready;
+        
+        next();
+        
         
     }
     
     //27
     private void createResourceResumeVM()
     {
+        System.out.println("JobGovernor kuria resursą [Pratęsti VM darbą]");
+        pd.core.createResource(this, ResName.PratestiVMDarba, createMessage("PratestiDarba"));
         
+        goTo(7);
     }
 }

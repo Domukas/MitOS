@@ -138,7 +138,6 @@ public class VirtualMachine extends Process
 
         if ((OPC.equals("DGT")) || (OPC.equals("DPT")))
         {
-            System.out.println("////////////////////"+OPC);
             commandParameter = getRealBlockAdress(commandParameter);
         }
             
@@ -147,6 +146,8 @@ public class VirtualMachine extends Process
         pd.core.createResource(this, ResName.PranesimasApiePertraukima, parameters);
         //pd.core.requestResource(this, ResName.MOSPabaiga, 1);
 
+        resetInterruptReginsters();
+        
         next();
     }
     
@@ -686,6 +687,7 @@ public class VirtualMachine extends Process
         pd.processor.SI.setValue(1);
         commandParameter = x;
         goTo(3);
+        
         /*
         pd.processor.CH2.setClosed();
         
@@ -715,6 +717,7 @@ public class VirtualMachine extends Process
         pd.processor.SI.setValue(2); 
         commandParameter = x;
         goTo(3);
+        
         /*
         pd.processor.CH1.setClosed();
            
@@ -997,6 +1000,16 @@ public class VirtualMachine extends Process
     {
         return RealMachine.memory.getBlock(pd.processor.PLR.getA2()*0x10
                 + pd.processor.PLR.getA3()).getWord(adress).getIntValue();
+    }
+
+    private void resetInterruptReginsters()
+    {
+        
+        if (pd.processor != null)
+        {
+            pd.processor.PI.setValue(0);
+            pd.processor.SI.setValue(0);
+        }
     }
 
 }
