@@ -6,7 +6,6 @@ package GUI;
 
 import tdzVmRm.MemoryBlock;
 import tdzVmRm.RealMachine;
-import tdzVmRm.VirtualMachine;
 import tdzVmRm.VirtualMemory;
 
 /**
@@ -19,7 +18,7 @@ public class VirtualMemoryTableModel extends MemoryTableModel {
     
 	public VirtualMemoryTableModel(RealMachine realMachine, RealMachineGUI ownerGUI){
             super(realMachine, ownerGUI);
-            memory = realMachine.VM.memory;
+            //memory = realMachine.VM.memory;
             this.ownerGUI = ownerGUI;
 	}
 }

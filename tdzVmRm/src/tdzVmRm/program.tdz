@@ -1,4 +1,4 @@
-@Memory 10
+@Memory 5
 @Code
 JP03
 00AA    
@@ -6,7 +6,7 @@ JP03
 L101
 A102
 S110
-DPT1
-JP03
+DPT0
+LCK1
 HALT
 @CodeEnd
