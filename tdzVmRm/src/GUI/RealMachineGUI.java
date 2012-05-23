@@ -220,6 +220,7 @@ public class RealMachineGUI extends javax.swing.JFrame {
         ));
         processesJTable.setColumnSelectionAllowed(true);
         processesJTable.setFillsViewportHeight(true);
+        processesJTable.setMaximumSize(new java.awt.Dimension(2147483647, 2147483647));
         processesJTable.setPreferredSize(new java.awt.Dimension(128, 100));
         processesJTable.getTableHeader().setReorderingAllowed(false);
         processesJTable.addMouseListener(new java.awt.event.MouseAdapter() {
