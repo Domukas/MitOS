@@ -121,6 +121,7 @@ public class Interrupt extends Process
     
     private void createResourcePertraukimas()
     {
+        
         System.out.println("Interrupt kuria resursą [Pertraukimas]");
         LinkedList<Object> tempList = new LinkedList<>(); //Viska supakauojam i viena sarasa, nes governor'ius nezinos kiek prasyt
         tempList.add(parameters);

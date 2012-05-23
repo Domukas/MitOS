@@ -231,6 +231,7 @@ public class JobGovernor extends Process
     {
         for (ResComponent rc: pd.ownedResources)
             System.out.println(rc.value);
+        
         tempList = (LinkedList<Object>)pd.ownedResources.getLast().value;
         
         

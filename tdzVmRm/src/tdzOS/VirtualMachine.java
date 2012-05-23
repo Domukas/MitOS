@@ -177,7 +177,7 @@ public class VirtualMachine extends Process
     
     public void stepVM()
     {    
-        if ((pd.processor.SI.getValue() != 5) && (pd.processor.PI.getValue() == 0) && !timerInt)
+        if ((pd.processor.SI.getValue() != 5) && (pd.processor.PI.getValue() == 0))
         {
             Word currentCommand = getCurrentCommand();
             goToNextCommand();
