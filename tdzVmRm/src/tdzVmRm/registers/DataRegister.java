@@ -40,5 +40,5 @@ public class DataRegister {
     {
         return data;
     }
-    
+     
 }

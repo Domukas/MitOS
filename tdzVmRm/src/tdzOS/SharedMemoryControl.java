@@ -6,6 +6,7 @@ package tdzOS;
 
 import java.util.LinkedList;
 import tdzVmRm.Processor;
+import tdzVmRm.RealMachine;
 import tdzVmRm.Word;
 
 /**
@@ -16,7 +17,8 @@ public class SharedMemoryControl extends Process{
     
     String command;
     int adress;
-    Process VM;
+    VirtualMachine VM;
+    LinkedList<Integer> lockedBLocks = new LinkedList<>();
     
     public SharedMemoryControl (LinkedList inList, int internalID, OS.ProcName externalID, 
            ProcessorState ps, Processor p, LinkedList<ResComponent> or,
@@ -47,7 +49,7 @@ public class SharedMemoryControl extends Process{
                 break;
                 
             case 5:
-                blocking();
+                locking();
                 break;
                 
             case 6:
@@ -63,7 +65,7 @@ public class SharedMemoryControl extends Process{
                 break;
                 
             case 9:
-                unblocking();
+                unlocking();
                 break;
                 
             case 10:
@@ -101,6 +103,9 @@ public class SharedMemoryControl extends Process{
     {
         System.out.println("SharedMemoryControl blokuojasi dėl resurso [Pranešimas SharedMemoryControl procesui]");
         pd.core.requestResource(this, OS.ResName.PranesimasSharedMemorycontrolProcesui, 1);
+        
+        pd.ownedResources.clear();
+        
         next();
     }
     
@@ -109,12 +114,15 @@ public class SharedMemoryControl extends Process{
     {
         //Issisaugom ka gavom
         
-        LinkedList<Object> temp = new LinkedList<>();
+        LinkedList<Object> temp;
         temp =(LinkedList<Object>) pd.ownedResources.getFirst().value;
         
         command = (String)temp.get(0);
         adress = (Integer)temp.get(1);
-        VM = (Process)temp.get(2);
+        VM = (VirtualMachine)temp.get(2);
+        
+        for (Object o:temp)
+            System.out.println("gauna:" + o);
         
         System.out.println("SharedMemoryControl tikrina ar bloką bando užrakinti");
         if(command.equals("LCK"))
@@ -131,8 +139,8 @@ public class SharedMemoryControl extends Process{
     private void isBlockUnlocked1()
     {
         System.out.println("SharedMemoryControl tikrina tas blokas atrakintas");
-        if(!pd.processor.S.isBitSet((int)pd.ownedResources.get(1).value)) //0 ar 1 nesvarbu, nes ir tas ir tas turetu ta pati rodyti
-        {                                                                   //laikau kad antrasis komponentas yra adresas, o pirmas pati komanda 
+        if(!pd.processor.S.isBitSet(adress)) //0 ar 1 nesvarbu, nes ir tas ir tas turetu ta pati rodyti
+        {                                    //laikau kad antrasis komponentas yra adresas, o pirmas pati komanda 
             goTo(5);
         }
         else
@@ -152,10 +160,10 @@ public class SharedMemoryControl extends Process{
     }
     
     //5
-    private void blocking()
+    private void locking()
     {
-        System.out.println("SharedMemoryControl rakina bloką");
-        pd.processor.S.setBit((int)pd.ownedResources.get(1).value);
+        System.out.println("SharedMemoryControl rakina bloką: " + adress);
+        lockAll(adress);
         goTo(13);
     }
     
@@ -163,7 +171,7 @@ public class SharedMemoryControl extends Process{
     private void isBlockUnlocking()
     {
         System.out.println("SharedMemoryControl tikrina ar bandomas atrakinti blokas");
-        if((String)pd.ownedResources.getFirst().value == "ULC")
+        if(command.equals("ULC"))
         {
             next();
         }
@@ -174,10 +182,10 @@ public class SharedMemoryControl extends Process{
     }
     
     //7
-    private void isBlockUnlocked2() //doke klaida pagal mane
+    private void isBlockUnlocked2()
     {
-        System.out.println("SharedMemoryControl tikrina tas blokas atrakintas");
-        if(!pd.processor.S.isBitSet((int)pd.ownedResources.get(1).value))
+        System.out.println("SharedMemoryControl tikrina ar tas blokas atrakintas");
+        if(!pd.processor.S.isBitSet(adress))
         {
             goTo(13);
         }
@@ -188,10 +196,10 @@ public class SharedMemoryControl extends Process{
     }
     
     //8
-    private void isBlockedByThisVM1()//TODO
+    private void isBlockedByThisVM1()
     {
         System.out.println("SharedMemoryControl tikrina ar bloka uzrakino ta pati VM");
-        if(pd.ownedResources.get(2).value == pd.parent.pd.children.get(1)) //ar uzrakino ta pati masina
+        if(lockedBLocks.contains(adress/16)) //ar uzrakino ta pati masina
         {
             next();
         }
@@ -202,18 +210,19 @@ public class SharedMemoryControl extends Process{
     }
     
     //9
-    private void unblocking()
+    private void unlocking()
     {
         System.out.println("SharedMemoryControl atrakinamas blokas");
-        pd.processor.S.unsetBit((int)pd.ownedResources.get(1).value);
+        unlockAll(adress);
         goTo(13);
     }
     
     //10
     private void isBlockLocked()
     {
-        System.out.println("SharedMemoryControl tikrina tas blokas užrakintas");
-        if(pd.processor.S.isBitSet((int)pd.ownedResources.get(1).value))
+        System.out.println("SharedMemoryControl tikrina ar tas blokas užrakintas");
+        //System.out.println(adress + " " + adress/16 + Integer.toBinaryString(pd.processor.S.getValue()) + pd.processor.S.isBitSet(adress/16));
+        if(pd.processor.S.isBitSet(adress/16))
         {
             next();
         }
@@ -224,10 +233,10 @@ public class SharedMemoryControl extends Process{
     }
     
     //11
-    private void isBlockedByThisVM2()//TODO
+    private void isBlockedByThisVM2()
     {
         System.out.println("SharedMemoryControl tikrina ar bloka uzrakino ta pati VM");
-        if(pd.ownedResources.get(2).value == pd.parent.pd.children.get(1)) //ar uzrakino ta pati masina
+        if(lockedBLocks.contains(adress/16)) //ar uzrakino ta pati masina
         {
             next();
         }
@@ -238,23 +247,25 @@ public class SharedMemoryControl extends Process{
     }
     
     //12
-    private void readingOrWriting()//TODO
+    private void readingOrWriting()
     {
         System.out.println("SharedMemoryControl atlieka rašymą arba skaitymą");
-        if((String)pd.ownedResources.getFirst().value == "X1")
+        
+        switch (command)
         {
-          //  pd.processor.R1.setValue((Word)pd.ownedResources.get(1).value); //nukopijuoja adreso reiksme/
-        }
-        else if((String)pd.ownedResources.getFirst().value == "X2")
-        {
-         //   pd.processor.R2.setValue((Word)pd.ownedResources.get(2).value);
-        }
-        else if((String)pd.ownedResources.getFirst().value == "Z1")
-        {
-      //     pd.ownedResources.get(2).value  .setValue(pd.processor.R1.getValue());
-        }
-        else if((String)pd.ownedResources.getFirst().value == "Z2")
-        {
+            case "X1":
+                VM.pd.procesorState.R1.setValue(VM.memory.getSharedMemoryWord(adress));
+                break;
+            case "X2":
+                VM.pd.procesorState.R2.setValue(VM.memory.getSharedMemoryWord(adress));
+                break;
+            case "Z1":
+                VM.memory.setSharedMemoryWord(adress,(VM.pd.procesorState.R1.getValue()));
+                break;
+            case "Z2":
+                VM.memory.setSharedMemoryWord(adress,(VM.pd.procesorState.R2.getValue()));
+                break;
+                
         }
         next();
     }
@@ -298,5 +309,23 @@ public class SharedMemoryControl extends Process{
         //Kuriamas resursas..
         pd.core.createResource(this, OS.ResName.EiluteAtmintyje, createMessage("Atmintis neprieinama"));
         goTo(15);
+    }
+    
+    private void lockAll(int number)
+    {
+        for (Processor p:RealMachine.proc)
+        {
+            p.S.setBit(number);
+            lockedBLocks.add(number);
+        }
+    }
+    
+    private void unlockAll(int number)
+    {
+        for (Processor p:RealMachine.proc)
+        {
+            p.S.unsetBit(number);
+            lockedBLocks.remove(number);
+        }        
     }
 }

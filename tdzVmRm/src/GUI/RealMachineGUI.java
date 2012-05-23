@@ -308,7 +308,7 @@ public class RealMachineGUI extends javax.swing.JFrame {
         });
         buttonPanel.add(runButton);
 
-        stepButton.setText("Step");
+        stepButton.setText("Step to VM");
         stepButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 stepButtonActionPerformed(evt);
@@ -353,8 +353,9 @@ public class RealMachineGUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void stepButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_stepButtonActionPerformed
+        os.stepToVM();
         //RM.VM.step();
-        //updateAll();
+        updateAll();
     }//GEN-LAST:event_stepButtonActionPerformed
 
     private void memoryTableInputMethodTextChanged(java.awt.event.InputMethodEvent evt) {//GEN-FIRST:event_memoryTableInputMethodTextChanged
@@ -363,7 +364,6 @@ public class RealMachineGUI extends javax.swing.JFrame {
 
     private void runButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_runButtonActionPerformed
         os.run();
-        //RM.VM.run();
         updateAll();
     }//GEN-LAST:event_runButtonActionPerformed
 

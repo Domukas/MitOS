@@ -177,7 +177,7 @@ public class JobGovernor extends Process
     private void createSharedMemoryControl()
     {
         System.out.println("JobGovernor kuria SharedMemoryControl");
-        //TODO
+        pd.core.createProcess(this, ProcessState.Ready, 60, null, ProcName.SharedMemoryControl);
         
         next();
     }
@@ -403,8 +403,10 @@ public class JobGovernor extends Process
     {
         System.out.print("JobGovernor kuria resursą [Pranešimas SharedMemoryControl]");
         LinkedList<Object> tempParameters = new LinkedList<>();
+        commandParameter = (Integer)tempList.get(2);
         
-        tempParameters.add(OPC);
+        
+        tempParameters.add(tempList.get(1)); 
         tempParameters.add(commandParameter);
         tempParameters.add(pd.children.getLast());
         

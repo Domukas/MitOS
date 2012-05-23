@@ -42,8 +42,8 @@ public class ProcessorJPanel extends javax.swing.JPanel {
         
         TimerTextField.setText(Integer.toHexString(proc.timer.getValue()));
         
-        MODEToggleButton.setText(modeToString(RealMachine.proc[0].mode.isSupervisor()));
-        MODEToggleButton.setSelected(RealMachine.proc[0].mode.isSupervisor());
+        MODEToggleButton.setText(modeToString(proc.mode.isSupervisor()));
+        MODEToggleButton.setSelected(proc.mode.isSupervisor());
         
         PITextField.setText(Integer.toHexString(proc.PI.getValue()));
         SITextField.setText(Integer.toString(proc.SI.getValue()));

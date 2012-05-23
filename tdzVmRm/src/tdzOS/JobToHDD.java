@@ -90,6 +90,7 @@ public class JobToHDD extends Process
     {
         System.out.println("JobToHDD kopijuoja duomenis į diską");
         
+        pd.core.rm.setCH3ClosedForAllProcessors();
         //Susikuriam sarasa del patogumo
         taskInHDD = new LinkedList<>();
         
@@ -119,7 +120,7 @@ public class JobToHDD extends Process
                 }
             }
         }
-        
+        pd.core.rm.setCH3OpenForAllProcessors();
         //galim naikint resursa 
         pd.core.destroyResource(pd.ownedResources.getFirst().parent);
         

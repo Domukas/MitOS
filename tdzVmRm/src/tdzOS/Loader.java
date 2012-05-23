@@ -61,6 +61,7 @@ public class Loader extends Process
     {
         System.out.println("Loader kopijuoja duomenis į vartotojo atmintį ");
         
+        pd.core.rm.setCH3ClosedForAllProcessors();
         //sarasuose saugom nuorodas i blokus HDD ir isskirtus blokus RM
         
         LinkedList<String> inHDDList = (LinkedList<String>)pd.ownedResources.getFirst().value;
@@ -90,7 +91,7 @@ public class Loader extends Process
             }
             i++;
         }
-        
+        pd.core.rm.setCH3OpenForAllProcessors();
         //tik testavimui
         next();
         

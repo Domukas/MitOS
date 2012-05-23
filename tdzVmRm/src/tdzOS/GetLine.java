@@ -76,6 +76,7 @@ public class GetLine extends Process{
     private void blockForVartotojoIvestaEilute()
     {
         System.out.println("GetLine blokuojasi dėl resurso [Vartotojo įvesta eilutė]");
+        pd.core.rm.setCH2ClosedForAllProcessors();
         line = pd.core.rm.in.get();
         next();
     }
@@ -105,6 +106,7 @@ public class GetLine extends Process{
     {  
         System.out.println("GetLine atlaisvina resursą [įvedimo įrenginys]");
         pd.core.freeResource(this, pd.ownedResources.getFirst().parent);
+        pd.core.rm.setCH2OpenForAllProcessors();
         next();
     }
     

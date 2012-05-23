@@ -306,5 +306,67 @@ public class RealMachine {
     }
 
     
+    public void setCH1OpenForAllProcessors()
+    {
+        for(int i=0 ; i < proc.length; i++)
+        {
+            proc[i].CH1.setOpen();
+        }
+    }
     
+    public void setCH2OpenForAllProcessors()
+    {
+        for(int i=0 ; i < proc.length; i++)
+        {
+            proc[i].CH2.setOpen();
+        }
+    }  
+    
+    public void setCH3OpenForAllProcessors()
+    {
+        for(int i=0 ; i < proc.length; i++)
+        {
+            proc[i].CH3.setOpen();
+        }
+    }  
+    
+    public void setCH4OpenForAllProcessors()
+    {
+        for(int i=0 ; i < proc.length; i++)
+        {
+            proc[i].CH4.setOpen();
+        }
+    }   
+    
+    public void setCH1ClosedForAllProcessors()
+    {
+        for(int i=0 ; i < proc.length; i++)
+        {
+            proc[i].CH1.setClosed();
+        }
+    }
+    
+    public void setCH2ClosedForAllProcessors()
+    {
+        for(int i=0 ; i < proc.length; i++)
+        {
+            proc[i].CH2.setClosed();
+        }
+    }
+    
+    public void setCH3ClosedForAllProcessors()
+    {
+        for(int i=0 ; i < proc.length; i++)
+        {
+            proc[i].CH3.setClosed();
+        }
+    }
+    
+    public void setCH4ClosedForAllProcessors()
+    {
+        for(int i=0 ; i < proc.length; i++)
+        {
+            proc[i].CH4.setClosed();
+        }
+    }
 }
