@@ -112,7 +112,7 @@ public class JCL extends Process
     {
         //Prasom resurso uzduotis atmintyje su vienu nuorodu sarasu i blokus
         //Kuriuose yra nuskaitytos programos komandos
-        System.out.println("JCL blokuojasi del resurso Uzduotis supervizorineje atmintyje");
+        System.out.println("JCL blokuojasi dėl resurso [Užduotis supervizorinėje atmintyje]");
         pd.core.requestResource(this, ResName.UzduotisSupervizorinejeAtmintyje, 1);
         
         currentBlock = 0;
@@ -129,7 +129,7 @@ public class JCL extends Process
         blocks = (LinkedList<String>) rc.value;
         
         
-        System.out.println("JCL inicijuoja programos komandu sarasa");
+        System.out.println("JCL inicijuoja programos komandų sąrašą");
         commandList = new LinkedList<>();
          
         next();
@@ -140,7 +140,7 @@ public class JCL extends Process
     {
         block = blocks.get(currentBlock);
         
-        System.out.println("JCL paima " + currentBlock + " -taji bloka is saraso. Reiksme: "
+        System.out.println("JCL paima " + currentBlock + " -tajį bloką iš sąrašo. Reiksmė: "
                 + block);
         
         currentBlock++;
@@ -169,7 +169,7 @@ public class JCL extends Process
     private void memoryBlockNotFound()
     {
         //Savaime surpantama...
-        System.out.println("JCL kuria pranesima, kad nerastas @Memory blokas");
+        System.out.println("JCL kuria pranešimą, kad nerastas @Memory blokas");
         pd.core.createResource(this, ResName.EiluteAtmintyje, createMessage("Trūksta @Memory bloko"));
         
         //Naikinam resursa Uzduotis supervizorineje atmintyje
@@ -245,7 +245,7 @@ public class JCL extends Process
     //11
     private void codeBlockNotFound()
     {
-        System.out.println("JCL kuria pranesima, kad nerastas @Code blokas");
+        System.out.println("JCL kuria pranešimą, kad nerastas @Code blokas");
         pd.core.createResource(this, ResName.EiluteAtmintyje, createMessage("Trūksta @Code bloko"));
         
         //Naikinam resursa Uzduotis supervizorineje atmintyje

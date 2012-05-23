@@ -13,6 +13,8 @@ import tdzVmRm.Processor;
  */
 public class SoundControl extends Process{
     
+    int speaker;
+    
     public SoundControl (LinkedList inList, int internalID, OS.ProcName externalID, 
            ProcessorState ps, Processor p, LinkedList<ResComponent> or,
            OS.ProcessState state, int priority, Process parent, OS core)
@@ -70,6 +72,9 @@ public class SoundControl extends Process{
     //3
     private void isCommandPlay()
     {
+        //kuri speakeri turi
+        speaker = (int)pd.ownedResources.getLast().value;
+
         //tikrina ar grojimas ar garsumo nustatymas
         if(((String)pd.ownedResources.getFirst().value == "GNR1") || ((String)pd.ownedResources.getFirst().value == "GNR2"))
         {
@@ -85,15 +90,16 @@ public class SoundControl extends Process{
     private void sendFreaquencyToSoundSpeaker()
     {
         System.out.println("Į garsiakalbį siunčiamas pranešimas groti nurodyto dažnio garsą");
+        pd.core.rm.setCH4ClosedForAllProcessors();
         if((String)pd.ownedResources.getFirst().value == "GNR1")
         {
-            pd.core.rm.speakers[0].play((int)pd.ownedResources.get(2).value);   
+            pd.core.rm.speakers[speaker].play(pd.procesorState.R1.getValue().getIntValue());   
         }
         else
         {
-            pd.core.rm.speakers[1].play((int)pd.ownedResources.get(2).value);   
+            pd.core.rm.speakers[speaker].play(pd.procesorState.R2.getValue().getIntValue());   
         }
-        
+        pd.core.rm.setCH4OpenForAllProcessors();
         next();
     }
     
@@ -109,14 +115,16 @@ public class SoundControl extends Process{
     private void sendVolumeToSoundSpeaker()
     {
         System.out.println("Į garsiakalbį siunčiamas pranešimas nustatyti nurodytą garso lygį");
+        pd.core.rm.setCH4ClosedForAllProcessors();
         if((String)pd.ownedResources.getFirst().value == "GGR1")
         {
-            pd.core.rm.speakers[0].setVolume((int)pd.ownedResources.getFirst().value);
+            pd.core.rm.speakers[speaker].setVolume(pd.procesorState.R1.getValue().getIntValue());
         }
         else
         {
-            pd.core.rm.speakers[1].setVolume((int)pd.ownedResources.getFirst().value);  
+            pd.core.rm.speakers[speaker].setVolume(pd.procesorState.R2.getValue().getIntValue());  
         }
+        pd.core.rm.setCH4OpenForAllProcessors();
         goTo(5);
     }
     

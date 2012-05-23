@@ -66,6 +66,7 @@ public class PrintLine extends Process
     private void sendMessageToOutput()
     {
         System.out.println("PrintLine spausdina į išvedimo įrenginį");
+        pd.core.rm.setCH1ClosedForAllProcessors();
         pd.core.rm.out.send((String)pd.ownedResources.getFirst().value);
         next();
     }
@@ -75,7 +76,8 @@ public class PrintLine extends Process
     {
         System.out.println("PrintLine atlaisvina resursą [išvedimo įrenginys]");
         pd.core.freeResource(this, pd.ownedResources.getFirst().parent);
-        next();
+        pd.core.rm.setCH1OpenForAllProcessors();
+        //next();
         
         goTo(1);
     }
