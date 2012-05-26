@@ -16,14 +16,17 @@ public class TimerRegister{
     public TimerRegister(int interval)
     {
         this.interval = (byte)interval;
+        this.time = this.interval;
     }
     
     public boolean timePass(int value)
     {
-        time += (byte)value;
+        time -= (byte)value;
+        if (time < 0)
+            time = 0;
+        
         if (time > interval)
         {
-            time -= interval;
             return true;
         }
         else 
@@ -33,6 +36,11 @@ public class TimerRegister{
     public void setValue(int value) {
      
         time = (byte)value;
+    }
+    
+    public void reset()
+    {
+        time = interval;
     }
 
 

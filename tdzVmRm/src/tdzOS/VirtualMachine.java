@@ -88,7 +88,7 @@ public class VirtualMachine extends Process
                 break;
                 
             case 2:
-                runProgram();
+                stepProgram();
                 break;
                 
             case 3:
@@ -116,7 +116,7 @@ public class VirtualMachine extends Process
     }
     
     //2
-    private void runProgram()
+    private void stepProgram()
     {
         System.out.println("VirtualMachine suveikia");
         stepVM();
@@ -172,12 +172,12 @@ public class VirtualMachine extends Process
             step();
             //RealMachine.gui.updateAll();
             //pause(500);
-        } while ((pd.processor.SI.getValue() != 5) && (pd.processor.PI.getValue() == 0));
+        } while ((pd.processor.SI.getValue() == 0) && (pd.processor.PI.getValue() == 0));
     }
     
     public void stepVM()
     {    
-        if ((pd.processor.SI.getValue() != 5) && (pd.processor.PI.getValue() == 0))
+        if ((pd.processor.SI.getValue() == 0) && (pd.processor.PI.getValue() == 0))
         {
             Word currentCommand = getCurrentCommand();
             goToNextCommand();

@@ -4,9 +4,7 @@
  */
 package tdzOS;
 
-import IODevices.Output;
 import java.util.LinkedList;
-import tdzOS.OS.ResName;
 import tdzVmRm.Processor;
 
 /**
@@ -75,10 +73,14 @@ public class PrintLine extends Process
     private void freeResourceIsvedimoIrenginys()
     {
         System.out.println("PrintLine atlaisvina resursą [išvedimo įrenginys]");
-        pd.core.freeResource(this, pd.ownedResources.getFirst().parent);
+        for (ResComponent re:pd.ownedResources)
+            System.out.println(re.value);
+        
+        pd.core.freeResource(this, pd.ownedResources.getLast().parent);
         pd.core.rm.setCH1OpenForAllProcessors();
         //next();
         
+        pd.ownedResources.clear();
         goTo(1);
     }
     
