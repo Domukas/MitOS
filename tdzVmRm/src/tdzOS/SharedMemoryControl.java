@@ -18,7 +18,7 @@ public class SharedMemoryControl extends Process{
     String command;
     int adress;
     VirtualMachine VM;
-    LinkedList<Integer> lockedBLocks = new LinkedList<>();
+    int[] lockedBLocks = new int[16];
     
     public SharedMemoryControl (LinkedList inList, int internalID, OS.ProcName externalID, 
            ProcessorState ps, Processor p, LinkedList<ResComponent> or,
@@ -199,7 +199,8 @@ public class SharedMemoryControl extends Process{
     private void isBlockedByThisVM1()
     {
         System.out.println("SharedMemoryControl tikrina ar bloka uzrakino ta pati VM");
-        if(lockedBLocks.contains(adress/16)) //ar uzrakino ta pati masina
+        //System.out.println(lockedBLocks + " " + adress);
+        if(lockedBLocks[adress] == 1) //ar uzrakino ta pati masina
         {
             next();
         }
@@ -236,14 +237,16 @@ public class SharedMemoryControl extends Process{
     private void isBlockedByThisVM2()
     {
         System.out.println("SharedMemoryControl tikrina ar bloka uzrakino ta pati VM");
-        if(lockedBLocks.contains(adress/16)) //ar uzrakino ta pati masina
+        if(lockedBLocks[adress/16] == 1) //ar uzrakino ta pati masina
         {
             next();
         }
+        
         else
         {
             goTo(16);
         }
+ 
     }
     
     //12
@@ -316,16 +319,17 @@ public class SharedMemoryControl extends Process{
         for (Processor p:RealMachine.proc)
         {
             p.S.setBit(number);
-            lockedBLocks.add(number);
+            lockedBLocks[number] = 1;
         }
     }
     
     private void unlockAll(int number)
     {
+        lockedBLocks[number] = 0;
+        
         for (Processor p:RealMachine.proc)
         {
             p.S.unsetBit(number);
-            lockedBLocks.remove(number);
         }        
     }
 }

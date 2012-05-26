@@ -104,7 +104,7 @@ public class ProcessManager {
         os.runProcesses.remove(currentProcess);
 
             System.out.println("Atimamas procesorius #"+ currentProcess.pd.processor.pd.number +
-            " is: " + currentProcess.pd.externalID + "#" + currentProcess.pd.internalID);
+            " iš: " + currentProcess.pd.externalID + "#" + currentProcess.pd.internalID);
             
         //Issaugom procesoriaus busena ir atimam procesoriaus resursa
         currentProcess.pd.procesorState.saveProcessorState(currentProcess.pd.processor);
@@ -148,7 +148,7 @@ public class ProcessManager {
         }
         else
         {
-            System.out.println("Nera pasiruosusiu procesu");
+            System.out.println("Nera pasiruošusių procesu");
         }
         return highestReadyProcess;
     }

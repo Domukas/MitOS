@@ -236,7 +236,7 @@ public class JobGovernor extends Process
         
         
         if (((String)tempList.getFirst() == "DG") || ((String)tempList.getFirst() == "DP") ||
-                ((String)tempList.getFirst() == "Gartsiakalbis"))
+                ((String)tempList.getFirst() == "Garsiakalbis"))
         {
             System.out.println("IO arba garso pertraukimas");
             goTo(16);

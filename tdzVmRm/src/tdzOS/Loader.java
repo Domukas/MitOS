@@ -75,7 +75,6 @@ public class Loader extends Process
         int i = 1; //Pradedam nuo 1, nes nulinaime yra PLR
         int m = 1; //kelintas einamasis blokas is HDD
         
-        System.out.println(inMemoryList.size() + " " + inMemoryList.get(i).getBlockSize());
         //einam per vius gautus atminties blokus
         
         while ((i<inMemoryList.size()) && (m < inHDDList.size()))
@@ -85,7 +84,6 @@ public class Loader extends Process
             while (n<inMemoryList.get(i).getBlockSize() && (m < inHDDList.size()))
             {
                 inMemoryList.get(i).setWord(n, new Word(inHDDList.get(m)));
-                System.out.println(i + "tasis blokas" + n + " tasis zodis gauna reiksme " + inHDDList.get(m));
                 n++;
                 m++;
             }

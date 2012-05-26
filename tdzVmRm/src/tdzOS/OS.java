@@ -67,7 +67,7 @@ public class OS {
             LinkedList<ResComponent> components, ProcName externalID)
     {
         System.out.println("-------------------------");
-        System.out.println("Kurti procesa iskviestas!");
+        System.out.println("Kurti procesa iškviestas!");
         
         if (components == null)
             components = new LinkedList<>();
@@ -396,6 +396,7 @@ public class OS {
             case PratestiVMDarba:
             case PranesimasSharedMemorycontrolProcesui:
             case PranesimasJobGovernor:
+            case PranesimasSoundControlProcesui:
                 System.out.println("Kuriamas resursas " + externalID);
                 
                 r = new Resource(creator, externalID, internalID, false, //ne pakartotinio naudojimo
@@ -597,7 +598,7 @@ public class OS {
         resourceManager = new ResourceManager(this);
         System.out.println("Resource manager sukurtas");
         
-        System.out.println("Darbo pradzia");
+        System.out.println("Darbo pradžia");
         
         createProcess(null, OS.ProcessState.Ready, 90, null, ProcName.StartStop);
 
