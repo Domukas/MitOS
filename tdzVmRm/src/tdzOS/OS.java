@@ -284,9 +284,12 @@ public class OS {
                 p.pd.processor.pd.currentProcess = null;
                 p.pd.processor = null; //Atimam procesoriu
 
-                
+                p.pd.state = ProcessState.Ready;
+                readyProcesses.add(p);
                 System.out.println("Procesas " + p.pd.externalID + 
-                        "#" + p.pd.internalID + "perjungtas i ReadyS būsena");   
+                        "#" + p.pd.internalID + "perjungtas i Ready būsena");   
+                
+                processManager.Execute();
                 break;
                 
             case Ready:
@@ -491,7 +494,8 @@ public class OS {
         for(int i = 0; i < resources.size(); i++)
         {
             //gal galima patikrint pagal kalses??? ///TODO
-            if((resources.get(i).rd.externalID == r.rd.externalID) && (resources.get(i).rd.internalID == r.rd.internalID))
+            //if((resources.get(i).rd.externalID == r.rd.externalID) && (resources.get(i).rd.internalID == r.rd.internalID))
+            if (resources.get(i) == r)
             {
                 //jei randam laisvu sarase ta resursa, tai reiskia, kad 
                 //jam turim grazint tuos komponentus. Todel isimenam ji.
@@ -529,11 +533,17 @@ public class OS {
             resources.add(r);
             
             //Grazinam jam komponentus
+            
             for (ResComponent c:tmpList)
             {
-                tmpRes.rd.components.add(c);
-                process.pd.ownedResources.remove(c);
+                if (c.parent == tmpRes)
+                {
+                    System.out.println("Removing: " + c.parent.rd.externalID);
+                    tmpRes.rd.components.add(c);
+                    process.pd.ownedResources.remove(c);
+                }
             }
+            
         }
         
         System.out.println("Resursas atlaisvintas");

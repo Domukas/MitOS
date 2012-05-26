@@ -181,7 +181,15 @@ public class VirtualMachine extends Process
         {
             Word currentCommand = getCurrentCommand();
             goToNextCommand();
-            processCommand(currentCommand);          
+            processCommand(currentCommand);        
+            
+            if (pd.processor.timer.getValue() == 0)
+            {
+                pd.processor.timer.reset();
+                System.out.println(pd.externalID + " #" + pd.internalID + " taimerio pertraukimas");
+                pd.core.stopProcess(this);
+                
+            }
         }
         else
             goTo(3);

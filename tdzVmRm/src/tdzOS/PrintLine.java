@@ -76,7 +76,10 @@ public class PrintLine extends Process
         for (ResComponent re:pd.ownedResources)
             System.out.println(re.value);
         
+        
+        //System.out.println ("Ireng" + pd.ownedResources.getLast().parent);
         pd.core.freeResource(this, pd.ownedResources.getLast().parent);
+        
         pd.core.rm.setCH1OpenForAllProcessors();
         //next();
         

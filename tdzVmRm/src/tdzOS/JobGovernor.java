@@ -367,7 +367,6 @@ public class JobGovernor extends Process
         }
         
         pd.core.createResource(this, ResName.EiluteAtmintyje, createMessage(temp));
-        RealMachine.out.send(temp);
         
         goTo(26); //Reikia eit i aktyvavima VM'o
     }
