@@ -104,6 +104,8 @@ public class Loader extends Process
         pd.core.createResource(this, ResName.UzduotiesPakrovimasBaigtas,
                 createMessage(Integer.toHexString(PagingAdress)));
         
+        pd.ownedResources.clear();
+        
         goTo(1);
     }
     

@@ -19,18 +19,11 @@ public class TimerRegister{
         this.time = this.interval;
     }
     
-    public boolean timePass(int value)
+    public void timePass(int value)
     {
         time -= (byte)value;
         if (time < 0)
             time = 0;
-        
-        if (time > interval)
-        {
-            return true;
-        }
-        else 
-            return false;     
     }
     
     public void setValue(int value) {

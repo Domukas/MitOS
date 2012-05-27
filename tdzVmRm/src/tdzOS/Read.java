@@ -65,12 +65,18 @@ public class Read extends Process
         System.out.println("Procesas Read blokuojasi del resurso Supervizorine atmintis");
         
         //Susirandam input stream'a turimu resursu sarase
-        for (ResComponent r:pd.ownedResources)
+        
+        stream = (FileInputStream)pd.ownedResources.getLast().value;
+        System.out.println();
+        
+        /*for (ResComponent r:pd.ownedResources)
             if (r.value instanceof FileInputStream)
             {
                 stream = (FileInputStream) r.value;
             }
         
+        * 
+        */
         //suskaicuojam eilutes ir...
         //Pasidedam failo turini i string'u masyva
         //Tik tam, kad veliau kas kart kopinuojant eilutes nereiktu pastoviai atidarinet failo
@@ -131,6 +137,8 @@ public class Read extends Process
         pd.core.createResource(this, ResName.UzduotisSupervizorinejeAtmintyje, components);
         
         //Pereinam i proceso pradine busena
+        
+        pd.ownedResources.clear();
         goTo(1);
     }
     

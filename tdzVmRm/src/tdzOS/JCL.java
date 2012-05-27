@@ -125,7 +125,7 @@ public class JCL extends Process
     {
          //Kai gaunam resursa pasidarom nuoroda i bloku sarasa tik del patogumo
         
-        ResComponent rc = pd.ownedResources.getFirst();
+        ResComponent rc = pd.ownedResources.getLast();
         blocks = (LinkedList<String>) rc.value;
         
         
@@ -175,6 +175,8 @@ public class JCL extends Process
         //Naikinam resursa Uzduotis supervizorineje atmintyje
         pd.core.destroyResource(pd.ownedResources.getFirst().parent);
         
+        pd.ownedResources.clear();
+        
         goTo(1);
     }
     
@@ -208,6 +210,9 @@ public class JCL extends Process
         
         //Naikinam resursa Uzduotis supervizorineje atmintyje
         pd.core.destroyResource(pd.ownedResources.getFirst().parent);
+        
+        pd.ownedResources.clear();
+        
         goTo(1);
     }
     
@@ -251,6 +256,8 @@ public class JCL extends Process
         //Naikinam resursa Uzduotis supervizorineje atmintyje
         pd.core.destroyResource(pd.ownedResources.getFirst().parent);
         
+        pd.ownedResources.clear();
+        
         goTo(1);
     }
     
@@ -280,6 +287,8 @@ public class JCL extends Process
         components.add(commandList);
         //Sukuriam paruosta uzduoti supervizorineje atmintyje
         pd.core.createResource(this, ResName.ParuostaUzduotis, components);
+        
+        pd.ownedResources.clear();
         
         goTo(1);
     }
@@ -316,7 +325,10 @@ public class JCL extends Process
                 createMessage("Trūksta @CodeEnd bloko"));
         
         //Naikinam resursa Uzduotis supervizorineje atmintyje
-        pd.core.destroyResource(pd.ownedResources.getFirst().parent);     
+        pd.core.destroyResource(pd.ownedResources.getFirst().parent);    
+        
+        pd.ownedResources.clear();
+        
         goTo(1);
     }
 }

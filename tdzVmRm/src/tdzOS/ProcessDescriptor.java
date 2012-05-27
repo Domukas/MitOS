@@ -39,14 +39,14 @@ public class ProcessDescriptor {
        this.externalID = externalID;
        this.procesorState = ps;
        this.processor = p;
-       this.createdResources = new LinkedList<Resource>();
+       this.createdResources = new LinkedList<>();
        this.ownedResources = or;
-       this.waitingFor = new LinkedList<ResName>();
-       this.waitingCount = new LinkedList<Integer>();
+       this.waitingFor = new LinkedList<>();
+       this.waitingCount = new LinkedList<>();
        this.state = state;
        this.priority = priority;
        this.parent = parent;
-       this.children = new LinkedList<Process>();   
+       this.children = new LinkedList<>();   
        this.core = core;
    }
    

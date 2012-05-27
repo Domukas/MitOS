@@ -57,9 +57,7 @@ public class VirtualMachine extends Process
     public ICRegister IC;
     public CRegister C;
     
-    boolean timerInt = false;
-    
-    
+  
     public VirtualMemory memory;
     
     String OPC = "";
@@ -107,17 +105,18 @@ public class VirtualMachine extends Process
         System.out.println("VirtualMachine perjungia procesorių į vartotojo rėžimą");
         pd.processor.mode.setUser();
         
-        IC = pd.processor.IC;
-        R1 = pd.processor.R1;
-        R2 = pd.processor.R2;
-        C = pd.processor.C;
-
         next();
     }
     
     //2
     private void stepProgram()
     {
+        //del patogumo
+        IC = pd.processor.IC;
+        R1 = pd.processor.R1;
+        R2 = pd.processor.R2;
+        C = pd.processor.C;
+        
         System.out.println("VirtualMachine suveikia");
         stepVM();
 
@@ -148,7 +147,6 @@ public class VirtualMachine extends Process
         parameters.add(commandParameter);
         
         pd.core.createResource(this, ResName.PranesimasApiePertraukima, parameters);
-        //pd.core.requestResource(this, ResName.MOSPabaiga, 1);
 
         resetInterruptRegisters();
         
@@ -177,22 +175,28 @@ public class VirtualMachine extends Process
     
     public void stepVM()
     {    
-        if ((pd.processor.SI.getValue() == 0) && (pd.processor.PI.getValue() == 0))
+        //if ((pd.processor.SI.getValue() == 0) && (pd.processor.PI.getValue() == 0))
+        
+        if (pd.processor.timer.getValue() != 0)
         {
             Word currentCommand = getCurrentCommand();
             goToNextCommand();
-            processCommand(currentCommand);        
+            processCommand(currentCommand);  
+            pd.processor.timer.timePass(1);
             
-            if (pd.processor.timer.getValue() == 0)
+            System.out.println("Timer: " + pd.processor.timer.getValue());
+            
+            if ((pd.processor.SI.getValue() + pd.processor.PI.getValue() == 0)
+                    && (pd.processor.timer.getValue() == 0))
             {
-                pd.processor.timer.reset();
-                System.out.println(pd.externalID + " #" + pd.internalID + " taimerio pertraukimas");
-                pd.core.stopProcess(this);
-                
+                timerInterrupt();
             }
         }
-        else
-            goTo(3);
+        else 
+        {   
+            timerInterrupt();
+        }
+        //else goTo(3);
     }
     
     
@@ -205,12 +209,7 @@ public class VirtualMachine extends Process
     {
         int val = IC.getValue();
         val++;
-        IC.setValue(val);
-        
-        if (pd.processor.timer.timePass(1))
-            timerInt = true;
-            
-            
+        IC.setValue(val);          
     }
        
     private void processCommand(Word currentWord)
@@ -701,6 +700,9 @@ public class VirtualMachine extends Process
     {
         pd.processor.SI.setValue(1);
         commandParameter = x;
+        
+        pd.processor.timer.timePass(1);
+        
         goTo(3);
         
         /*
@@ -731,6 +733,9 @@ public class VirtualMachine extends Process
     {
         pd.processor.SI.setValue(2); 
         commandParameter = x;
+        
+        pd.processor.timer.timePass(1);
+        
         goTo(3);
         
         /*
@@ -1013,6 +1018,9 @@ public class VirtualMachine extends Process
     
     private int getRealBlockAdress(int adress)
     {
+        System.out.print("Adresas: " + RealMachine.memory.getBlock(pd.processor.PLR.getA2()*0x10
+                + pd.processor.PLR.getA3()).getWord(adress).getIntValue());
+        
         return RealMachine.memory.getBlock(pd.processor.PLR.getA2()*0x10
                 + pd.processor.PLR.getA3()).getWord(adress).getIntValue();
     }
@@ -1025,6 +1033,13 @@ public class VirtualMachine extends Process
             pd.processor.PI.setValue(0);
             pd.processor.SI.setValue(0);
         }
+    }
+    
+    private void timerInterrupt()
+    {
+        pd.processor.timer.reset();
+        System.out.println(pd.externalID + " #" + pd.internalID + " taimerio pertraukimas");
+        pd.core.stopProcess(this);
     }
 
 }

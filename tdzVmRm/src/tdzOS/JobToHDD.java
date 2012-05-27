@@ -137,6 +137,8 @@ public class JobToHDD extends Process
         //Sukuriam paruosta uzduoti supervizorineje atmintyje
         pd.core.createResource(this, ResName.UzduotisHDD, components);
         
+        pd.ownedResources.clear();
+        
         goTo (1);
     }
     

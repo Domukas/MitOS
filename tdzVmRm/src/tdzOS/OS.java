@@ -516,7 +516,7 @@ public class OS {
 
             for (ResComponent c: tmpList)
             {
-                //neaisku ar suveiks.... //TODO
+
                 //atiduodam komponentus...
                 if (c.parent == tmpRes)
                 {

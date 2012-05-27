@@ -1,0 +1,9 @@
+@Memory 3
+@Code
+JP02
+0001
+A101
+A201
+JP02
+HALT
+@CodeEnd
