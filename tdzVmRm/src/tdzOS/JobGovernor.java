@@ -330,6 +330,13 @@ public class JobGovernor extends Process
     //17
     private void createMessageForSoundControl()
     {
+        System.out.print("JobGovernor kuria resursą [Pranešimas SoundControl procesui]");
+        OPC = (String)tempList.get(1);
+        
+        pd.core.createResource(this, ResName.PranesimasSoundControlProcesui,
+                createMessage(OPC));    
+        
+        goTo (26);
         
     }
     

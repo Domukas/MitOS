@@ -14,6 +14,7 @@ import tdzVmRm.Processor;
 public class SoundControl extends Process{
     
     int speaker;
+    String command;
     
     public SoundControl (LinkedList inList, int internalID, OS.ProcName externalID, 
            ProcessorState ps, Processor p, LinkedList<ResComponent> or,
@@ -58,6 +59,7 @@ public class SoundControl extends Process{
     {
         System.out.println("SoundControl blokuojasi dėl resurso [Pranešimas SoundControl procesui]");
         pd.core.requestResource(this, OS.ResName.PranesimasSoundControlProcesui, 1);
+        
         next();
     }
     
@@ -66,17 +68,23 @@ public class SoundControl extends Process{
     {
         System.out.println("SoundControl blokuojasi dėl resurso [Garsiakalbio įrenginys]");
         pd.core.requestResource(this, OS.ResName.GarsiakalbioIrenginys, 1);
+        
+        //pasidedam komanda 
+        command = (String)pd.ownedResources.getFirst().value;
+        
         next();
     }
     
     //3
     private void isCommandPlay()
     {
+        
+        String temp = (String)pd.ownedResources.getLast().value;
         //kuri speakeri turi
-        speaker = (int)pd.ownedResources.getLast().value;
+        speaker = Integer.parseInt(temp);
 
         //tikrina ar grojimas ar garsumo nustatymas
-        if(((String)pd.ownedResources.getFirst().value == "GNR1") || ((String)pd.ownedResources.getFirst().value == "GNR2"))
+        if((command.equals("GNR1")) || (command.equals("GNR2")))
         {
             next();
         }
@@ -91,7 +99,7 @@ public class SoundControl extends Process{
     {
         System.out.println("Į garsiakalbį siunčiamas pranešimas groti nurodyto dažnio garsą");
         pd.core.rm.setCH4ClosedForAllProcessors();
-        if((String)pd.ownedResources.getFirst().value == "GNR1")
+        if(command.equals("GNR1"))
         {
             pd.core.rm.speakers[speaker].play(pd.procesorState.R1.getValue().getIntValue());   
         }
@@ -107,7 +115,10 @@ public class SoundControl extends Process{
     private void freeResourceGarsiakalbioIrenginys()
     {
         System.out.println("SoundControl atlaisvina resursą [Garsiakalbio įrenginys]");
-        pd.core.freeResource(this, pd.ownedResources.getFirst().parent);
+        pd.core.freeResource(this, pd.ownedResources.getLast().parent);
+        
+        pd.ownedResources.clear();
+        
         goTo(1);
     }
     
@@ -116,7 +127,7 @@ public class SoundControl extends Process{
     {
         System.out.println("Į garsiakalbį siunčiamas pranešimas nustatyti nurodytą garso lygį");
         pd.core.rm.setCH4ClosedForAllProcessors();
-        if((String)pd.ownedResources.getFirst().value == "GGR1")
+        if(command.equals("GGR1"))
         {
             pd.core.rm.speakers[speaker].setVolume(pd.procesorState.R1.getValue().getIntValue());
         }

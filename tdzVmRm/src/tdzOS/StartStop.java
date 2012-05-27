@@ -71,8 +71,8 @@ public class StartStop extends Process {
         System.out.println("IO irenginiu resursai sukurti");  
         
         System.out.println("StartStop kuria garsiakalbio irenginio resursus");
-        pd.core.createResource(this, ResName.GarsiakalbioIrenginys, createMessage("Garsiakalbis#1"));
-        pd.core.createResource(this, ResName.GarsiakalbioIrenginys, createMessage("Garsiakalbis#2"));
+        pd.core.createResource(this, ResName.GarsiakalbioIrenginys, createMessage("0"));
+        pd.core.createResource(this, ResName.GarsiakalbioIrenginys, createMessage("1"));
         System.out.println("Garsiakalbio irenginio resursai sukurti");
         
         next();
