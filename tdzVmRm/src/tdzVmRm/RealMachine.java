@@ -83,7 +83,7 @@ public class RealMachine {
         proc[1] = new Processor();
         
         speakers[0] = new Speaker();
-        speakers[1] = new Speaker();
+        speakers[1] = new Speaker();   
         in = new Input();
         out = new Output();
         
