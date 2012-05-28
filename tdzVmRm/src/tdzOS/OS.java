@@ -58,7 +58,18 @@ public class OS {
     public OS (RealMachine rm)
     {
         this.rm = rm;
+        
+        startOS();
+    }
+    
+    public void startOS()
+    {
         initProcesses();
+    }
+    
+    public void stopOS()
+    {
+        
     }
     
     
