@@ -122,7 +122,6 @@ public class ProcessorJPanel extends javax.swing.JPanel {
         setMaximumSize(new java.awt.Dimension(256, 128));
         setMinimumSize(new java.awt.Dimension(256, 128));
         setPreferredSize(new java.awt.Dimension(256, 128));
-        setLayout(new java.awt.GridLayout(0, 4));
 
         jLabel2.setText("R1");
         add(jLabel2);
