@@ -116,6 +116,18 @@ public class RealMachineGUI extends javax.swing.JFrame {
         }
     }
     
+    public void dropVMTab(VirtualMachine vm)
+    {
+        for (int i = 1; i < memoryTabbedPane.getTabCount(); i++)
+        {
+            if (Integer.parseInt(memoryTabbedPane.getTitleAt(i).split("#")[1])==vm.pd.internalID)
+            {
+                memoryTabbedPane.removeTabAt(i);
+                break;
+            }    
+        }
+    }
+    
     public void createVMTab(VirtualMachine vm)
     {
         vm1MemoryTable = new JTable();

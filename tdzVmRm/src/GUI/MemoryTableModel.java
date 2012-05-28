@@ -62,7 +62,7 @@ public class MemoryTableModel extends TableModel {
             memoryBlock = memory.getBlock(rowIndex);
             
             if (columnIndex == 0) 
-                return Integer.toHexString(rowIndex);
+                return Integer.toHexString(rowIndex).toUpperCase();
                 else
                 return memoryBlock.getWord(columnIndex-1).getValue();
             
