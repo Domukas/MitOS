@@ -9,6 +9,7 @@ import java.awt.Component;
 import java.awt.Font;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableCellRenderer;
+import tdzOS.VirtualMachine;
 import tdzVmRm.Processor;
 import tdzVmRm.RealMachine;
 
@@ -41,14 +42,22 @@ public Component getTableCellRendererComponent(JTable table, Object value,boolea
             //Spalvinam virtualios masinos atminties blokus geltonai
             for (Processor p : rm.proc)
             {
-                int blockCount = 0x10;
-                if (p.PLR.getA1() != 0)
-                    blockCount = p.PLR.getA1();
-                for (int i = 0; i <= blockCount-1; i++){
-                    if (row == rm.memory.getBlock(p.PLR.getA2()*0x10 + p.PLR.getA3()).getWord(i).getIntValue())
+                if (p.pd.currentProcess instanceof VirtualMachine){
+                    int blockCount = 0x10;
+                    if (p.PLR.getA1() != 0)
+                        blockCount = p.PLR.getA1();
+                    for (int i = 0; i <= blockCount-1; i++){
+                        if (row == rm.memory.getBlock(p.PLR.getA2()*0x10 + p.PLR.getA3()).getWord(i).getIntValue())
+                        {
+                            setBackground(new Color(0xFFFF00));
+                            setToolTipText("Processor "+p.pd.number+" Block "+(i+1));
+                        }
+                    }
+                    //Spalvinam PLR registro naudojama bloka raudonai
+                    if (row == p.PLR.getA2()*0x10+p.PLR.getA3())
                     {
-                        setBackground(new Color(0xFFFF00));
-                        setToolTipText("Processor "+p.pd.number+" Block "+(i+1));
+                        setToolTipText("Processor "+p.pd.number+" Page table");
+                        setBackground(new Color(0xFF0000));
                     }
                 }
                 //Spalvinam bendros atminties blokus zaliai
@@ -56,12 +65,6 @@ public Component getTableCellRendererComponent(JTable table, Object value,boolea
                 {
                     setToolTipText("Shared memory");
                     setBackground(new Color(0x77FF77));
-                }
-                //Spalvinam PLR registro naudojama bloka raudonai
-                if (row == p.PLR.getA2()*0x10+p.PLR.getA3())
-                {
-                    setToolTipText("Processor "+p.pd.number+" Page table");
-                    setBackground(new Color(0xFF0000));
                 }
             }
         }

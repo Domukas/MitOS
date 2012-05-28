@@ -18,6 +18,7 @@ import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 import javax.swing.table.DefaultTableModel;
 import tdzOS.OS;
+import tdzOS.OS.ProcName;
 import tdzOS.ProcessDescriptor;
 import tdzOS.ResourceDescriptor;
 import tdzOS.VirtualMachine;
@@ -77,13 +78,13 @@ public class RealMachineGUI extends javax.swing.JFrame {
         
         procJTable.setModel(new ProcessesTableModel(os));
         
-        ListSelectionListener infoJTableListener = new ListSelectionListener()
+        ListSelectionListener procJTableListener = new ListSelectionListener()
         {
             public void valueChanged(ListSelectionEvent e) {
-                //updateInfoJTable();
+                procTableSelected();
             }
         };
-        procJTable.getSelectionModel().addListSelectionListener(infoJTableListener);
+        procJTable.getSelectionModel().addListSelectionListener(procJTableListener);
         
         resJTable.setModel(new ResourcesTableModel(os));
         
@@ -93,8 +94,26 @@ public class RealMachineGUI extends javax.swing.JFrame {
                 //updateInfoJTable();
             }
         };
-        resJTable.getSelectionModel().addListSelectionListener(infoJTableListener);
+        resJTable.getSelectionModel().addListSelectionListener(resJTableListener);
          
+    }
+    
+    private void procTableSelected() {
+        tdzOS.Process proc;
+        proc = os.processes.get(procJTable.getSelectedRow());
+        if (proc.pd.externalID == ProcName.VirtualMachine)
+        {
+            for (int i = 1; i < memoryTabbedPane.getTabCount(); i++)
+            {
+                if (Integer.parseInt(memoryTabbedPane.getTitleAt(i).split("#")[1])==proc.pd.internalID)
+                    memoryTabbedPane.setSelectedIndex(i);
+            }
+            for (int i = 0; i< processorsTabbedPane.getTabCount(); i++)
+            {
+                if (proc.pd.processor != null && processorsTabbedPane.getTitleAt(i).equals("P"+proc.pd.processor.pd.number))
+                    processorsTabbedPane.setSelectedIndex(i);
+            }
+        }
     }
     
     public void createVMTab(VirtualMachine vm)
@@ -186,10 +205,9 @@ public class RealMachineGUI extends javax.swing.JFrame {
 
         procJPanel.setLayout(new java.awt.GridLayout(1, 0));
 
+        procTableJScrollPane.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         procTableJScrollPane.setMinimumSize(new java.awt.Dimension(128, 128));
-        procTableJScrollPane.setPreferredSize(new java.awt.Dimension(128, 400));
 
-        procJTable.setAutoCreateRowSorter(true);
         procJTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -203,8 +221,9 @@ public class RealMachineGUI extends javax.swing.JFrame {
         ));
         procJTable.setColumnSelectionAllowed(true);
         procJTable.setFillsViewportHeight(true);
-        procJTable.setMaximumSize(new java.awt.Dimension(2147483647, 2147483647));
-        procJTable.setPreferredSize(new java.awt.Dimension(128, 100));
+        procJTable.setMaximumSize(new java.awt.Dimension(0, 0));
+        procJTable.setMinimumSize(new java.awt.Dimension(0, 0));
+        procJTable.setPreferredSize(new java.awt.Dimension(0, 400));
         procJTable.getTableHeader().setReorderingAllowed(false);
         procJTable.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -218,9 +237,8 @@ public class RealMachineGUI extends javax.swing.JFrame {
 
         operationsPanel.add(procJPanel);
 
-        resJPanel.setLayout(new java.awt.GridLayout());
+        resJPanel.setLayout(new java.awt.GridLayout(1, 0));
 
-        resJTable.setAutoCreateRowSorter(true);
         resJTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -232,6 +250,7 @@ public class RealMachineGUI extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        resJTable.setFillsViewportHeight(true);
         resTableScrollPane.setViewportView(resJTable);
 
         resJPanel.add(resTableScrollPane);
@@ -397,7 +416,7 @@ public class RealMachineGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_taskNameFieldMouseClicked
 
     private void procJTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_procJTableMouseClicked
-        //updateInfoJTable();
+        procTableSelected();
     }//GEN-LAST:event_procJTableMouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

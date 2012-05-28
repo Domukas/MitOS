@@ -22,10 +22,7 @@ public class ResourcesTableModel extends AbstractTableModel {
     OS os;
     String[] columnNames = {"Resource",
         "Creator",
-        "Components",
-        "Priority",
-        "Processor",
-        "Parent"};
+        "Components"};
     
     public ResourcesTableModel(OS os)
     {

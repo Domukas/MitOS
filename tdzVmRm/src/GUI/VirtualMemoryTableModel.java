@@ -4,6 +4,7 @@
  */
 package GUI;
 
+import tdzOS.ProcessDescriptor;
 import tdzOS.VirtualMachine;
 import tdzVmRm.MemoryBlock;
 import tdzVmRm.RealMachine;
@@ -23,5 +24,13 @@ public class VirtualMemoryTableModel extends MemoryTableModel {
             memory = virtualMachine.memory;
             this.ownerGUI = ownerGUI;
             this.vm = virtualMachine;
-	}
+        }
+        public int getRowCount()
+        {
+                int icValue = vm.pd.procesorState.PLR.getA0();
+                if (icValue == 0) 
+                    return 0x10;
+                else
+                    return icValue;
+        }
 }
