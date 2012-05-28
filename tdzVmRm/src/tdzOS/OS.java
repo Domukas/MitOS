@@ -39,7 +39,7 @@ public class OS {
         PranesimasJobGovernor, PranesimasSharedMemorycontrolProcesui, 
         PranesimasLoaderProcesui, //REIKIA SUTVARKYT DOKUMENTE, BUS PAKEITIMU DEL TO
         IvestaEiluteSupervizorinejeAtmintyje, //prikuriau nzn ar reikia
-        PratestiVMDarba, Neegzistuojantis
+        PratestiVMDarba, BlokasAtrakintas, Neegzistuojantis
     }
     
     public LinkedList<Process> processes;

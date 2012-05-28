@@ -49,7 +49,7 @@ public class Interrupt extends Process
     private void blockForPranesimasApiePertraukima()
     {
         System.out.println("Interrupt blokuojasi dėl resurso [Pranešimas apie pertraukimą]");
-        pd.core.requestResource(this, OS.ResName.PranesimasApiePertraukima, 4); //Sudarytas is 4 komponentu
+        pd.core.requestResource(this, OS.ResName.PranesimasApiePertraukima, 1);
         
         next();
     }
@@ -58,10 +58,12 @@ public class Interrupt extends Process
     {   
         System.out.println("Interrupt nustato pertraukino tipą");
         
-        PI = (Integer)pd.ownedResources.get(0).value;
-        SI = (Integer)pd.ownedResources.get(1).value;
-        commandParameter = (Integer)pd.ownedResources.get(3).value;
-        OPC = (String)pd.ownedResources.get(2).value;
+        LinkedList<Object> tempList = (LinkedList<Object>)pd.ownedResources.getLast().value;
+        
+        PI = (Integer)tempList.get(0);
+        SI = (Integer)tempList.get(1);
+        commandParameter = (Integer)tempList.get(3);
+        OPC = (String)tempList.get(2);
         
         parameters = new LinkedList<>();
         switch (PI)

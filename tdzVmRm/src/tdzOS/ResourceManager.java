@@ -175,8 +175,10 @@ class ResourceManager {
                 else //Visa kita is eiles dalinam
                 {   
                     boolean give = true;
-                    
-                    if (r.rd.externalID == ResName.Pertraukimas) //dalinant pertraukimus reikia patikrint, ar jis tam JG skirtas
+                     //dalinant pertraukimus reikia patikrint, ar jis tam JG skirtas
+                     //arba ar pranesimas tam SharedMemoryControl skirtas
+                    if ((r.rd.externalID == ResName.Pertraukimas)|| (r.rd.externalID == ResName.BlokasAtrakintas)
+                            || (r.rd.externalID == ResName.PranesimasSharedMemorycontrolProcesui))
                     {
                         LinkedList<Object> contents = (LinkedList<Object>) r.rd.components.getFirst().value;
                         

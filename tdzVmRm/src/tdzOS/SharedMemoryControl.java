@@ -20,6 +20,8 @@ public class SharedMemoryControl extends Process{
     VirtualMachine VM;
     int[] lockedBLocks = new int[16];
     
+    public int blockedFor = -1;
+    
     public SharedMemoryControl (LinkedList inList, int internalID, OS.ProcName externalID, 
            ProcessorState ps, Processor p, LinkedList<ResComponent> or,
            OS.ProcessState state, int priority, Process parent, OS core)
@@ -153,15 +155,26 @@ public class SharedMemoryControl extends Process{
     private void blockWhileIsUnlocked()
     {
         System.out.println("SharedMemoryControl blokuojasi kol bus atblokuotas tas blokas");
+        
+        pd.core.requestResource(this, OS.ResName.BlokasAtrakintas, 1);
+        blockedFor = adress;
+        
+        
+        next();
+        /*
         if(!pd.processor.S.isBitSet((int)pd.ownedResources.get(1).value))
         {
             next();
         }
+        * 
+        */
     }
     
     //5
     private void locking()
     {
+        blockedFor = -1;
+        
         System.out.println("SharedMemoryControl rakina bloką: " + adress);
         lockAll(adress);
         goTo(13);
@@ -215,6 +228,25 @@ public class SharedMemoryControl extends Process{
     {
         System.out.println("SharedMemoryControl atrakinamas blokas");
         unlockAll(adress);
+        
+        
+        //Jei kas nors laukia to bloko atsirakinimo, tai sukuriam resursa, kad tas blokas atrakintas
+        for (Process p:pd.core.blockedProcesses)
+        {
+            if (p instanceof SharedMemoryControl)
+            {
+                SharedMemoryControl smc = (SharedMemoryControl)p;
+                if (smc.blockedFor == adress)
+                {
+                    LinkedList<Object> tempList = new LinkedList<>();
+                    tempList.add(smc);
+                    
+                    pd.core.createResource(p, OS.ResName.BlokasAtrakintas, tempList);
+                    break;
+                }
+            }
+        }
+        
         goTo(13);
     }
     

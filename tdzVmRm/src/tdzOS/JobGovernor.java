@@ -416,6 +416,7 @@ public class JobGovernor extends Process
         tempParameters.add(tempList.get(1)); 
         tempParameters.add(commandParameter);
         tempParameters.add(pd.children.getLast());
+        tempParameters.add(pd.children.getFirst());
         
         LinkedList<Object> parameters = new LinkedList<>();
         parameters.add(tempParameters);

@@ -146,7 +146,11 @@ public class VirtualMachine extends Process
             
         parameters.add(commandParameter);
         
-        pd.core.createResource(this, ResName.PranesimasApiePertraukima, parameters);
+        
+        LinkedList<Object> tempList = new LinkedList<>();
+        tempList.add(parameters);
+        
+        pd.core.createResource(this, ResName.PranesimasApiePertraukima, tempList);
 
         resetInterruptRegisters();
         
