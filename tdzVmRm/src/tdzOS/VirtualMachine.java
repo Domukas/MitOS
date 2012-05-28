@@ -779,7 +779,7 @@ public class VirtualMachine extends Process
         pause(WAIT_TIME);
         
         int volume = pd.processor.R1.getValue().getIntValue();
-        RealMachine.speakers[0].setVolume(volume);
+        RealMachine.speakers[0].setLength(volume);
         
         pd.processor.CH4.setOpen();
         * 
@@ -796,7 +796,7 @@ public class VirtualMachine extends Process
         pause(WAIT_TIME);
         
         int volume = pd.processor.R2.getValue().getIntValue();
-        RealMachine.speakers[1].setVolume(volume);
+        RealMachine.speakers[1].setLength(volume);
         
         pd.processor.CH4.setOpen();
         * 

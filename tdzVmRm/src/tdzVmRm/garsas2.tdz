@@ -1,0 +1,15 @@
+@Memory 3
+@Code
+JP04
+0050
+0000
+0050
+L203
+L101
+GGR1
+L102
+GNR1
+A103
+LO08
+HALT
+@CodeEnd
