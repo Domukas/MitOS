@@ -203,6 +203,7 @@ public class RealMachineGUI extends javax.swing.JFrame {
         runButton = new javax.swing.JButton();
         stepButton = new javax.swing.JButton();
         osStepButton = new javax.swing.JButton();
+        osStartStopButton = new javax.swing.JToggleButton();
         taskNameField = new javax.swing.JTextField();
         taskButton = new javax.swing.JButton();
 
@@ -325,6 +326,14 @@ public class RealMachineGUI extends javax.swing.JFrame {
         });
         buttonPanel.add(osStepButton);
 
+        osStartStopButton.setText("Start OS");
+        osStartStopButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                osStartStopButtonActionPerformed(evt);
+            }
+        });
+        buttonPanel.add(osStartStopButton);
+
         taskNameField.setText("Task name");
         taskNameField.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -431,6 +440,18 @@ public class RealMachineGUI extends javax.swing.JFrame {
         procTableSelected();
     }//GEN-LAST:event_procJTableMouseClicked
 
+    private void osStartStopButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_osStartStopButtonActionPerformed
+        if (osStartStopButton.isSelected()) {
+            osStartStopButton.setText("Stop OS");
+            os.startOS();
+        }
+        else 
+        {
+            osStartStopButton.setText("Start OS");
+            os.stopOS();
+        }
+    }//GEN-LAST:event_osStartStopButtonActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel buttonPanel;
     private javax.swing.JScrollPane jScrollPane1;
@@ -438,6 +459,7 @@ public class RealMachineGUI extends javax.swing.JFrame {
     private javax.swing.JTabbedPane memoryTabbedPane;
     private javax.swing.JTable memoryTable;
     private javax.swing.JPanel operationsPanel;
+    private javax.swing.JToggleButton osStartStopButton;
     private javax.swing.JButton osStepButton;
     private javax.swing.JPanel procJPanel;
     private javax.swing.JTable procJTable;
