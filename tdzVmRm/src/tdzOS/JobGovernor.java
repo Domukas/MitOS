@@ -470,7 +470,13 @@ public class JobGovernor extends Process
     private void createResourceResumeVM()
     {
         System.out.println("JobGovernor kuria resursą [Pratęsti VM darbą]");
-        pd.core.createResource(this, ResName.PratestiVMDarba, createMessage("PratestiDarba"));
+        
+        LinkedList<Object> tempParameters = new LinkedList<>();
+        tempParameters.add(pd.children.getLast());
+       
+        
+        //Siunciam tik vienai virtualiai masinai
+        pd.core.createResource(this, ResName.PratestiVMDarba, tempParameters);
         
         goTo(7);
     }

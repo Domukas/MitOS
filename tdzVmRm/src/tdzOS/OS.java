@@ -400,6 +400,7 @@ public class OS {
             case PranesimasSharedMemorycontrolProcesui:
             case PranesimasJobGovernor:
             case PranesimasSoundControlProcesui:
+            case BlokasAtrakintas:
                 System.out.println("Kuriamas resursas " + externalID);
                 
                 r = new Resource(creator, externalID, internalID, false, //ne pakartotinio naudojimo

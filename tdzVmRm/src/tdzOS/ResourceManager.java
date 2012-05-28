@@ -177,12 +177,17 @@ class ResourceManager {
                     boolean give = true;
                      //dalinant pertraukimus reikia patikrint, ar jis tam JG skirtas
                      //arba ar pranesimas tam SharedMemoryControl skirtas
-                    if ((r.rd.externalID == ResName.Pertraukimas)|| (r.rd.externalID == ResName.BlokasAtrakintas)
+                    if ((r.rd.externalID == ResName.Pertraukimas)
                             || (r.rd.externalID == ResName.PranesimasSharedMemorycontrolProcesui))
-                    {
+                    {                        
                         LinkedList<Object> contents = (LinkedList<Object>) r.rd.components.getFirst().value;
                         
                         if ((Process)contents.getLast() != tmpProcess)
+                            give = false;
+                    }
+                    else if ((r.rd.externalID == ResName.PratestiVMDarba) || ((r.rd.externalID == ResName.BlokasAtrakintas)))
+                    {
+                        if ((Process)r.rd.components.getLast().value != tmpProcess)
                             give = false;
                     }
                     

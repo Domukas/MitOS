@@ -206,6 +206,8 @@ public class VirtualMachine extends Process
     
     public Word getCurrentCommand()
     {
+        System.out.println("IC: " + IC.getValue());
+        
         return memory.getWord(IC.getValue());
     }
     
