@@ -62,7 +62,7 @@ public class StartStop extends Process {
         System.out.println("StartStop kuria sisteminius resursus");  
         
         createResourceVartotojoAtmintis();
-        createResourceSupervizorineAtmintis(265);
+        createResourceSupervizorineAtmintis(256);
         createResourceHDD(256);
         
         System.out.println("Kuria IO irenginio resursus");  
@@ -163,9 +163,8 @@ public class StartStop extends Process {
     {
         System.out.println("Kuriam atminties resursa");
 
-        LinkedList<Object> memoryBlocks = new LinkedList<Object>();
-        int totalBlocks = pd.core.rm.memory.getMaxMemoryBlocks();
-        
+        LinkedList<Object> memoryBlocks = new LinkedList<>();
+     
         //Pridedam i komponentu sarasa nuorodas i jau egzistuojancia atminti
         for (int i = 0; i < RealMachine.SHARED_MEMORY_BLOCK_OFFSET; i++)
         {
@@ -185,7 +184,7 @@ public class StartStop extends Process {
     {
         System.out.println("Kuriam supervizorines atminties resursa");
 
-        LinkedList<Object> memoryBlocks = new LinkedList<Object>();
+        LinkedList<Object> memoryBlocks = new LinkedList<>();
         
         //Kuriam supervizorines atminties blokus
         for (int i = 0; i < totalBlocks; i++)
@@ -203,7 +202,7 @@ public class StartStop extends Process {
     {
         System.out.println("Kuriam HDD resursa");
 
-        LinkedList<Object> memoryBlocks = new LinkedList<Object>();
+        LinkedList<Object> memoryBlocks = new LinkedList<>();
         
         //Kuriam HDD blokus
         for (int i = 0; i < totalBlocks; i++)

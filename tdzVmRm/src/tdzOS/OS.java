@@ -511,9 +511,7 @@ public class OS {
         
         //randam resursa resursu sarase
         for(int i = 0; i < resources.size(); i++)
-        {
-            //gal galima patikrint pagal kalses??? ///TODO
-            //if((resources.get(i).rd.externalID == r.rd.externalID) && (resources.get(i).rd.internalID == r.rd.internalID))
+        {  
             if (resources.get(i) == r)
             {
                 //jei randam laisvu sarase ta resursa, tai reiskia, kad 

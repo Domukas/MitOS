@@ -281,6 +281,7 @@ public class JobGovernor extends Process
     private void destroySharedMemoryControl()
     {
         System.out.println("JobGovernor naikina procesą SharedMemoryControl");
+        pd.core.destroyProcess(pd.children.getFirst());
         
         next();
     }

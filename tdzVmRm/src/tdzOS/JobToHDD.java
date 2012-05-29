@@ -47,6 +47,10 @@ public class JobToHDD extends Process
             case 5:
                 createTaskInHDD();
                 break;
+            case 6:
+                freeSupervisor();
+                break;
+                        
         }
     }
     
@@ -137,8 +141,30 @@ public class JobToHDD extends Process
         //Sukuriam paruosta uzduoti supervizorineje atmintyje
         pd.core.createResource(this, ResName.UzduotisHDD, components);
         
-        pd.ownedResources.clear();
+        next();
+    }
+    
+    private void freeSupervisor()
+    {
+        System.out.println("JobToHDD atlaisvina resursą Supervizorinė atmintis");
+     
         
+        LinkedList<Object> tmpList = (LinkedList<Object>)pd.ownedResources.get(1).value;
+
+        int count = tmpList.size() + 2;
+        
+        for (Resource r:pd.core.resources)
+            if (r.rd.externalID == ResName.SupervizorineAtmintis)
+            {
+                for (int i = 0; i < count; i++)
+                {
+                    r.rd.components.add(new ResComponent(new String(), r));
+                }
+            }
+        
+
+        
+        pd.ownedResources.clear();
         goTo (1);
     }
     
