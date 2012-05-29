@@ -268,6 +268,7 @@ public class JobGovernor extends Process
     private void destroyVM()
     {
         System.out.println("JobGovernor naikina VM");
+        RealMachine.gui.dropVMTab((VirtualMachine)pd.children.getLast());
         pd.core.destroyProcess(pd.children.getLast());
         next();
         

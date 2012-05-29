@@ -55,6 +55,9 @@ public class OS {
     ProcessManager processManager;   //Planuotojas
     ResourceManager resourceManager; //Resursu paskirstytojas
     
+    
+    int VMCount = 0;
+    
     public OS (RealMachine rm)
     {
         this.rm = rm;
@@ -591,9 +594,16 @@ public class OS {
         while (!stop && (runProcesses.size()!= 0))
         {
             step();
+            int newCount = 0;
             for (Process p:processes)
                 if (p instanceof VirtualMachine)
-                    stop = true;
+                    newCount++;
+            if (newCount != VMCount)
+            {
+                System.out.println(newCount + " kitas " + VMCount);
+                stop = true;
+                VMCount = newCount;
+            }
         }
         
         
