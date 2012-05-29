@@ -110,7 +110,7 @@ public class GetLine extends Process{
     private void freeResourceIvedimoIrenginys()
     {  
         System.out.println("GetLine atlaisvina resursą [įvedimo įrenginys]");
-        pd.core.freeResource(this, pd.ownedResources.getFirst().parent);
+        pd.core.freeResource(this, pd.ownedResources.get(1).parent);
         pd.core.rm.setCH2OpenForAllProcessors();
         next();
     }
@@ -121,7 +121,7 @@ public class GetLine extends Process{
         System.out.println("GetLine kuria resursą [įvesta eilutė supervizorinėje atmintyje]");
         
         LinkedList<Object> components = new LinkedList();
-        components.add("įvesta");
+        components.add(pd.ownedResources.getFirst().parent.rd.creator);
           
         //Kuriamas resursas..
         pd.core.createResource(this, OS.ResName.IvestaEiluteSupervizorinejeAtmintyje, components);

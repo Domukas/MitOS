@@ -185,7 +185,8 @@ class ResourceManager {
                         if ((Process)contents.getLast() != tmpProcess)
                             give = false;
                     }
-                    else if ((r.rd.externalID == ResName.PratestiVMDarba) || ((r.rd.externalID == ResName.BlokasAtrakintas)))
+                    else if ((r.rd.externalID == ResName.PratestiVMDarba) || ((r.rd.externalID == ResName.BlokasAtrakintas))
+                            || r.rd.externalID == ResName.IvestaEiluteSupervizorinejeAtmintyje)
                     {
                         if ((Process)r.rd.components.getLast().value != tmpProcess)
                             give = false;
