@@ -39,7 +39,7 @@ public class OS {
         PranesimasJobGovernor, PranesimasSharedMemorycontrolProcesui, 
         PranesimasLoaderProcesui, //REIKIA SUTVARKYT DOKUMENTE, BUS PAKEITIMU DEL TO
         IvestaEiluteSupervizorinejeAtmintyje, //prikuriau nzn ar reikia
-        PratestiVMDarba, BlokasAtrakintas, Neegzistuojantis
+        PratestiVMDarba, BlokasAtrakintas, VartotojoIvestaEilute, Neegzistuojantis
     }
     
     public LinkedList<Process> processes;
@@ -412,6 +412,7 @@ public class OS {
             case PranesimasJobGovernor:
             case PranesimasSoundControlProcesui:
             case BlokasAtrakintas:
+            case VartotojoIvestaEilute:
                 System.out.println("Kuriamas resursas " + externalID);
                 
                 r = new Resource(creator, externalID, internalID, false, //ne pakartotinio naudojimo

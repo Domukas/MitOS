@@ -1,0 +1,6 @@
+@Memory 3
+@Code
+JP01
+DGT1
+HALT
+@CodeEnd

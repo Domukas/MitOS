@@ -4,6 +4,7 @@
  */
 package tdzOS;
 
+import IODevices.InputWindow;
 import java.util.LinkedList;
 import tdzVmRm.MemoryBlock;
 import tdzVmRm.Processor;
@@ -77,7 +78,11 @@ public class GetLine extends Process{
     {
         System.out.println("GetLine blokuojasi dėl resurso [Vartotojo įvesta eilutė]");
         pd.core.rm.setCH2ClosedForAllProcessors();
-        line = pd.core.rm.in.get();
+        
+        InputWindow inputWindow = new InputWindow(pd.core, this);
+        inputWindow.setVisible(true); 
+        
+        pd.core.requestResource(this, OS.ResName.VartotojoIvestaEilute, 1);
         next();
     }
     
@@ -86,7 +91,7 @@ public class GetLine extends Process{
     { 
         System.out.println("GetLine įrašo eilute į atmintį");
         String adress = (String)pd.ownedResources.get(0).value;
-        
+        line = (String)pd.ownedResources.getLast().value;
         MemoryBlock block = RealMachine.memory.getBlock(Integer.parseInt(adress));
         
         for (int i = 0; i < line.length() / 4 + 1; i++)
@@ -120,6 +125,8 @@ public class GetLine extends Process{
           
         //Kuriamas resursas..
         pd.core.createResource(this, OS.ResName.IvestaEiluteSupervizorinejeAtmintyje, components);
+        
+        pd.ownedResources.clear();
         
         //Pereinam i proceso pradine busena
         goTo(1);

@@ -5,7 +5,6 @@
 package tdzVmRm;
 
 import IODevices.Output;
-import IODevices.Input;
 import GUI.RealMachineGUI;
 import java.io.*;
 import java.util.LinkedList;
@@ -45,7 +44,6 @@ public class RealMachine {
     public static Processor[] proc = new Processor[2];
     
     public static Speaker[] speakers = new Speaker[2];
-    public static Input in;
     public static Output out;
     
     //public static VirtualMachine VM;
@@ -84,7 +82,6 @@ public class RealMachine {
         
         speakers[0] = new Speaker();
         speakers[1] = new Speaker();   
-        in = new Input();
         out = new Output();
         
         memory = new RealMemory(blocks);
