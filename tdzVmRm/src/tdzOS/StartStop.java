@@ -114,7 +114,7 @@ public class StartStop extends Process {
         next();
     }
     
-    private void blockForExit() //TODO
+    private void blockForExit()
     {
         System.out.println("StartStop blokuojasi del MOS pabaigos resurso");  
         pd.core.requestResource(this, ResName.MOSPabaiga, 1);
@@ -122,18 +122,41 @@ public class StartStop extends Process {
         next();
     }
     
-    private void destroySystemProcesses() //TODO
+    private void destroySystemProcesses() 
     {
+        for (Processor p:RealMachine.proc)
+            if (p.pd.currentProcess != null)
+                if (p.pd.currentProcess != this)
+                    pd.core.stopProcess(p.pd.currentProcess);
+        
         System.out.println("StartStop naikina procesus");  
+        LinkedList<Process> temp = new LinkedList<>();
+        for (Process p:pd.children)
+            temp.add(p);
+        
+        for (Process p:temp)
+            pd.core.destroyProcess(p);
+        
+        pd.core.blockedProcesses.clear();
+        pd.core.readyProcesses.clear();
+        pd.core.runProcesses.clear();
+        
+
         
         next();
     }
     
-    private void destroySystemResources() //TODO
+    private void destroySystemResources() 
     {
         System.out.println("StartStop naikina resursus");
         
-        next();
+        LinkedList<Resource> temp = new LinkedList<>();
+        for (Resource r:pd.createdResources)
+            temp.add(r);
+        
+        for (Resource r:temp)
+            pd.core.destroyResource(r);
+        pd.core.destroyProcess(this);
     }
     
     private void createResourceVartotojoAtmintis()

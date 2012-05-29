@@ -189,8 +189,6 @@ public class JobGovernor extends Process
         
         LinkedList<ResComponent> toGive = new LinkedList<>();
         
-        //for (ResComponent rc:pd.ownedResources)
-        //    System.out.println(rc.value.toString());
         
         String temp = (String)pd.ownedResources.getLast().value;
         if (temp.length() == 1)
@@ -201,7 +199,6 @@ public class JobGovernor extends Process
         pd.ownedResources.getLast().value = temp;
         toGive.add(pd.ownedResources.getLast());
         
-        //System.out.println("\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\" + (String)toGive.getFirst().value);
         
         pd.core.createProcess(this, ProcessState.Ready, 50, toGive, ProcName.VirtualMachine);
         
@@ -228,10 +225,7 @@ public class JobGovernor extends Process
     
     //9
     private void isIOorSoundInt()
-    {
-        for (ResComponent rc: pd.ownedResources)
-            System.out.println(rc.value);
-        
+    {      
         tempList = (LinkedList<Object>)pd.ownedResources.getLast().value;
         
         
@@ -337,6 +331,8 @@ public class JobGovernor extends Process
         pd.core.createResource(this, ResName.PranesimasSoundControlProcesui,
                 createMessage(OPC));    
         
+        pd.ownedResources.removeLast();
+        
         goTo (26);
         
     }
@@ -376,13 +372,16 @@ public class JobGovernor extends Process
         
         pd.core.createResource(this, ResName.EiluteAtmintyje, createMessage(temp));
         
-        goTo(26); //Reikia eit i aktyvavima VM'o
+        next(); 
     }
     
     //20
     private void blockForLinePrinted()
     {
+        System.out.print("JobGovernor blokuojasi dėl resurso [Išvesta eilutė]");
+        pd.core.requestResource(this, ResName.IsvestaEilute, 1);
         
+        goTo(26); //Aktyvuojam VM
     }
     
     //21
@@ -478,6 +477,9 @@ public class JobGovernor extends Process
         
         //Siunciam tik vienai virtualiai masinai
         pd.core.createResource(this, ResName.PratestiVMDarba, tempParameters);
+        
+        pd.ownedResources.removeLast();
+        pd.ownedResources.removeLast();
         
         goTo(7);
     }

@@ -190,7 +190,8 @@ class ResourceManager {
                             
                         case PratestiVMDarba:
                         case BlokasAtrakintas:
-                        case IvestaEiluteSupervizorinejeAtmintyje:    
+                        case IvestaEiluteSupervizorinejeAtmintyje:  
+                        case IsvestaEilute:
                             if ((Process)r.rd.components.getLast().value != tmpProcess)
                                 give = false;     
                             

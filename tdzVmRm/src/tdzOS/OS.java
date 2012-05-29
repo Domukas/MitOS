@@ -61,18 +61,20 @@ public class OS {
     public OS (RealMachine rm)
     {
         this.rm = rm;
-        
-        startOS();
+        initProcesses();
+        //startOS();
     }
     
     public void startOS()
     {
-        initProcesses();
+        //initProcesses();
     }
     
     public void stopOS()
     {
-        
+        LinkedList<Object> temp = new LinkedList<>();
+        temp.add("MOS pabaiga");
+        createResource(getMainproc(), ResName.MOSPabaiga, temp);
     }
     
     
@@ -416,6 +418,7 @@ public class OS {
             case PranesimasSoundControlProcesui:
             case BlokasAtrakintas:
             case VartotojoIvestaEilute:
+            case MOSPabaiga:
                 System.out.println("Kuriamas resursas " + externalID);
                 
                 r = new Resource(creator, externalID, internalID, false, //ne pakartotinio naudojimo

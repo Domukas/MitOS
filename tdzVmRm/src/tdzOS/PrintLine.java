@@ -5,6 +5,7 @@
 package tdzOS;
 
 import java.util.LinkedList;
+import tdzOS.OS.ResName;
 import tdzVmRm.Processor;
 
 /**
@@ -40,6 +41,9 @@ public class PrintLine extends Process
                 
             case 4:
                 freeResourceIsvedimoIrenginys();
+                break;
+            case 5:
+                createResourceIsvestaEilute();
                 break;
         }
     }
@@ -81,27 +85,36 @@ public class PrintLine extends Process
         pd.core.freeResource(this, pd.ownedResources.getLast().parent);
         
         pd.core.rm.setCH1OpenForAllProcessors();
-        //next();
         
-        pd.ownedResources.clear();
-        goTo(1);
+        
+        
+        if (pd.ownedResources.getFirst().parent.rd.creator instanceof JobGovernor)
+        {
+            System.out.println("true");
+            next();
+        }
+        else
+        {
+            pd.ownedResources.clear();
+            goTo(1);
+        }
     }
     
     
-    /*
+    
     //5
     private void createResourceIsvestaEilute()
     {
         System.out.println("PrintLine kuria resursą [išvesta eilutė]");
         
         LinkedList<Object> components = new LinkedList();
-        components.add("išvesta");
+        components.add(pd.ownedResources.getFirst().parent.rd.creator);
           
         //Kuriamas resursas..
         pd.core.createResource(this, ResName.IsvestaEilute, components);
         
+        pd.ownedResources.clear();
         //Pereinam i proceso pradine busena
         goTo(1);
     }
-    * */
 }
