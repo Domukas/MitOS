@@ -19,6 +19,7 @@ import tdzVmRm.Word;
 public class Loader extends Process
 {
     int PagingAdress;
+    LinkedList<String> inHDDList;
     
     public Loader (LinkedList inList, int internalID, OS.ProcName externalID, 
            ProcessorState ps, Processor p, LinkedList<ResComponent> or,
@@ -39,9 +40,12 @@ public class Loader extends Process
             case 2:
                 copyToMemory();
                 break;
-                
             case 3:
                 createResourceLoadingFinished();
+                break;
+                
+            case 4:
+                freeHDD();
                 break;
         }
     }
@@ -64,7 +68,7 @@ public class Loader extends Process
         pd.core.rm.setCH3ClosedForAllProcessors();
         //sarasuose saugom nuorodas i blokus HDD ir isskirtus blokus RM
         
-        LinkedList<String> inHDDList = (LinkedList<String>)pd.ownedResources.getFirst().value;
+        inHDDList = (LinkedList<String>)pd.ownedResources.getFirst().value;
         LinkedList<MemoryBlock> inMemoryList = (LinkedList<MemoryBlock>)pd.ownedResources.getLast().value;
         
         //Sudarom PLR
@@ -103,6 +107,20 @@ public class Loader extends Process
         //Dar paduodam puslapiavimo lenteles adresa
         pd.core.createResource(this, ResName.UzduotiesPakrovimasBaigtas,
                 createMessage(Integer.toHexString(PagingAdress)));
+        
+        next();
+    }
+    
+    private void freeHDD()
+    {
+        for (Resource r:pd.core.resources)
+            if (r.rd.externalID == ResName.HDD)
+            {
+                for (int i = 0; i < inHDDList.size(); i++)
+                {
+                    r.rd.components.add(new ResComponent(new String(), r));
+                }
+            }
         
         pd.ownedResources.clear();
         
