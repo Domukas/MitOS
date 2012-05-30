@@ -41,7 +41,7 @@ public class RealMachine {
     public static INTRegister PI, SI;
     public static CHRegister CH1, CH2, CH3, CH4;
     */
-    public static Processor[] proc = new Processor[2];
+    public static Processor[] proc = new Processor[5];
     
     public static Speaker[] speakers = new Speaker[2];
     public static Output out;
@@ -77,8 +77,10 @@ public class RealMachine {
         CH3 = new CHRegister();
         CH4 = new CHRegister();
         * */
-        proc[0] = new Processor();
-        proc[1] = new Processor();
+        for (int i = 0; i < proc.length; i++)
+        {
+        proc[i] = new Processor();
+        }
         
         speakers[0] = new Speaker();
         speakers[1] = new Speaker();   
