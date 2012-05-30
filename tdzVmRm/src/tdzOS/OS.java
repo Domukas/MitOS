@@ -5,6 +5,8 @@
 package tdzOS;
 
 import java.util.LinkedList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import tdzVmRm.Processor;
 import tdzVmRm.RealMachine;
 
@@ -12,8 +14,8 @@ import tdzVmRm.RealMachine;
  *
  * @author Tomas
  */
-public class OS {
-    
+public class OS implements Runnable {
+
     public enum ProcessState 
     {
         Run, Ready, ReadyS, Blocked, BlockedS
@@ -41,12 +43,12 @@ public class OS {
         IvestaEiluteSupervizorinejeAtmintyje, //prikuriau nzn ar reikia
         PratestiVMDarba, BlokasAtrakintas, VartotojoIvestaEilute, Neegzistuojantis
     }
-    
+
     public LinkedList<Process> processes;
     public LinkedList<Process> readyProcesses;
     public LinkedList<Process> runProcesses;
     public LinkedList<Process> blockedProcesses;
-    
+
     public LinkedList<Resource> resources;
     
     public RealMachine rm; //nuoroda i RM
@@ -57,6 +59,10 @@ public class OS {
     
     
     int VMCount = 0;
+    public boolean makeStep = false;
+    public boolean makeStepToVM = false;
+    public boolean stopOS = false;
+    public boolean makeRun = false;
     
     public OS (RealMachine rm)
     {
@@ -65,6 +71,32 @@ public class OS {
         //startOS();
     }
     
+    @Override
+    public void run() {
+        while (!stopOS)
+        {
+            if (makeStep){
+                step();
+            } 
+            else if (makeStepToVM){
+                stepToVM();
+            }
+            else if (makeRun)
+            {
+                while (runProcesses.size() != 0 && makeRun)
+                    {
+                        step();
+                        rm.gui.updateTables = true;
+                    }
+            }
+            makeStep = makeStepToVM = false;
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(OS.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
     
     public void stopOS()
     {
@@ -604,14 +636,6 @@ public class OS {
         }
         
         
-    }
-    
-    public void run()
-    {
-        while (runProcesses.size() != 0)
-        {
-            step();
-        }
     }
     
     private void initProcesses()

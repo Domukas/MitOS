@@ -42,16 +42,17 @@ public class ResourcesTableModel extends AbstractTableModel {
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-        ResourceDescriptor rd = os.resources.get(rowIndex).rd;
-        switch (columnIndex) {
-            case 0: return rd.externalID+"#"+rd.internalID;
-                
-            case 1: return rd.creator.pd.externalID+"#"+rd.creator.pd.internalID;
-                
-            case 2: return rd.components.size();
-       
+            if (os.resources.size() > rowIndex){
+            ResourceDescriptor rd = os.resources.get(rowIndex).rd;
+            switch (columnIndex) {
+                case 0: return rd.externalID+"#"+rd.internalID;
+
+                case 1: return rd.creator.pd.externalID+"#"+rd.creator.pd.internalID;
+
+                case 2: return rd.components.size();
+            }     
         }
-        return "ERROR";
+        return "ERROR";    
     }
 
     public String getColumnName(int column) {

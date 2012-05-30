@@ -27,7 +27,6 @@ public class ProcessorJPanel extends javax.swing.JPanel {
     
     public void updateFields()
     {
-        repaint();
         PLRTextField.setText(proc.PLR.getValue());
         R1TextField.setText(proc.R1.getValue().getValue().replaceFirst("^0+(?!$)", ""));
         R2TextField.setText(proc.R2.getValue().getValue().replaceFirst("^0+(?!$)", ""));
@@ -60,6 +59,8 @@ public class ProcessorJPanel extends javax.swing.JPanel {
         ZFCheckBox.setSelected(proc.C.isZeroFlagSet());
         SFCheckBox.setSelected(proc.C.isSignFlagSet());
         OFCheckBox.setSelected(proc.C.isOverflowFlagSet());
+        
+        repaint();
     }
     
     private String CHStateToString(boolean state)

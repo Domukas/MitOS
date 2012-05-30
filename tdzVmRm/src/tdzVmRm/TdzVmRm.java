@@ -22,15 +22,12 @@ public class TdzVmRm {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
 
-        final RealMachine RM = new RealMachine(0x65);
-        final OS os = new OS(RM);
-        
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new RealMachineGUI(RM, os).setVisible(true);
-            }
-        });
+        RealMachine RM = new RealMachine(0x65);
+        OS os = new OS(RM);
+        Thread tGUI = new Thread(new RealMachineGUI(RM, os));
+        Thread t = new Thread(os);
+        tGUI.start();
+        t.start();
     }
 }

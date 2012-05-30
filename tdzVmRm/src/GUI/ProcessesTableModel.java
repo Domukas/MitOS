@@ -44,27 +44,29 @@ public class ProcessesTableModel extends AbstractTableModel {
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-        ProcessDescriptor pd = os.processes.get(rowIndex).pd;
-        switch (columnIndex) {
-            case 0: return pd.externalID+"#"+pd.internalID;
-                
-            case 1: return os.processes.get(rowIndex).nextInstruction;
-                
-            case 2: return pd.state;
-                
-            case 3: return pd.priority;
-                
-            case 4:
-                if (pd.processor != null)
-                    return pd.processor.pd.number;
-                else
-                    return "null";
-                
-            case 5:
-                if (pd.parent != null)
-                    return pd.parent.pd.externalID+"#"+pd.parent.pd.internalID;
-                else
-                    return "null";
+        if (os.processes.size() > rowIndex){
+            ProcessDescriptor pd = os.processes.get(rowIndex).pd;
+            switch (columnIndex) {
+                case 0: return pd.externalID+"#"+pd.internalID;
+
+                case 1: return os.processes.get(rowIndex).nextInstruction;
+
+                case 2: return pd.state;
+
+                case 3: return pd.priority;
+
+                case 4:
+                    if (pd.processor != null)
+                        return pd.processor.pd.number;
+                    else
+                        return "null";
+
+                case 5:
+                    if (pd.parent != null)
+                        return pd.parent.pd.externalID+"#"+pd.parent.pd.internalID;
+                    else
+                        return "null";
+            }            
         }
         return "ERROR";
     }

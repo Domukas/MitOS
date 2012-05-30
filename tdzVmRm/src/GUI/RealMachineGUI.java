@@ -29,7 +29,7 @@ import tdzVmRm.Word;
  *
  * @author Tomas
  */
-public class RealMachineGUI extends javax.swing.JFrame {
+public class RealMachineGUI extends javax.swing.JFrame implements Runnable {
 
     /**
      * Creates new form RealMachineGUI
@@ -38,9 +38,32 @@ public class RealMachineGUI extends javax.swing.JFrame {
     RealMachine RM;
     OS os;
     JTable vm1MemoryTable;
+    public boolean updateTables = false;
     
     //Reikalinga nusakyti lenteles reiksmiu tipui
     TableDataTypes tableDataType = TableDataTypes.Hex;
+
+    @Override
+    public void run() {
+        while (true)
+        {
+            if (updateTables)
+                updateAll();
+            updateTables = false;
+            if (os.makeRun)
+                runJToggleButton.setText("Running");
+            else
+                runJToggleButton.setText("Run");
+            runJToggleButton.setSelected(os.makeRun);
+            
+            try {
+                Thread.sleep(100);
+            } catch (InterruptedException ex) {
+                Logger.getLogger(RealMachineGUI.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+   
     
     public enum TableDataTypes {
         Int,
@@ -151,12 +174,9 @@ public class RealMachineGUI extends javax.swing.JFrame {
     
     public void updateAll(){
         updateProcessorJPanels();
-        this.paint(this.getGraphics());
-        memoryTable.repaint();
-        /*
-        if (RealMachine.VM != null)
-            vm1MemoryTable.repaint();
-            * */
+        memoryTabbedPane.getComponentAt(memoryTabbedPane.getSelectedIndex()).repaint();
+        procJTable.revalidate();
+        resJTable.revalidate();
         procJTable.repaint();
         resJTable.repaint();
     }
@@ -201,7 +221,7 @@ public class RealMachineGUI extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         memoryTable = new javax.swing.JTable();
         buttonPanel = new javax.swing.JPanel();
-        runButton = new javax.swing.JButton();
+        runJToggleButton = new javax.swing.JToggleButton();
         stepButton = new javax.swing.JButton();
         osStepButton = new javax.swing.JButton();
         taskNameField = new javax.swing.JTextField();
@@ -213,13 +233,12 @@ public class RealMachineGUI extends javax.swing.JFrame {
         getContentPane().setLayout(new javax.swing.BoxLayout(getContentPane(), javax.swing.BoxLayout.LINE_AXIS));
 
         operationsPanel.setMinimumSize(new java.awt.Dimension(256, 128));
-        operationsPanel.setLayout(new javax.swing.BoxLayout(operationsPanel, javax.swing.BoxLayout.Y_AXIS));
+        operationsPanel.setLayout(new javax.swing.BoxLayout(operationsPanel, javax.swing.BoxLayout.PAGE_AXIS));
+
+        processorsTabbedPane.setDoubleBuffered(true);
         operationsPanel.add(processorsTabbedPane);
 
         procJPanel.setLayout(new java.awt.GridLayout(1, 0));
-
-        procTableJScrollPane.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-        procTableJScrollPane.setMinimumSize(new java.awt.Dimension(128, 128));
 
         procJTable.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -232,19 +251,14 @@ public class RealMachineGUI extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        procJTable.setColumnSelectionAllowed(true);
+        procJTable.setDoubleBuffered(true);
         procJTable.setFillsViewportHeight(true);
-        procJTable.setMaximumSize(new java.awt.Dimension(0, 0));
-        procJTable.setMinimumSize(new java.awt.Dimension(0, 0));
-        procJTable.setPreferredSize(new java.awt.Dimension(0, 400));
-        procJTable.getTableHeader().setReorderingAllowed(false);
         procJTable.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 procJTableMouseClicked(evt);
             }
         });
         procTableJScrollPane.setViewportView(procJTable);
-        procJTable.getColumnModel().getSelectionModel().setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
 
         procJPanel.add(procTableJScrollPane);
 
@@ -263,6 +277,7 @@ public class RealMachineGUI extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        resJTable.setDoubleBuffered(true);
         resJTable.setFillsViewportHeight(true);
         resTableScrollPane.setViewportView(resJTable);
 
@@ -281,6 +296,7 @@ public class RealMachineGUI extends javax.swing.JFrame {
 
         memoryTable.setModel(new MemoryTableModel(RM, this));
         memoryTable.setColumnSelectionAllowed(true);
+        memoryTable.setDoubleBuffered(true);
         memoryTable.addInputMethodListener(new java.awt.event.InputMethodListener() {
             public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
             }
@@ -302,13 +318,13 @@ public class RealMachineGUI extends javax.swing.JFrame {
         buttonPanel.setPreferredSize(new java.awt.Dimension(128, 16));
         buttonPanel.setLayout(new javax.swing.BoxLayout(buttonPanel, javax.swing.BoxLayout.LINE_AXIS));
 
-        runButton.setText("Run");
-        runButton.addActionListener(new java.awt.event.ActionListener() {
+        runJToggleButton.setText("Run");
+        runJToggleButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                runButtonActionPerformed(evt);
+                runJToggleButtonActionPerformed(evt);
             }
         });
-        buttonPanel.add(runButton);
+        buttonPanel.add(runJToggleButton);
 
         stepButton.setText("Step to VM");
         stepButton.addActionListener(new java.awt.event.ActionListener() {
@@ -355,7 +371,7 @@ public class RealMachineGUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void stepButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_stepButtonActionPerformed
-        os.stepToVM();
+        os.makeStepToVM = true;
         //RM.VM.step();
         updateAll();
     }//GEN-LAST:event_stepButtonActionPerformed
@@ -363,11 +379,6 @@ public class RealMachineGUI extends javax.swing.JFrame {
     private void memoryTableInputMethodTextChanged(java.awt.event.InputMethodEvent evt) {//GEN-FIRST:event_memoryTableInputMethodTextChanged
 
     }//GEN-LAST:event_memoryTableInputMethodTextChanged
-
-    private void runButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_runButtonActionPerformed
-        os.run();
-        updateAll();
-    }//GEN-LAST:event_runButtonActionPerformed
 
     private void taskButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_taskButtonActionPerformed
             String taskName;
@@ -416,7 +427,7 @@ public class RealMachineGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_taskButtonActionPerformed
 
     private void osStepButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_osStepButtonActionPerformed
-        os.step();
+        os.makeStep = true;
         updateAll();
     }//GEN-LAST:event_osStepButtonActionPerformed
 
@@ -431,6 +442,18 @@ public class RealMachineGUI extends javax.swing.JFrame {
     private void procJTableMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_procJTableMouseClicked
         procTableSelected();
     }//GEN-LAST:event_procJTableMouseClicked
+
+    private void runJToggleButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_runJToggleButtonActionPerformed
+        if (runJToggleButton.isSelected())
+        {
+            os.makeRun = true;
+            runJToggleButton.setText("Running");
+        } else 
+        {
+            os.makeRun = false;
+            runJToggleButton.setText("Run");
+        }
+    }//GEN-LAST:event_runJToggleButtonActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel buttonPanel;
@@ -448,7 +471,7 @@ public class RealMachineGUI extends javax.swing.JFrame {
     private javax.swing.JTable resJTable;
     private javax.swing.JScrollPane resTableScrollPane;
     private javax.swing.JPanel rightSidePanel;
-    private javax.swing.JButton runButton;
+    private javax.swing.JToggleButton runJToggleButton;
     private javax.swing.JButton stepButton;
     private javax.swing.ButtonGroup tableDataTypeButtonGroup;
     private javax.swing.JButton taskButton;
