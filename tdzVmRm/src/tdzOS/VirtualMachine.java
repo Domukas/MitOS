@@ -104,7 +104,11 @@ public class VirtualMachine extends Process
     {
         System.out.println("VirtualMachine perjungia procesorių į vartotojo rėžimą");
         pd.processor.mode.setUser();
-        
+        for (ResComponent rc : pd.ownedResources)
+        {
+            if (rc.parent.rd.externalID == ResName.PratestiVMDarba)
+                pd.core.freeResource(this, rc.parent);
+        }
         next();
     }
     
@@ -220,216 +224,223 @@ public class VirtualMachine extends Process
        
     private void processCommand(Word currentWord)
     {
-        int xx;
-        
-        OPC = encodeBytes3and2(currentWord);
-        xx = XXAdress(currentWord);
-         
-        switch(OPC)
+        int xx = 0;
+        if (currentWord.getValue().length() == 4)
         {
-            case "A1":
+            OPC = encodeBytes3and2(currentWord);
+            xx = XXAdress(currentWord);
+// <editor-fold defaultstate="collapsed" desc="Opkodu Switch'as">
+            switch(OPC)
             {
-                A1(xx);
-                break;
-            }
-            case "A2":
-            {
-                A2(xx); 
-                break;
-            }
-            case "B1":
-            {
-                B1(xx);
-                break;
-            }
-            case "B2":
-            {
-                B2(xx); 
-                break;
-            }
-            case "C1":
-            {
-                C1(xx); 
-                break;
-            }
-            case "C2":
-            {
-                C2(xx);  
-                break;
-            }
-            case "L1":
-            {             
-                L1(xx);
-                break;
-            }
-            case "L2":
-            {
-                L2(xx);
-                break;
-            }
-            case "S1":
-            {
-                S1(xx);
-                break;
-            }
-            case "S2":
-            {
-                S2(xx);
-                break;
-            }
-            case "X1":
-            {
-                X1(xx);
-                break;
-            }
-            case "X2":
-            {
-                X2(xx);
-                break;
-            }
-            case "Z1":
-            {
-                Z1(xx);
-                break;
-            }
-            case "Z2":
-            {
-                Z2(xx);
-                break;
-            }
-            case "MU":
-            {
-                MU(xx);
-                break;
-            }
-            case "DI":
-            {
-                DI(xx);
-                break;
-            }
-            case "XR":
-            {
-                XR(xx);
-                break;
-            }
-            case "AN":
-            {
-                AN(xx);
-                break;
-            }
-            case "OR":
-            {
-                OR(xx);
-                break;
-            }
-            case "JP":
-            {
-                JP(xx);
-                break;
-            }
-            case "JE":
-            {
-                JE(xx);
-                break;
-            }
-            case "JG":
-            {
-                JG(xx);
-                break;
-            }
-            case "JL":
-            {
-                JL(xx);
-                break;
-            }
-            case "JX":
-            {
-                JX(xx);
-                break;
-            }
-            case "LO":
-            {
-                LO(xx);
-                break;
-            }
-            default:
-            {
-                OPC += encodeByte1(currentWord);
-                int x = XAdress(currentWord);
-                switch (OPC)
+                case "A1":
                 {
-                    case "LCK":
+                    A1(xx);
+                    break;
+                }
+                case "A2":
+                {
+                    A2(xx); 
+                    break;
+                }
+                case "B1":
+                {
+                    B1(xx);
+                    break;
+                }
+                case "B2":
+                {
+                    B2(xx); 
+                    break;
+                }
+                case "C1":
+                {
+                    C1(xx); 
+                    break;
+                }
+                case "C2":
+                {
+                    C2(xx);  
+                    break;
+                }
+                case "L1":
+                {             
+                    L1(xx);
+                    break;
+                }
+                case "L2":
+                {
+                    L2(xx);
+                    break;
+                }
+                case "S1":
+                {
+                    S1(xx);
+                    break;
+                }
+                case "S2":
+                {
+                    S2(xx);
+                    break;
+                }
+                case "X1":
+                {
+                    X1(xx);
+                    break;
+                }
+                case "X2":
+                {
+                    X2(xx);
+                    break;
+                }
+                case "Z1":
+                {
+                    Z1(xx);
+                    break;
+                }
+                case "Z2":
+                {
+                    Z2(xx);
+                    break;
+                }
+                case "MU":
+                {
+                    MU(xx);
+                    break;
+                }
+                case "DI":
+                {
+                    DI(xx);
+                    break;
+                }
+                case "XR":
+                {
+                    XR(xx);
+                    break;
+                }
+                case "AN":
+                {
+                    AN(xx);
+                    break;
+                }
+                case "OR":
+                {
+                    OR(xx);
+                    break;
+                }
+                case "JP":
+                {
+                    JP(xx);
+                    break;
+                }
+                case "JE":
+                {
+                    JE(xx);
+                    break;
+                }
+                case "JG":
+                {
+                    JG(xx);
+                    break;
+                }
+                case "JL":
+                {
+                    JL(xx);
+                    break;
+                }
+                case "JX":
+                {
+                    JX(xx);
+                    break;
+                }
+                case "LO":
+                {
+                    LO(xx);
+                    break;
+                }
+                default:
+                {
+                    OPC += encodeByte1(currentWord);
+                    int x = XAdress(currentWord);
+                    switch (OPC)
                     {
-                        LCK(x);
-                        break;
-                    }
-                    case "ULC":
-                    {
-                        ULC(x);
-                        break;
-                    }
-                    case "DGT":
-                    {
-                        DGT(x);
-                        break;
-                    }
-                    case "DPT":
-                    {
-                        DPT(x);
-                        break;
-                    }
-                    default:
-                    {
-                        OPC += encodeByte0(currentWord);
-                        switch(OPC)
+                        case "LCK":
                         {
-                            case "GGR1":
+                            LCK(x);
+                            break;
+                        }
+                        case "ULC":
+                        {
+                            ULC(x);
+                            break;
+                        }
+                        case "DGT":
+                        {
+                            DGT(x);
+                            break;
+                        }
+                        case "DPT":
+                        {
+                            DPT(x);
+                            break;
+                        }
+                        default:
+                        {
+                            OPC += encodeByte0(currentWord);
+                            switch(OPC)
                             {
-                                GGR1();
-                                break;
-                            }
-                            case "GGR2":
-                            {
-                                GGR2();
-                                break;
-                            }
-                            case "GLR1":
-                            {
-                                GLR1();
-                                break;
-                            }
-                            case "GLR2":
-                            {
-                                GLR2();
-                                break;
-                            }
-                            case "GNR1":
-                            {
-                                GNR1();
-                                break;
-                            }
-                            case "GNR2":
-                            {
-                                GNR2();
-                                break;
-                            }
-                            case "HALT":
-                            {
-                                HALT();
-                                break;
-                            }
-                            default:
-                            {
-                                //Opkodas neegzistuoja
-                                pd.processor.PI.setValue(2);
-                                goTo(3);
+                                case "GGR1":
+                                {
+                                    GGR1();
+                                    break;
+                                }
+                                case "GGR2":
+                                {
+                                    GGR2();
+                                    break;
+                                }
+                                case "GLR1":
+                                {
+                                    GLR1();
+                                    break;
+                                }
+                                case "GLR2":
+                                {
+                                    GLR2();
+                                    break;
+                                }
+                                case "GNR1":
+                                {
+                                    GNR1();
+                                    break;
+                                }
+                                case "GNR2":
+                                {
+                                    GNR2();
+                                    break;
+                                }
+                                case "HALT":
+                                {
+                                    HALT();
+                                    break;
+                                }
+                                default:
+                                {
+                                    //Opkodas neegzistuoja
+                                    pd.processor.PI.setValue(2);
+                                    goTo(3);
+                                }
                             }
                         }
-                    }
-                } 
-            }   
+                    } 
+                }   
+            }// </editor-fold>
         }
-
+        else 
+        {
+            //Opkodas per trumpas
+            pd.processor.PI.setValue(2);
+            goTo(3);
+        }
         System.out.println(" -- > Code:" + OPC);  
     }   
         

@@ -481,27 +481,7 @@ public class OS implements Runnable {
         {
             r.rd.components.remove(i);
         }
-        
-        //atblokuojami visi procesai laukiantys sio resurso
-        //TODO cia negerai......
-        /*
-        for(int i = 0; i < processes.size(); i++)
-        {
-            Process currentProcess = processes.get(i);
-            for(int j = 0; j < currentProcess.pd.ownedResources.size(); j++)
-            {
-                if((currentProcess.pd.ownedResources.get(j).equals(r)) && (currentProcess.pd.state == ProcessState.Blocked))
-                {
-                    currentProcess.pd.state = ProcessState.Ready;
-                }
-            }
-           
-        }
-        * 
-        */
-        //ismetamas is bendro resursu saraso
         resources.remove(r);
-        
         System.out.println("Resursas sunaikintas");
     }
     
@@ -531,64 +511,74 @@ public class OS implements Runnable {
         //yra kviečiamas resursų paskirstytojas.
         //Resurso elementas pridedamas prie resurso elementų sąrašo.  
 
-        System.out.println("Procesas " + process.pd.externalID + " #" + process.pd.internalID + 
-                "atlaisvina resursa " + r.rd.externalID);
+        System.out.println("Procesas " + process.pd.externalID + "#" + process.pd.internalID + 
+                "atlaisvina resursa " + r.rd.externalID + "#" + r.rd.internalID);
         
         boolean isInFreeList = false;
         Resource tmpRes = null;
-        
-        //randam resursa resursu sarase
-        for(int i = 0; i < resources.size(); i++)
-        {  
-            if (resources.get(i) == r)
-            {
-                //jei randam laisvu sarase ta resursa, tai reiskia, kad 
-                //jam turim grazint tuos komponentus. Todel isimenam ji.
-                isInFreeList = true;
-                tmpRes = resources.get(i);
-                break;
-            }
-        
-        }
-        
-        LinkedList<ResComponent> tmpList = new LinkedList<>();
-        for (ResComponent c:process.pd.ownedResources)
-            tmpList.add(c);
-        
-        if (isInFreeList)
-        {   
-            //reiks prideti jo komponentus
-
-            for (ResComponent c: tmpList)
-            {
-
-                //atiduodam komponentus...
-                if (c.parent == tmpRes)
-                {
-                    tmpRes.rd.components.add(c);
-                    process.pd.ownedResources.remove(c);
-                }
-            }
-        }
-        else
+        if (r.rd.reusable)
         {
-            //Jei ne laisvu sarase, tada i ta sarasa resursa idedam
-            //Ir jam vel grazinam komponentus
-            tmpRes = r;
-            resources.add(r);
-            
-            //Grazinam jam komponentus
-            
-            for (ResComponent c:tmpList)
-            {
-                if (c.parent == tmpRes)
+            //randam resursa resursu sarase
+            for(int i = 0; i < resources.size(); i++)
+            {  
+                if (resources.get(i) == r)
                 {
-                    System.out.println("Removing: " + c.parent.rd.externalID);
-                    tmpRes.rd.components.add(c);
-                    process.pd.ownedResources.remove(c);
+                    //jei randam laisvu sarase ta resursa, tai reiskia, kad 
+                    //jam turim grazint tuos komponentus. Todel isimenam ji.
+                    isInFreeList = true;
+                    tmpRes = resources.get(i);
+                    break;
+                }
+
+            }
+
+            LinkedList<ResComponent> tmpList = new LinkedList<>();
+            for (ResComponent c:process.pd.ownedResources)
+                tmpList.add(c);
+
+            if (isInFreeList)
+            {   
+                //reiks prideti jo komponentus
+
+                for (ResComponent c: tmpList)
+                {
+
+                    //atiduodam komponentus...
+                    if (c.parent == tmpRes)
+                    {
+                        tmpRes.rd.components.add(c);
+                        process.pd.ownedResources.remove(c);
+                    }
                 }
             }
-            
+            else
+            {
+                //Jei ne laisvu sarase, tada i ta sarasa resursa idedam
+                //Ir jam vel grazinam komponentus
+                tmpRes = r;
+                resources.add(r);
+
+                //Grazinam jam komponentus
+
+                for (ResComponent c:tmpList)
+                {
+                    if (c.parent == tmpRes)
+                    {
+                        System.out.println("Removing: " + c.parent.rd.externalID);
+                        tmpRes.rd.components.add(c);
+                        process.pd.ownedResources.remove(c);
+                    }
+                }  
+            }
+        } else {
+            for (int i = 0; i < process.pd.ownedResources.size(); i ++)
+            {
+                if (process.pd.ownedResources.get(i).parent.equals(r))
+                {
+                    process.pd.ownedResources.remove(i);
+                    break;
+                }
+            }
         }
         
         System.out.println("Resursas atlaisvintas");

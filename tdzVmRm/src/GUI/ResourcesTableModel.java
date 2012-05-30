@@ -12,6 +12,7 @@ import javax.swing.table.AbstractTableModel;
 import tdzOS.OS;
 import tdzOS.ProcessDescriptor;
 import tdzOS.ResourceDescriptor;
+import tdzVmRm.RealMachine;
 
 /**
  *
@@ -31,7 +32,12 @@ public class ResourcesTableModel extends AbstractTableModel {
 
     @Override
     public int getRowCount() {
-        return os.resources.size();
+        int resOwned = 0;
+        try {
+            resOwned = os.processes.get(RealMachine.gui.procJTable.getSelectedRow()).pd.ownedResources.size();
+        }
+        catch (java.lang.IndexOutOfBoundsException e) {}
+        return os.resources.size()+resOwned;
     }
 
     @Override
@@ -42,16 +48,22 @@ public class ResourcesTableModel extends AbstractTableModel {
 
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-            if (os.resources.size() > rowIndex){
-            ResourceDescriptor rd = os.resources.get(rowIndex).rd;
-            switch (columnIndex) {
+        ResourceDescriptor rd;
+        if (os.resources.size() > rowIndex)
+            rd = os.resources.get(rowIndex).rd;
+                else
+                    if (RealMachine.gui.procJTable.getSelectedRow() >= 0)
+                        rd = os.processes.get(RealMachine.gui.procJTable.getSelectedRow()).pd.ownedResources.get(rowIndex-os.resources.size()).parent.rd;
+                    else
+                        return "ERROR";
+            
+        switch (columnIndex) {
                 case 0: return rd.externalID+"#"+rd.internalID;
 
                 case 1: return rd.creator.pd.externalID+"#"+rd.creator.pd.internalID;
 
                 case 2: return rd.components.size();
-            }     
-        }
+            }
         return "ERROR";    
     }
 

@@ -6,11 +6,14 @@ package GUI;
 
 import java.util.LinkedList;
 import java.util.Random;
+import javax.annotation.Resource;
 import javax.swing.ListModel;
 import javax.swing.event.ListDataListener;
 import javax.swing.table.AbstractTableModel;
 import tdzOS.OS;
 import tdzOS.ProcessDescriptor;
+import tdzOS.ResComponent;
+import tdzOS.ResourceDescriptor;
 
 /**
  *
@@ -24,7 +27,8 @@ public class ProcessesTableModel extends AbstractTableModel {
         "State",
         "Priority",
         "Processor",
-        "Parent"};
+        "Parent",
+        "Owned resources"};
     
     public ProcessesTableModel(OS os)
     {
@@ -38,7 +42,7 @@ public class ProcessesTableModel extends AbstractTableModel {
 
     @Override
     public int getColumnCount() {
-        return 6;
+        return 7;
     }
     
 
@@ -66,6 +70,11 @@ public class ProcessesTableModel extends AbstractTableModel {
                         return pd.parent.pd.externalID+"#"+pd.parent.pd.internalID;
                     else
                         return "null";
+                case 6:
+                    String result = "";
+                    for(ResComponent rc: pd.ownedResources)
+                        result += "#"+rc.parent.rd.internalID+"; ";
+                    return result;
             }            
         }
         return "ERROR";

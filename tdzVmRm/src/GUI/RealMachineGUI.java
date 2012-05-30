@@ -138,6 +138,8 @@ public class RealMachineGUI extends javax.swing.JFrame implements Runnable {
                     processorsTabbedPane.setSelectedIndex(i);
             }
         }
+        resJTable.revalidate();
+        resJTable.repaint();
     }
     
     public void dropVMTab(VirtualMachine vm)
@@ -464,7 +466,7 @@ public class RealMachineGUI extends javax.swing.JFrame implements Runnable {
     private javax.swing.JPanel operationsPanel;
     private javax.swing.JButton osStepButton;
     private javax.swing.JPanel procJPanel;
-    private javax.swing.JTable procJTable;
+    public javax.swing.JTable procJTable;
     private javax.swing.JScrollPane procTableJScrollPane;
     private javax.swing.JTabbedPane processorsTabbedPane;
     private javax.swing.JPanel resJPanel;

@@ -178,7 +178,6 @@ public class JobGovernor extends Process
     {
         System.out.println("JobGovernor kuria SharedMemoryControl");
         pd.core.createProcess(this, ProcessState.Ready, 60, null, ProcName.SharedMemoryControl);
-        
         next();
     }
     
@@ -201,7 +200,11 @@ public class JobGovernor extends Process
         
         
         pd.core.createProcess(this, ProcessState.Ready, 50, toGive, ProcName.VirtualMachine);
-        
+        for (ResComponent rc : pd.ownedResources)
+        {
+            if (rc.parent.rd.externalID == ResName.UzduotiesPakrovimasBaigtas)
+                pd.core.freeResource(this, rc.parent);
+        }
         next();
     }
     
@@ -210,7 +213,11 @@ public class JobGovernor extends Process
     {
         System.out.println("JobGovernor blokuojasi dėl resurso [Pertraukimas]");
         pd.core.requestResource(this, ResName.Pertraukimas, 1);
-        
+        for (ResComponent rc : pd.ownedResources)
+        {
+            if (rc.parent.rd.externalID == ResName.Pertraukimas)
+                pd.core.freeResource(this, rc.parent);
+        }
         next();
     }
     
