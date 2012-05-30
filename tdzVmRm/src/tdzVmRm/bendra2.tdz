@@ -1,0 +1,12 @@
+@Memory 3
+@Code
+JP02
+0010
+L201
+L101
+LCK1
+Z102
+ULC1
+LO03
+HALT
+@CodeEnd
