@@ -326,6 +326,7 @@ public class RealMachineGUI extends javax.swing.JFrame {
         });
         buttonPanel.add(osStepButton);
 
+        osStartStopButton.setSelected(true);
         osStartStopButton.setText("Start OS");
         osStartStopButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

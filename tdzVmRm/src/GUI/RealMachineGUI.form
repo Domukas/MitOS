@@ -262,6 +262,7 @@
             </Component>
             <Component class="javax.swing.JToggleButton" name="osStartStopButton">
               <Properties>
+                <Property name="selected" type="boolean" value="true"/>
                 <Property name="text" type="java.lang.String" value="Start OS"/>
               </Properties>
               <Events>
