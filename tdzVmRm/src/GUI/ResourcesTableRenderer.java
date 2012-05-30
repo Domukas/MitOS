@@ -35,7 +35,7 @@ public Component getTableCellRendererComponent(JTable table, Object value,boolea
             setBackground(table.getBackground());
             setForeground(table.getForeground());
             //Spalvinam virtualios masinos atminties blokus geltonai
-            if (row > RealMachine.gui.os.resources.size())
+            if (row >= RealMachine.gui.os.resources.size())
             {
                 setBackground(new Color(0x66FF66));
             }

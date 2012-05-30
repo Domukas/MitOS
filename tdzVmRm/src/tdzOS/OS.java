@@ -77,9 +77,11 @@ public class OS implements Runnable {
         {
             if (makeStep){
                 step();
+                rm.gui.updateTables = true;
             } 
             else if (makeStepToVM){
                 stepToVM();
+                rm.gui.updateTables = true;
             }
             else if (makeRun)
             {

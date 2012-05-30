@@ -55,9 +55,8 @@ public class RealMachineGUI extends javax.swing.JFrame implements Runnable {
             else
                 runJToggleButton.setText("Run");
             runJToggleButton.setSelected(os.makeRun);
-            
             try {
-                Thread.sleep(100);
+                Thread.sleep(10);
             } catch (InterruptedException ex) {
                 Logger.getLogger(RealMachineGUI.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -187,6 +186,7 @@ public class RealMachineGUI extends javax.swing.JFrame implements Runnable {
         procJTable.revalidate();
         resJTable.revalidate();
         procJTable.repaint();
+        //procJTable.paint(procJTable.getGraphics());
         resJTable.repaint();
     }
    
