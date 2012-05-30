@@ -24,10 +24,13 @@ public class TdzVmRm {
     public static void main(String[] args) {
         // TODO code application logic here
 
-        RealMachine RM = new RealMachine(0x65);
+        final RealMachine RM = new RealMachine(0x65);
+        final OS os = new OS(RM);
         
-        OS os = new OS(RM);
-        RealMachineGUI rmGUI = new RealMachineGUI(RM, os);
-        RM.addGui(rmGUI);
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new RealMachineGUI(RM, os).setVisible(true);
+            }
+        });
     }
 }

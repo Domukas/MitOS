@@ -65,10 +65,6 @@ public class OS {
         //startOS();
     }
     
-    public void startOS()
-    {
-        initProcesses();
-    }
     
     public void stopOS()
     {

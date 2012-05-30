@@ -260,15 +260,6 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="osStepButtonActionPerformed"/>
               </Events>
             </Component>
-            <Component class="javax.swing.JToggleButton" name="osStartStopButton">
-              <Properties>
-                <Property name="selected" type="boolean" value="true"/>
-                <Property name="text" type="java.lang.String" value="Start OS"/>
-              </Properties>
-              <Events>
-                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="osStartStopButtonActionPerformed"/>
-              </Events>
-            </Component>
             <Component class="javax.swing.JTextField" name="taskNameField">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Task name"/>
