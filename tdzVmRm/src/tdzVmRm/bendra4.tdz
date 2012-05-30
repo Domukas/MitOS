@@ -1,7 +1,9 @@
 @Memory 3
 @Code
-JP01
-DGT1
-DPT1
+JP02
+0010
+L201
+L101
+ULC1
 HALT
 @CodeEnd
