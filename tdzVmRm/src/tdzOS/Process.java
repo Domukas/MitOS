@@ -56,7 +56,7 @@ public abstract class Process {
     
     public void decreasePriority()
     {
-        if (pd.priority > 0)
+        if (pd.priority > 1)
             pd.priority--;
     }
 }
