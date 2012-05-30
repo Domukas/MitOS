@@ -1046,6 +1046,7 @@ public class VirtualMachine extends Process
         pd.processor.timer.reset();
         System.out.println(pd.externalID + " #" + pd.internalID + " taimerio pertraukimas");
         pd.core.stopProcess(this);
+        decreasePriority();
     }
 
 }

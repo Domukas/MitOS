@@ -103,9 +103,12 @@ public class ProcessManager {
         //pasalinam is dabar vykdomu saraso
         os.runProcesses.remove(currentProcess);
 
-            System.out.println("Atimamas procesorius #"+ currentProcess.pd.processor.pd.number +
-            " iš: " + currentProcess.pd.externalID + "#" + currentProcess.pd.internalID);
+        System.out.println("Atimamas procesorius #"+ currentProcess.pd.processor.pd.number +
+        " iš: " + currentProcess.pd.externalID + "#" + currentProcess.pd.internalID);
             
+        if (p.pd.externalID == OS.ProcName.VirtualMachine)
+            p.decreasePriority();
+        
         //Issaugom procesoriaus busena ir atimam procesoriaus resursa
         currentProcess.pd.procesorState.saveProcessorState(currentProcess.pd.processor);
         //Nustatom, kad tas procesorius nevykdo proceso

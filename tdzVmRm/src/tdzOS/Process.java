@@ -53,4 +53,10 @@ public abstract class Process {
     {
         nextInstruction++;
     }
+    
+    public void decreasePriority()
+    {
+        if (pd.priority > 0)
+            pd.priority--;
+    }
 }
