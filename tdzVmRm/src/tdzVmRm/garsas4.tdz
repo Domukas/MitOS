@@ -1,0 +1,43 @@
+@Memory A
+@Code
+JP0B
+0130  //ketvirtine 01
+0260  //pusine 02
+0900  //sol 03
+0800  //fa 04
+0700  //mi 05
+0600  //re 06
+0500  //do 07
+0400  //si 08
+0350  //la 09
+0300  //sol 0A
+L20D
+JP0E
+0002
+L101
+GGR1
+L106
+GNR1
+GNR1
+L108
+GNR1
+L10A
+GNR1
+LO0C
+L107
+GNR1
+L105
+GNR1
+L103
+GNR1
+L105
+GNR1
+L102
+GGR1
+L106
+GNR1
+GNR1
+L101
+GGR1
+HALT
+@CodeEnd
