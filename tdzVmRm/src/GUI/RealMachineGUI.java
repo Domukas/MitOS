@@ -119,27 +119,34 @@ public class RealMachineGUI extends javax.swing.JFrame implements Runnable {
             }
         };
         resJTable.getSelectionModel().addListSelectionListener(resJTableListener);
-         
+        ResourcesTableRenderer rr =new ResourcesTableRenderer();
+        for (int i=0;i < resJTable.getColumnCount(); i++)
+        {
+            resJTable.getColumn(resJTable.getColumnName(i)).setCellRenderer(rr);
+        }
     }
     
     private void procTableSelected() {
         tdzOS.Process proc;
-        proc = os.processes.get(procJTable.getSelectedRow());
-        if (proc.pd.externalID == ProcName.VirtualMachine)
+        try 
         {
-            for (int i = 1; i < memoryTabbedPane.getTabCount(); i++)
+            proc = os.processes.get(procJTable.getSelectedRow());
+            if (proc.pd.externalID == ProcName.VirtualMachine)
             {
-                if (Integer.parseInt(memoryTabbedPane.getTitleAt(i).split("#")[1])==proc.pd.internalID)
-                    memoryTabbedPane.setSelectedIndex(i);
+                for (int i = 1; i < memoryTabbedPane.getTabCount(); i++)
+                {
+                    if (Integer.parseInt(memoryTabbedPane.getTitleAt(i).split("#")[1])==proc.pd.internalID)
+                        memoryTabbedPane.setSelectedIndex(i);
+                }
+                for (int i = 0; i< processorsTabbedPane.getTabCount(); i++)
+                {
+                    if (proc.pd.processor != null && processorsTabbedPane.getTitleAt(i).equals("P"+proc.pd.processor.pd.number))
+                        processorsTabbedPane.setSelectedIndex(i);
+                }
             }
-            for (int i = 0; i< processorsTabbedPane.getTabCount(); i++)
-            {
-                if (proc.pd.processor != null && processorsTabbedPane.getTitleAt(i).equals("P"+proc.pd.processor.pd.number))
-                    processorsTabbedPane.setSelectedIndex(i);
-            }
-        }
-        resJTable.revalidate();
-        resJTable.repaint();
+            resJTable.revalidate();
+            resJTable.repaint();
+        } catch (IndexOutOfBoundsException e) {}
     }
     
     public void dropVMTab(VirtualMachine vm)
