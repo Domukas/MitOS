@@ -311,7 +311,16 @@ public class SharedMemoryControl extends Process{
         System.out.println("SharedMemoryControl kuria resursą [PrnesimasJobGovernor] su parametru [rezultatas = 0]");
           
         //Kuriamas resursas..
-        pd.core.createResource(this, OS.ResName.PranesimasJobGovernor, createMessage("0"));
+        LinkedList<Object> tmp = new LinkedList<>();
+        tmp.add("0");
+        tmp.add(pd.ownedResources.getFirst().parent.rd.creator);
+        
+        LinkedList<Object> parameters = new LinkedList<>();
+        parameters.add(tmp);
+        
+        pd.core.createResource(this, OS.ResName.PranesimasJobGovernor, parameters);
+        
+        pd.ownedResources.clear();
         
         goTo(1);
     }
@@ -332,7 +341,18 @@ public class SharedMemoryControl extends Process{
         System.out.println("SharedMemoryControl kuria resursą [PrnesimasJobGovernor] su parametru [1]");
           
         //Kuriamas resursas..
-        pd.core.createResource(this, OS.ResName.PranesimasJobGovernor, createMessage("1"));
+        
+        LinkedList<Object> tmp = new LinkedList<>();
+        tmp.add("1");
+        tmp.add(pd.ownedResources.getFirst().parent.rd.creator);
+        
+        LinkedList<Object> parameters = new LinkedList<>();
+        parameters.add(tmp);
+        
+        pd.core.createResource(this, OS.ResName.PranesimasJobGovernor, parameters);
+        
+        pd.ownedResources.clear();
+        
         goTo(1);
     }
     

@@ -180,7 +180,8 @@ class ResourceManager {
                     switch (r.rd.externalID)
                     {
                         case Pertraukimas:
-                        case PranesimasSharedMemorycontrolProcesui:            
+                        case PranesimasSharedMemorycontrolProcesui: 
+                        case PranesimasJobGovernor:
                             LinkedList<Object> contents = (LinkedList<Object>) r.rd.components.getFirst().value;
 
                             if ((Process)contents.getLast() != tmpProcess)

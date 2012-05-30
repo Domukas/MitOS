@@ -218,7 +218,7 @@ public class JobGovernor extends Process
     private void stopVirtualMachine()
     {
         System.out.println("JobGovernor stabdo VM");
-        pd.children.getLast().pd.state = ProcessState.ReadyS;
+        pd.children.getLast().pd.state = ProcessState.BlockedS;
         
         next();
     }
@@ -332,7 +332,7 @@ public class JobGovernor extends Process
         pd.core.createResource(this, ResName.PranesimasSoundControlProcesui,
                 createMessage(OPC));    
         
-        pd.ownedResources.removeLast();
+        //pd.ownedResources.removeLast();
         
         goTo (26);
         
@@ -409,7 +409,7 @@ public class JobGovernor extends Process
     //23
     private void messageToSharedMemoryControl()
     {
-        System.out.print("JobGovernor kuria resursą [Pranešimas SharedMemoryControl]");
+        System.out.print("JobGovernor kuria resursą [Pranešimas SharedMemoryControl]" + "nr." + pd.children.getLast().pd.internalID);
         LinkedList<Object> tempParameters = new LinkedList<>();
         commandParameter = (Integer)tempList.get(2);
         
@@ -441,7 +441,8 @@ public class JobGovernor extends Process
     //25
     private void isResultZero()
     {
-        String result = (String)pd.ownedResources.getLast().value;
+        LinkedList<Object> tmp = (LinkedList<Object>) pd.ownedResources.getLast().value;
+        String result = (String)tmp.getFirst();
         
         if (Integer.parseInt(result) == 0)
         {
@@ -460,7 +461,7 @@ public class JobGovernor extends Process
     private void activateVirtualMachine()
     {
         System.out.println("JobGovernor aktyvuoja VM");
-        pd.children.getLast().pd.state = ProcessState.Ready;
+        pd.children.getLast().pd.state = ProcessState.Blocked;
         
         next();
     }
