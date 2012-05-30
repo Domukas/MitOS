@@ -21,7 +21,7 @@ public class Speaker {
         length = 1000;
     }
     
-    public void play(int xx){
+    public void play(final int xx){
         byte[] buf = new byte[1];
         AudioFormat af = new AudioFormat((float)44100, 8, 1, true, false);
         SourceDataLine sdl;

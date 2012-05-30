@@ -477,8 +477,6 @@ public class JobGovernor extends Process
         //Siunciam tik vienai virtualiai masinai
         pd.core.createResource(this, ResName.PratestiVMDarba, tempParameters);
         
-        pd.ownedResources.removeLast();
-        pd.ownedResources.removeLast();
         
         goTo(7);
     }

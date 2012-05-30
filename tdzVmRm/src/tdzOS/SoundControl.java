@@ -5,6 +5,8 @@
 package tdzOS;
 
 import java.util.LinkedList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import tdzVmRm.Processor;
 import tdzVmRm.Speaker;
 
@@ -43,7 +45,7 @@ public class SoundControl extends Process{
                 break;
                 
             case 4:
-                sendFreaquencyToSoundSpeaker();
+                sendFrequencyToSoundSpeaker();
                 break;
                 
             case 5:
@@ -101,7 +103,7 @@ public class SoundControl extends Process{
     }
     
     //4
-    private void sendFreaquencyToSoundSpeaker()
+    private void sendFrequencyToSoundSpeaker()
     {
         System.out.println("Į garsiakalbį siunčiamas pranešimas groti nurodyto dažnio garsą");
         pd.core.rm.setCH4ClosedForAllProcessors();
@@ -111,7 +113,6 @@ public class SoundControl extends Process{
         }
         else
         {
-            
             pd.core.rm.speakers[speaker].play(VM.pd.procesorState.R2.getValue().getIntValue());
         }
         pd.core.rm.setCH4OpenForAllProcessors();
