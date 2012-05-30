@@ -218,7 +218,7 @@ public class JobGovernor extends Process
     private void stopVirtualMachine()
     {
         System.out.println("JobGovernor stabdo VM");
-        pd.children.getLast().pd.state = ProcessState.BlockedS;
+        pd.children.getLast().pd.state = ProcessState.ReadyS;
         
         next();
     }
@@ -460,7 +460,7 @@ public class JobGovernor extends Process
     private void activateVirtualMachine()
     {
         System.out.println("JobGovernor aktyvuoja VM");
-        pd.children.getLast().pd.state = ProcessState.Blocked;
+        pd.children.getLast().pd.state = ProcessState.Ready;
         
         next();
     }
@@ -476,9 +476,6 @@ public class JobGovernor extends Process
         
         //Siunciam tik vienai virtualiai masinai
         pd.core.createResource(this, ResName.PratestiVMDarba, tempParameters);
-        
-        pd.ownedResources.removeLast();
-        pd.ownedResources.removeLast();
         
         goTo(7);
     }
