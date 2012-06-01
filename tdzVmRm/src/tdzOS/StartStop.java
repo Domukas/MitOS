@@ -10,6 +10,7 @@ import tdzOS.OS.ProcessState;
 import tdzOS.OS.ResName;
 import tdzVmRm.Processor;
 import tdzVmRm.RealMachine;
+import tdzOS.OS;
 
 /**
  *
@@ -59,54 +60,54 @@ public class StartStop extends Process {
     private void createSystemResources()
     {
         //Kuriam sisteminius resursus
-        System.out.println("StartStop kuria sisteminius resursus");  
+        OS.printToConsole("StartStop kuria sisteminius resursus");  
         
         createResourceVartotojoAtmintis();
         createResourceSupervizorineAtmintis(256);
         createResourceHDD(256);
         
-        System.out.println("Kuria IO irenginio resursus");  
+        OS.printToConsole("Kuria IO irenginio resursus");  
         pd.core.createResource(this, ResName.IvedimoIrenginys, createMessage("IvedimoIrenginys"));
         pd.core.createResource(this, ResName.IsvedimoIrenginys, createMessage("IsvedimoIrenginys"));
-        System.out.println("IO irenginiu resursai sukurti");  
+        OS.printToConsole("IO irenginiu resursai sukurti");  
         
-        System.out.println("StartStop kuria garsiakalbio irenginio resursus");
+        OS.printToConsole("StartStop kuria garsiakalbio irenginio resursus");
         pd.core.createResource(this, ResName.GarsiakalbioIrenginys, createMessage("0"));
         pd.core.createResource(this, ResName.GarsiakalbioIrenginys, createMessage("1"));
-        System.out.println("Garsiakalbio irenginio resursai sukurti");
+        OS.printToConsole("Garsiakalbio irenginio resursai sukurti");
         
         next();
     }
     
     private void createSystemProcesses() //TODO
     {
-        System.out.println("StartStop kuria sisteminius procesus");  
+        OS.printToConsole("StartStop kuria sisteminius procesus");  
         
-        System.out.println("Kuriamas procesas Read");  
+        OS.printToConsole("Kuriamas procesas Read");  
         pd.core.createProcess(this, ProcessState.Ready, 80, null, ProcName.Read); 
         
-        System.out.println("Kuriamas procesas JCL");  
+        OS.printToConsole("Kuriamas procesas JCL");  
         pd.core.createProcess(this, ProcessState.Ready, 79, null, ProcName.JCL); 
         
-        System.out.println("Kuriamas procesas JobToHDD");  
+        OS.printToConsole("Kuriamas procesas JobToHDD");  
         pd.core.createProcess(this, ProcessState.Ready, 78, null, ProcName.JobToHDD); 
         
-        System.out.println("Kuriamas procesas PrintLine");  
+        OS.printToConsole("Kuriamas procesas PrintLine");  
         pd.core.createProcess(this, ProcessState.Ready, 60, null, ProcName.PrintLine); 
         
-        System.out.println("Kuriamas procesas MainProc");  
+        OS.printToConsole("Kuriamas procesas MainProc");  
         pd.core.createProcess(this, ProcessState.Ready, 77, null, ProcName.MainProc);
         
-        System.out.println("Kuriamas procesas Loader");  
+        OS.printToConsole("Kuriamas procesas Loader");  
         pd.core.createProcess(this, ProcessState.Ready, 76, null, ProcName.Loader); 
         
-        System.out.println("Kuriamas procesas Interupt");  
+        OS.printToConsole("Kuriamas procesas Interupt");  
         pd.core.createProcess(this, ProcessState.Ready, 76, null, ProcName.Interrupt);  
         
-        System.out.println("Kuriamas procesas GetLine");  
+        OS.printToConsole("Kuriamas procesas GetLine");  
         pd.core.createProcess(this, ProcessState.Ready, 76, null, ProcName.GetLine);  
         
-        System.out.println("Kuriamas procesas SoundControl");  
+        OS.printToConsole("Kuriamas procesas SoundControl");  
         pd.core.createProcess(this, ProcessState.Ready, 76, null, ProcName.SoundControl);          
         
         
@@ -116,7 +117,7 @@ public class StartStop extends Process {
     
     private void blockForExit()
     {
-        System.out.println("StartStop blokuojasi del MOS pabaigos resurso");  
+        OS.printToConsole("StartStop blokuojasi del MOS pabaigos resurso");  
         pd.core.requestResource(this, ResName.MOSPabaiga, 1);
         
         next();
@@ -129,7 +130,7 @@ public class StartStop extends Process {
                 if (p.pd.currentProcess != this)
                     pd.core.stopProcess(p.pd.currentProcess);
         
-        System.out.println("StartStop naikina procesus");  
+        OS.printToConsole("StartStop naikina procesus");  
         LinkedList<Process> temp = new LinkedList<>();
         for (Process p:pd.children)
             temp.add(p);
@@ -148,7 +149,7 @@ public class StartStop extends Process {
     
     private void destroySystemResources() 
     {
-        System.out.println("StartStop naikina resursus");
+        OS.printToConsole("StartStop naikina resursus");
         
         LinkedList<Resource> temp = new LinkedList<>();
         for (Resource r:pd.createdResources)
@@ -161,7 +162,7 @@ public class StartStop extends Process {
     
     private void createResourceVartotojoAtmintis()
     {
-        System.out.println("Kuriam atminties resursa");
+        OS.printToConsole("Kuriam atminties resursa");
 
         LinkedList<Object> memoryBlocks = new LinkedList<>();
      
@@ -171,7 +172,7 @@ public class StartStop extends Process {
             memoryBlocks.add(pd.core.rm.memory.getBlock(i));
         }
         
-        System.out.println("Nuorodos nukopijuotos. Skaicius:" +
+        OS.printToConsole("Nuorodos nukopijuotos. Skaicius:" +
                 memoryBlocks.size());
         
         pd.core.createResource(this, ResName.VartotojoAtmintis, memoryBlocks);
@@ -182,7 +183,7 @@ public class StartStop extends Process {
     //Supervizorine is string'u del paprastumo...
     private void createResourceSupervizorineAtmintis(int totalBlocks)
     {
-        System.out.println("Kuriam supervizorines atminties resursa");
+        OS.printToConsole("Kuriam supervizorines atminties resursa");
 
         LinkedList<Object> memoryBlocks = new LinkedList<>();
         
@@ -192,7 +193,7 @@ public class StartStop extends Process {
             memoryBlocks.add(new String());
         }
         
-        System.out.println("Sukurta " + totalBlocks + " supervizorines atminties bloku");
+        OS.printToConsole("Sukurta " + totalBlocks + " supervizorines atminties bloku");
         
         pd.core.createResource(this, ResName.SupervizorineAtmintis, memoryBlocks);
     }
@@ -200,7 +201,7 @@ public class StartStop extends Process {
     //HDD atmintis taip pat is string...
     private void createResourceHDD(int totalBlocks)
     {
-        System.out.println("Kuriam HDD resursa");
+        OS.printToConsole("Kuriam HDD resursa");
 
         LinkedList<Object> memoryBlocks = new LinkedList<>();
         
@@ -210,7 +211,7 @@ public class StartStop extends Process {
             memoryBlocks.add(new String());
         }
         
-        System.out.println("Sukurta " + totalBlocks + " HDD bloku");
+        OS.printToConsole("Sukurta " + totalBlocks + " HDD bloku");
         
         pd.core.createResource(this, ResName.HDD, memoryBlocks);
     }    

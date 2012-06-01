@@ -9,6 +9,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import tdzVmRm.Processor;
 import tdzVmRm.Speaker;
+import tdzOS.OS;
 
 /**
  *
@@ -61,7 +62,7 @@ public class SoundControl extends Process{
     //1
     private void blockForPranesimasSoundControlProcesui()
     {
-        System.out.println("SoundControl blokuojasi dėl resurso [Pranešimas SoundControl procesui]");
+        OS.printToConsole("SoundControl blokuojasi dėl resurso [Pranešimas SoundControl procesui]");
         pd.core.requestResource(this, OS.ResName.PranesimasSoundControlProcesui, 1);
         
         next();
@@ -70,11 +71,11 @@ public class SoundControl extends Process{
     //2
     private void blockForGarsiakalbioIrenginys()
     {
-        System.out.println("SoundControl blokuojasi dėl resurso [Garsiakalbio įrenginys]");
+        OS.printToConsole("SoundControl blokuojasi dėl resurso [Garsiakalbio įrenginys]");
         pd.core.requestResource(this, OS.ResName.GarsiakalbioIrenginys, 1);
         
      //   for(ResComponent rc : pd.ownedResources)
-     //       System.out.println(rc.value);
+     //       OS.printToConsole(rc.value);
         
         //pasidedam komanda 
         command = (String)pd.ownedResources.getFirst().value;
@@ -105,7 +106,7 @@ public class SoundControl extends Process{
     //4
     private void sendFrequencyToSoundSpeaker()
     {
-        System.out.println("Į garsiakalbį siunčiamas pranešimas groti nurodyto dažnio garsą");
+        OS.printToConsole("Į garsiakalbį siunčiamas pranešimas groti nurodyto dažnio garsą");
         pd.core.rm.setCH4ClosedForAllProcessors();
         if(command.equals("GNR1"))
         {
@@ -122,7 +123,7 @@ public class SoundControl extends Process{
     //5
     private void freeResourceGarsiakalbioIrenginys()
     {
-        System.out.println("SoundControl atlaisvina resursą [Garsiakalbio įrenginys]");
+        OS.printToConsole("SoundControl atlaisvina resursą [Garsiakalbio įrenginys]");
         pd.core.freeResource(this, pd.ownedResources.getLast().parent);
         
         pd.ownedResources.clear();
@@ -133,7 +134,7 @@ public class SoundControl extends Process{
     //6
     private void sendVolumeToSoundSpeaker()
     {
-        System.out.println("Į garsiakalbį siunčiamas pranešimas nustatyti nurodytą garso lygį");
+        OS.printToConsole("Į garsiakalbį siunčiamas pranešimas nustatyti nurodytą garso lygį");
         pd.core.rm.setCH4ClosedForAllProcessors();
         if(command.equals("GGR1"))
         {

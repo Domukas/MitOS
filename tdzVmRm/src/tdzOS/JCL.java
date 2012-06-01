@@ -7,6 +7,7 @@ package tdzOS;
 import java.util.LinkedList;
 import tdzOS.OS.ResName;
 import tdzVmRm.Processor;
+import tdzOS.OS;
 
 /**
  *
@@ -112,7 +113,7 @@ public class JCL extends Process
     {
         //Prasom resurso uzduotis atmintyje su vienu nuorodu sarasu i blokus
         //Kuriuose yra nuskaitytos programos komandos
-        System.out.println("JCL blokuojasi dėl resurso [Užduotis supervizorinėje atmintyje]");
+        OS.printToConsole("JCL blokuojasi dėl resurso [Užduotis supervizorinėje atmintyje]");
         pd.core.requestResource(this, ResName.UzduotisSupervizorinejeAtmintyje, 1);
         
         currentBlock = 0;
@@ -129,7 +130,7 @@ public class JCL extends Process
         blocks = (LinkedList<String>) rc.value;
         
         
-        System.out.println("JCL inicijuoja programos komandų sąrašą");
+        OS.printToConsole("JCL inicijuoja programos komandų sąrašą");
         commandList = new LinkedList<>();
          
         next();
@@ -140,7 +141,7 @@ public class JCL extends Process
     {
         block = blocks.get(currentBlock);
         
-        System.out.println("JCL paima " + currentBlock + " -tajį bloką iš sąrašo. Reiksmė: "
+        OS.printToConsole("JCL paima " + currentBlock + " -tajį bloką iš sąrašo. Reiksmė: "
                 + block);
         
         currentBlock++;
@@ -151,16 +152,16 @@ public class JCL extends Process
     //4
     private void checkMemoryBlock()
     {
-        System.out.println("JCL tikrina, ar yra @Memory blokas");
+        OS.printToConsole("JCL tikrina, ar yra @Memory blokas");
         block = block.replaceAll(" ", "");
         if (block.startsWith("@Memory"))
         {
-            System.out.println("Blokas yra");
+            OS.printToConsole("Blokas yra");
             goTo(6); //Jei blokas taisyklingas tai einam toliau
         }
         else
         {
-            System.out.println("BLOKAS NERASTAS!");
+            OS.printToConsole("BLOKAS NERASTAS!");
             goTo(5); //Jei netaisyklingas, tada einam sukurt pranesima
         }
     }
@@ -169,7 +170,7 @@ public class JCL extends Process
     private void memoryBlockNotFound()
     {
         //Savaime surpantama...
-        System.out.println("JCL kuria pranešimą, kad nerastas @Memory blokas");
+        OS.printToConsole("JCL kuria pranešimą, kad nerastas @Memory blokas");
         pd.core.createResource(this, ResName.EiluteAtmintyje, createMessage("Trūksta @Memory bloko"));
         
         //Naikinam resursa Uzduotis supervizorineje atmintyje
@@ -183,20 +184,20 @@ public class JCL extends Process
     //6
     private void isMemoryBlockCorrect()
     {
-        System.out.println("JCL tikrina @Memory bloko korektiškumą");
+        OS.printToConsole("JCL tikrina @Memory bloko korektiškumą");
         block = block.substring(7, block.length());
         int value = Integer.parseInt(block, 16);
         
         //Jei blokas korektiskas. t.y. nurodytas tinkamas bloku skaicius
         if ((value <= 16) && (value > 0))
         {
-            System.out.println("Blokas korektiškas");
+            OS.printToConsole("Blokas korektiškas");
             requiredBlockCount = value;//isiminam kiek bloku reiks isskirt atminty
             goTo(8);
         }
         else
         {
-            System.out.println("BLOKAS NEKOREKTIŠKAS!");
+            OS.printToConsole("BLOKAS NEKOREKTIŠKAS!");
             goTo(7);
         }
     }
@@ -204,7 +205,7 @@ public class JCL extends Process
     //7
     private void incorrectMemoryBlock()
     {
-        System.out.println("JCL kuria pranešimą, @Memory blokas nekorektiškas");
+        OS.printToConsole("JCL kuria pranešimą, @Memory blokas nekorektiškas");
         pd.core.createResource(this, ResName.EiluteAtmintyje,
                 createMessage("Netaisyklingas @Memory blokas"));
         
@@ -219,7 +220,7 @@ public class JCL extends Process
     //8
     private void createProgramBlockCount()
     {
-        System.out.println("JCL kuria resursą Programos blokų skaičius supervizorinėje atmintyje. "
+        OS.printToConsole("JCL kuria resursą Programos blokų skaičius supervizorinėje atmintyje. "
                 + "Reikšmė: " + requiredBlockCount);
         pd.core.createResource(this, ResName.ProgramosBlokuSkaicius,
                 createMessage(Integer.toString(requiredBlockCount)));
@@ -232,16 +233,16 @@ public class JCL extends Process
     //10
     private void checkCodeBlock()
     {
-        System.out.println("JCL tikrina, ar yra @Code blokas");
+        OS.printToConsole("JCL tikrina, ar yra @Code blokas");
         block = block.replaceAll(" ", "");
         if (block.startsWith("@Code"))
         {
-            System.out.println("Blokas yra");
+            OS.printToConsole("Blokas yra");
             goTo(12); //Jei blokas taisyklingas tai einam toliau
         }
         else
         {
-            System.out.println("BLOKAS NERASTAS!");
+            OS.printToConsole("BLOKAS NERASTAS!");
             goTo(11); //Jei netaisyklingas, tada einam sukurt pranesima
         }
         
@@ -250,7 +251,7 @@ public class JCL extends Process
     //11
     private void codeBlockNotFound()
     {
-        System.out.println("JCL kuria pranešimą, kad nerastas @Code blokas");
+        OS.printToConsole("JCL kuria pranešimą, kad nerastas @Code blokas");
         pd.core.createResource(this, ResName.EiluteAtmintyje, createMessage("Trūksta @Code bloko"));
         
         //Naikinam resursa Uzduotis supervizorineje atmintyje
@@ -266,16 +267,16 @@ public class JCL extends Process
     //13
     private void checkCodeEndBlock()
     {
-        System.out.println("JCL tikrina, ar yra @CodeEnd blokas");
+        OS.printToConsole("JCL tikrina, ar yra @CodeEnd blokas");
         block = block.replaceAll(" ", "");
         if (block.startsWith("@CodeEnd"))
         {
-            System.out.println("Blokas yra");
+            OS.printToConsole("Blokas yra");
             goTo(14); 
         }
         else
         {
-            System.out.println("Ne visi blokai peržiūrėti. Einama prie kito");
+            OS.printToConsole("Ne visi blokai peržiūrėti. Einama prie kito");
             goTo(15);
         }
     }
@@ -296,7 +297,7 @@ public class JCL extends Process
     //15
     private void addCommand()
     {
-        System.out.println("Blokas pridedamas į sąrašą");
+        OS.printToConsole("Blokas pridedamas į sąrašą");
         commandList.add(block);
         next();
     }
@@ -307,12 +308,12 @@ public class JCL extends Process
         //jei perziurejom sarasa
         if (blocks.size() == currentBlock)
         {
-            System.out.println("Daugiau blokų nėra");
+            OS.printToConsole("Daugiau blokų nėra");
             goTo(17);
         }
         else
         {
-            System.out.println("Dar yra blokų");
+            OS.printToConsole("Dar yra blokų");
             goTo(12);
         }
     }
@@ -320,7 +321,7 @@ public class JCL extends Process
     //17
     private void codeEndBlockNotFound()
     {
-        System.out.println("JCL kuria pranešimą: Trūksta CodeEnd bloko");
+        OS.printToConsole("JCL kuria pranešimą: Trūksta CodeEnd bloko");
         pd.core.createResource(this, ResName.EiluteAtmintyje,
                 createMessage("Trūksta @CodeEnd bloko"));
         

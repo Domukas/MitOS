@@ -7,25 +7,17 @@ package tdzVmRm;
 import IODevices.Output;
 import GUI.RealMachineGUI;
 import java.io.*;
-import java.util.LinkedList;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import tdzVmRm.registers.TimerRegister;
-import tdzVmRm.registers.SemaphoreRegister;
-import tdzVmRm.registers.PLRRegister;
-import tdzVmRm.registers.ModeRegister;
-import tdzVmRm.registers.INTRegister;
-import tdzVmRm.registers.ICRegister;
-import tdzVmRm.registers.DataRegister;
-import tdzVmRm.registers.CRegister;
-import tdzVmRm.registers.CHRegister;
 
 /**
  *
  * @author Tomas
  */
 public class RealMachine {
+    
+    public static final int processorCount = 2;
     
     public static RealMachineGUI gui;
     
@@ -41,7 +33,7 @@ public class RealMachine {
     public static INTRegister PI, SI;
     public static CHRegister CH1, CH2, CH3, CH4;
     */
-    public static Processor[] proc = new Processor[5];
+    public static Processor[] proc = new Processor[processorCount];
     
     public static Speaker[] speakers = new Speaker[2];
     public static Output out;
@@ -61,25 +53,10 @@ public class RealMachine {
     
     public RealMachine(int blocks)
     {
-        /*
-        PLR = new PLRRegister();
-        R1 = new DataRegister();
-        R2 = new DataRegister();
-        IC = new ICRegister();
-        C = new CRegister();
-        S = new SemaphoreRegister();
-        timer = new TimerRegister(50); 
-        mode  = new ModeRegister();
-        PI = new INTRegister();
-        SI = new INTRegister();
-        CH1 = new CHRegister();
-        CH2 = new CHRegister();
-        CH3 = new CHRegister();
-        CH4 = new CHRegister();
-        * */
+
         for (int i = 0; i < proc.length; i++)
         {
-        proc[i] = new Processor();
+            proc[i] = new Processor();
         }
         
         speakers[0] = new Speaker();
@@ -87,7 +64,6 @@ public class RealMachine {
         out = new Output();
         
         memory = new RealMemory(blocks);
-        String taskName = "program";
         
         
         memory = new RealMemory(blocks);

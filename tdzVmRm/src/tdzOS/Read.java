@@ -12,6 +12,7 @@ import tdzOS.OS.ProcName;
 import tdzOS.OS.ResName;
 import tdzVmRm.Processor;
 import tdzVmRm.RealMachine;
+import tdzOS.OS;
 
 /**
  *
@@ -54,7 +55,7 @@ public class Read extends Process
     
     private void blockForIvedimoSrautas()
     {
-        System.out.println("Procesas Read blokuojasi del resurso Ivedimo Srautas");
+        OS.printToConsole("Procesas Read blokuojasi del resurso Ivedimo Srautas");
         pd.core.requestResource(this, ResName.IvedimoSrautas, 1);
         
         next();
@@ -62,21 +63,12 @@ public class Read extends Process
     
     private void blockForSupervizorineAtmintis()
     {
-        System.out.println("Procesas Read blokuojasi del resurso Supervizorine atmintis");
+        OS.printToConsole("Procesas Read blokuojasi del resurso Supervizorine atmintis");
         
         //Susirandam input stream'a turimu resursu sarase
         
         stream = (FileInputStream)pd.ownedResources.getLast().value;
-        System.out.println();
-        
-        /*for (ResComponent r:pd.ownedResources)
-            if (r.value instanceof FileInputStream)
-            {
-                stream = (FileInputStream) r.value;
-            }
-        
-        * 
-        */
+       
         //suskaicuojam eilutes ir...
         //Pasidedam failo turini i string'u masyva
         //Tik tam, kad veliau kas kart kopinuojant eilutes nereiktu pastoviai atidarinet failo
@@ -95,7 +87,7 @@ public class Read extends Process
     {
         //Cia jau kopijuojam eilute is saraso i supervizorines atminties elementus
         
-        System.out.println(fileData.size());
+        OS.printToConsole(fileData.size());
         
         for(String s:fileData)
         {
@@ -106,7 +98,7 @@ public class Read extends Process
                     String temp = (String) r.value;
                     if (temp.length() == 0)
                     {
-                        System.out.println("Kopijuojama eilute " + s);
+                        OS.printToConsole("Kopijuojama eilute " + s);
                         r.value = s; //reikia butinai priskirt r.value ta reiksme. jei priskiriam temp'ui, tai reiksme neissaugoma
                         break;
                     }
@@ -156,7 +148,7 @@ public class Read extends Process
             }
             
         } catch (IOException ex) {
-            System.out.println("KLAIDA KOPIJUOJANT EILUTES!");
+            OS.printToConsole("KLAIDA KOPIJUOJANT EILUTES!");
         }
         
         return count;

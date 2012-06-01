@@ -16,6 +16,7 @@ import tdzVmRm.Word;
 import tdzVmRm.registers.ICRegister;
 import tdzVmRm.registers.DataRegister;
 import tdzVmRm.registers.CRegister;
+import tdzOS.OS;
 
 /*
  * To change this template, choose Tools | Templates
@@ -102,7 +103,7 @@ public class VirtualMachine extends Process
     //1
     private void switchToUser()
     {
-        System.out.println("VirtualMachine perjungia procesorių į vartotojo rėžimą");
+        OS.printToConsole("VirtualMachine perjungia procesorių į vartotojo rėžimą");
         pd.processor.mode.setUser();
         for (ResComponent rc : pd.ownedResources)
         {
@@ -121,7 +122,7 @@ public class VirtualMachine extends Process
         R2 = pd.processor.R2;
         C = pd.processor.C;
         
-        System.out.println("VirtualMachine suveikia");
+        OS.printToConsole("VirtualMachine suveikia");
         stepVM();
 
         
@@ -133,7 +134,7 @@ public class VirtualMachine extends Process
     //3
     private void createInterruptMessage()
     {
-        System.out.println("VirtualMachine pranešimą apie pertraukimą");
+        OS.printToConsole("VirtualMachine pranešimą apie pertraukimą");
         
         pd.processor.mode.SetSupervisor();
         
@@ -164,7 +165,7 @@ public class VirtualMachine extends Process
     //4
     private void blockForResume()
     {
-        System.out.println("VirtualMachine blokuojasi dėl resurso [Pratęsti VM darbą]");
+        OS.printToConsole("VirtualMachine blokuojasi dėl resurso [Pratęsti VM darbą]");
         pd.core.requestResource(this, ResName.PratestiVMDarba, 1);
         goTo(1);
     }
@@ -192,7 +193,7 @@ public class VirtualMachine extends Process
             processCommand(currentCommand);  
             pd.processor.timer.timePass(1);
             
-            System.out.println("Timer: " + pd.processor.timer.getValue());
+            OS.printToConsole("Timer: " + pd.processor.timer.getValue());
             
             if ((pd.processor.SI.getValue() + pd.processor.PI.getValue() == 0)
                     && (pd.processor.timer.getValue() == 0))
@@ -210,7 +211,7 @@ public class VirtualMachine extends Process
     
     public Word getCurrentCommand()
     {
-        System.out.println("IC: " + IC.getValue());
+        OS.printToConsole("IC: " + IC.getValue());
         
         return memory.getWord(IC.getValue());
     }
@@ -441,7 +442,7 @@ public class VirtualMachine extends Process
             pd.processor.PI.setValue(2);
             goTo(3);
         }
-        System.out.println(" -- > Code:" + OPC);  
+        OS.printToConsole(" -- > Code:" + OPC);  
     }   
         
     //Aritmetinės komandos
@@ -674,7 +675,7 @@ public class VirtualMachine extends Process
     
     public void JP (int xx)
     {
-        System.out.println(xx);
+        OS.printToConsole(xx);
         IC.setValue(xx);
     }
     
@@ -1055,7 +1056,7 @@ public class VirtualMachine extends Process
     private void timerInterrupt()
     {
         pd.processor.timer.reset();
-        System.out.println(pd.externalID + " #" + pd.internalID + " taimerio pertraukimas");
+        OS.printToConsole(pd.externalID + " #" + pd.internalID + " taimerio pertraukimas");
         pd.core.stopProcess(this);
         decreasePriority();
     }

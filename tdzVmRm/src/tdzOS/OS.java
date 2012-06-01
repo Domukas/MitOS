@@ -16,6 +16,8 @@ import tdzVmRm.RealMachine;
  */
 public class OS implements Runnable {
 
+    public static boolean showLog = false;
+    
     public enum ProcessState 
     {
         Run, Ready, ReadyS, Blocked, BlockedS
@@ -112,8 +114,8 @@ public class OS implements Runnable {
     public void createProcess(Process parent, ProcessState state, int priority,
             LinkedList<ResComponent> components, ProcName externalID)
     {
-        System.out.println("-------------------------");
-        System.out.println("Kurti procesa iškviestas!");
+        OS.printToConsole("-------------------------");
+        OS.printToConsole("Kurti procesa iškviestas!");
         
         if (components == null)
             components = new LinkedList<>();
@@ -121,7 +123,7 @@ public class OS implements Runnable {
         //Generuojamas vidinis ID
         int internalID = generateProcessInternalID(externalID);
         
-        System.out.println("Kuriamas procesas" + externalID);
+        OS.printToConsole("Kuriamas procesas" + externalID);
         
         //Nuoroda i procesoriu null, nes tik sukurtas procesas neturi procesoriaus,
         //ji gauna, kai jam procesoriu duoda planuotojas
@@ -203,7 +205,7 @@ public class OS implements Runnable {
         //Pridedam procesus i reikiamus sarasus
         addProcessToLlists(p);
         
-        System.out.println("Procesas sukurtas-------");   
+        OS.printToConsole("Procesas sukurtas-------");   
         processManager.Execute();
         
         
@@ -227,7 +229,7 @@ public class OS implements Runnable {
                     
             case Run:
                 //Jei kuriam Vykdoma procesa tikriausiai pazkas negerai
-                System.out.println("KURIAMAS PROCESAS TURI RUN STATE!");
+                OS.printToConsole("KURIAMAS PROCESAS TURI RUN STATE!");
             break;
           }
     }
@@ -250,7 +252,7 @@ public class OS implements Runnable {
                     
             case Run:
                 //Jei naikinam Vykdoma procesa tikriausiai pazkas negerai
-                System.out.println("NAIKINAMAS PROCESAS TURI RUN STATE!");
+                OS.printToConsole("NAIKINAMAS PROCESAS TURI RUN STATE!");
             break;
           }
         
@@ -260,7 +262,7 @@ public class OS implements Runnable {
     //TODO reikia pataisymu, gal negerai veiks
     public void destroyProcess(Process process)
     {
-        System.out.println("Naikinamas procesas: " + process.pd.externalID + " #" + process.pd.internalID);
+        OS.printToConsole("Naikinamas procesas: " + process.pd.externalID + " #" + process.pd.internalID);
         for (Process p:process.pd.children) //Rekursiskai naikiname visus proceso vaikus
             destroyProcess(p);
         
@@ -311,7 +313,7 @@ public class OS implements Runnable {
             }
         }
         
-        System.out.println("Procesas sunaikintas");
+        OS.printToConsole("Procesas sunaikintas");
         
     }
     
@@ -332,7 +334,7 @@ public class OS implements Runnable {
 
                 p.pd.state = ProcessState.Ready;
                 readyProcesses.add(p);
-                System.out.println("Procesas " + p.pd.externalID + 
+                OS.printToConsole("Procesas " + p.pd.externalID + 
                         "#" + p.pd.internalID + "perjungtas i Ready būsena");   
                 
                 processManager.Execute();
@@ -342,14 +344,14 @@ public class OS implements Runnable {
                 readyProcesses.remove(p);
                 p.pd.state = ProcessState.ReadyS;
                 
-                System.out.println("Procesas " + p.pd.externalID + 
+                OS.printToConsole("Procesas " + p.pd.externalID + 
                     "#" + p.pd.internalID + "perjungtas i ReadyS būsena");   
                 
                 break;
             case Blocked:
                 blockedProcesses.remove(p);
                 p.pd.state = ProcessState.BlockedS;
-                System.out.println("Procesas " + p.pd.externalID + 
+                OS.printToConsole("Procesas " + p.pd.externalID + 
                     "#" + p.pd.internalID + "perjungtas i BlockedS būsena");   
                 break;
         }
@@ -369,14 +371,14 @@ public class OS implements Runnable {
             p.pd.state = ProcessState.Blocked;
             blockedProcesses.add(p);
         }
-        else System.out.println("AKTYVUOJAMAS NE SUSPENDED PROCESAS!");
+        else OS.printToConsole("AKTYVUOJAMAS NE SUSPENDED PROCESAS!");
     }
     
     //Primityvas resurso kurimui
     public void createResource(Process creator, ResName externalID, LinkedList<Object> parameters)
     {
-        System.out.println("-------------------------");
-        System.out.println("Kurti resursa iskviestas!");
+        OS.printToConsole("-------------------------");
+        OS.printToConsole("Kurti resursa iskviestas!");
        
         //Generuojam isorini ID pagal tai, koki kuriam
         int internalID = generateResourceInternalID(externalID);
@@ -387,7 +389,7 @@ public class OS implements Runnable {
             case EiluteAtmintyje:
             case ProgramosBlokuSkaicius:
             case UzduotiesPakrovimasBaigtas:
-                System.out.println("Kuriamas resursas " + externalID +
+                OS.printToConsole("Kuriamas resursas " + externalID +
                         " su parametru " + (String)parameters.getFirst());
                 
                 //Paduodam:
@@ -403,7 +405,7 @@ public class OS implements Runnable {
             case SupervizorineAtmintis:  
             case HDD:    
                 
-                System.out.println("Kuriamas resursas " + externalID +
+                OS.printToConsole("Kuriamas resursas " + externalID +
                         " Bloku skaicius: " + parameters.size());
                 
                 //Paduodam:
@@ -416,7 +418,7 @@ public class OS implements Runnable {
             case IsvedimoIrenginys:
             case GarsiakalbioIrenginys:
                 
-                System.out.println("Kuriamas resursas " + externalID);
+                OS.printToConsole("Kuriamas resursas " + externalID);
 
             //Paduodam:
             //creator, externalID, internalID, reusable, components, waitingProcesses, resourceManager
@@ -426,7 +428,7 @@ public class OS implements Runnable {
                 break;
                 
             case IvedimoSrautas:
-                System.out.println("Kuriamas resursas " + externalID);
+                OS.printToConsole("Kuriamas resursas " + externalID);
                 
                 r = new Resource(creator, externalID, internalID, false, //ne pakartotinio naudojimo
                 parameters, resourceManager);    
@@ -449,7 +451,7 @@ public class OS implements Runnable {
             case BlokasAtrakintas:
             case VartotojoIvestaEilute:
             case MOSPabaiga:
-                System.out.println("Kuriamas resursas " + externalID);
+                OS.printToConsole("Kuriamas resursas " + externalID);
                 
                 r = new Resource(creator, externalID, internalID, false, //ne pakartotinio naudojimo
                 parameters, resourceManager);                   
@@ -464,8 +466,8 @@ public class OS implements Runnable {
         //pridedam i visu resursu sarasa
         resources.add(r);
                 
-        System.out.println("Resursas sukurtas-------");
-        System.out.println("-------------------------");
+        OS.printToConsole("Resursas sukurtas-------");
+        OS.printToConsole("-------------------------");
         
         resourceManager.execute();
     }
@@ -473,7 +475,7 @@ public class OS implements Runnable {
     //TODO primityvas resurso sunaikinimui
     public void destroyResource(Resource r)
     {
-        System.out.println("Naikinamas resursas " + r.rd.externalID + " #" + r.rd.internalID);
+        OS.printToConsole("Naikinamas resursas " + r.rd.externalID + " #" + r.rd.internalID);
         
         //istrinam resursa is ji sukurusio proceso sukurtu resursu saraso
         Process creatorProcess = r.rd.creator;
@@ -484,7 +486,7 @@ public class OS implements Runnable {
             r.rd.components.remove(i);
         }
         resources.remove(r);
-        System.out.println("Resursas sunaikintas");
+        OS.printToConsole("Resursas sunaikintas");
     }
     
     //TODO primityvas resurso prasymui
@@ -492,7 +494,7 @@ public class OS implements Runnable {
     {
         //Procesas, iškvietęs šį primityvą, yra užblokuojamas
         currentProcess.pd.state = ProcessState.Blocked;
-        System.out.println(currentProcess.pd.externalID + "-->Blocked");
+        OS.printToConsole(currentProcess.pd.externalID + "-->Blocked");
         
         //proceso deskriptoriuje nurodoma, kiek ir kokio resurso jis laukia
         currentProcess.pd.waitingFor.add(r);
@@ -513,7 +515,7 @@ public class OS implements Runnable {
         //yra kviečiamas resursų paskirstytojas.
         //Resurso elementas pridedamas prie resurso elementų sąrašo.  
 
-        System.out.println("Procesas " + process.pd.externalID + "#" + process.pd.internalID + 
+        OS.printToConsole("Procesas " + process.pd.externalID + "#" + process.pd.internalID + 
                 "atlaisvina resursa " + r.rd.externalID + "#" + r.rd.internalID);
         
         boolean isInFreeList = false;
@@ -566,7 +568,7 @@ public class OS implements Runnable {
                 {
                     if (c.parent == tmpRes)
                     {
-                        System.out.println("Removing: " + c.parent.rd.externalID);
+                        OS.printToConsole("Removing: " + c.parent.rd.externalID);
                         tmpRes.rd.components.add(c);
                         process.pd.ownedResources.remove(c);
                     }
@@ -583,24 +585,19 @@ public class OS implements Runnable {
             }
         }
         
-        System.out.println("Resursas atlaisvintas");
+        OS.printToConsole("Resursas atlaisvintas");
         resourceManager.execute();
     }
     
     public void step()
     {
-        System.out.println("++++++++++++++++ OS Step! ++++++++++++++++++++++++");
-        
-
-        LinkedList<Process> tempList = new LinkedList<Process>();
-        for (Process p:runProcesses)
-            tempList.add(p);
+        OS.printToConsole("++++++++++++++++ OS Step! ++++++++++++++++++++++++");
         
         for (Processor p:rm.proc)
         {
             if (p.pd.currentProcess != null)
             {
-                System.out.println("Suveikia procesas: " + p.pd.currentProcess.pd.externalID
+                OS.printToConsole("Suveikia procesas: " + p.pd.currentProcess.pd.externalID
                         + " #" + p.pd.currentProcess.pd.internalID);
 
                 p.pd.currentProcess.step();
@@ -621,7 +618,7 @@ public class OS implements Runnable {
                     newCount++;
             if (newCount != VMCount)
             {
-                System.out.println(newCount + " kitas " + VMCount);
+                OS.printToConsole(newCount + " kitas " + VMCount);
                 stop = true;
                 VMCount = newCount;
             }
@@ -639,12 +636,12 @@ public class OS implements Runnable {
         resources = new LinkedList<>();
 
         processManager = new ProcessManager(this);
-        System.out.println("Process manager sukurtas");
+        OS.printToConsole("Process manager sukurtas");
         
         resourceManager = new ResourceManager(this);
-        System.out.println("Resource manager sukurtas");
+        OS.printToConsole("Resource manager sukurtas");
         
-        System.out.println("Darbo pradžia");
+        OS.printToConsole("Darbo pradžia");
         
         createProcess(null, OS.ProcessState.Ready, 90, null, ProcName.StartStop);
 
@@ -671,7 +668,13 @@ public class OS implements Runnable {
             if (p.pd.externalID == ProcName.StartStop)
                 return p;
         
-        System.out.println("NERASTAS StartStop");
+        OS.printToConsole("NERASTAS StartStop");
         return  null;
+    }
+    
+    public static void printToConsole(Object s)
+    {
+        if (showLog)
+            System.out.println(s);
     }
 }

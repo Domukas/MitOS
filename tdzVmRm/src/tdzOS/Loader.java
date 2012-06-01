@@ -11,6 +11,7 @@ import tdzVmRm.MemoryBlock;
 import tdzVmRm.Processor;
 import tdzVmRm.RealMachine;
 import tdzVmRm.Word;
+import tdzOS.OS;
 
 /**
  *
@@ -53,7 +54,7 @@ public class Loader extends Process
     //1
     private void blockForMessageToLoader()
     {
-        System.out.println("Loader blokuojasi dėl resurso [Pranešimas Loader procesui]");
+        OS.printToConsole("Loader blokuojasi dėl resurso [Pranešimas Loader procesui]");
         //Pirmas pranesimo elementas - HDD. antras - vartotojo atmintis
         pd.core.requestResource(this, ResName.PranesimasLoaderProcesui, 2);
         
@@ -63,7 +64,7 @@ public class Loader extends Process
     //2
     private void copyToMemory()
     {
-        System.out.println("Loader kopijuoja duomenis į vartotojo atmintį ");
+        OS.printToConsole("Loader kopijuoja duomenis į vartotojo atmintį ");
         
         pd.core.rm.setCH3ClosedForAllProcessors();
         //sarasuose saugom nuorodas i blokus HDD ir isskirtus blokus RM
@@ -102,7 +103,7 @@ public class Loader extends Process
     //3
     private void createResourceLoadingFinished()
     {
-        System.out.println("Loader kuria resursą [Užduoties pakrovimas į vartotojo atmintį baigtas]");
+        OS.printToConsole("Loader kuria resursą [Užduoties pakrovimas į vartotojo atmintį baigtas]");
         
         //Dar paduodam puslapiavimo lenteles adresa
         pd.core.createResource(this, ResName.UzduotiesPakrovimasBaigtas,

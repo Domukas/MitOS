@@ -7,6 +7,7 @@ package tdzOS;
 import java.util.LinkedList;
 import tdzOS.OS.ResName;
 import tdzVmRm.Processor;
+import tdzOS.OS;
 
 /**
  *
@@ -48,7 +49,7 @@ public class Interrupt extends Process
        
     private void blockForPranesimasApiePertraukima()
     {
-        System.out.println("Interrupt blokuojasi dėl resurso [Pranešimas apie pertraukimą]");
+        OS.printToConsole("Interrupt blokuojasi dėl resurso [Pranešimas apie pertraukimą]");
         pd.core.requestResource(this, OS.ResName.PranesimasApiePertraukima, 1);
         
         next();
@@ -56,7 +57,7 @@ public class Interrupt extends Process
     
     private void indentifyInterrupt()
     {   
-        System.out.println("Interrupt nustato pertraukino tipą");
+        OS.printToConsole("Interrupt nustato pertraukino tipą");
         
         LinkedList<Object> tempList = (LinkedList<Object>)pd.ownedResources.getLast().value;
         
@@ -109,7 +110,7 @@ public class Interrupt extends Process
     
     private void identifyJobGovernor()
     {
-        System.out.println("Interrupt indentifikuoja JobGovernor");
+        OS.printToConsole("Interrupt indentifikuoja JobGovernor");
         //interrupto kurejo tevas yra job governor
         Process jg = pd.ownedResources.getFirst().parent.rd.creator.pd.parent;
         parameters.add(jg);
@@ -119,7 +120,7 @@ public class Interrupt extends Process
     private void createResourcePertraukimas()
     {
         
-        System.out.println("Interrupt kuria resursą [Pertraukimas]");
+        OS.printToConsole("Interrupt kuria resursą [Pertraukimas]");
         LinkedList<Object> tempList = new LinkedList<>(); //Viska supakauojam i viena sarasa, nes governor'ius nezinos kiek prasyt
         tempList.add(parameters);
         

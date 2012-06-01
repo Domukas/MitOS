@@ -7,6 +7,7 @@ package tdzOS;
 import java.util.LinkedList;
 import tdzOS.OS.ResName;
 import tdzVmRm.Processor;
+import tdzOS.OS;
 
 /**
  *
@@ -57,7 +58,7 @@ public class JobToHDD extends Process
     //1
     private void blockForProgramBlockCount()
     {
-        System.out.println("JobToHDD blokuojasi dėl resurso Programos blokų skaičius supervizorinėje atmintyje");
+        OS.printToConsole("JobToHDD blokuojasi dėl resurso Programos blokų skaičius supervizorinėje atmintyje");
         pd.core.requestResource(this, ResName.ProgramosBlokuSkaicius, 1);
         next();
     }
@@ -65,7 +66,7 @@ public class JobToHDD extends Process
     //2
     private void blockForReadyTaskInSupervisor()
     {
-        System.out.println("JobToHDD blokuojasi dėl resurso paruošta užduotis supervizorinėje atmintyje");
+        OS.printToConsole("JobToHDD blokuojasi dėl resurso paruošta užduotis supervizorinėje atmintyje");
         pd.core.requestResource(this, ResName.ParuostaUzduotis, 1);
         next();
     }
@@ -73,7 +74,7 @@ public class JobToHDD extends Process
     //3
     private void blockForHDD()
     {
-        System.out.println("JobToHDD blokuojasi dėl resurso HDD");
+        OS.printToConsole("JobToHDD blokuojasi dėl resurso HDD");
         
         //Pasiskaiciuojam, kiek reiks bloku is HDD gauti
         //paskutinis gautas resursas bus paruosta uzduotis supervizorineje atmintyje, todel paskaiciuojam
@@ -92,7 +93,7 @@ public class JobToHDD extends Process
     //4
     private void copyToHDD()
     {
-        System.out.println("JobToHDD kopijuoja duomenis į diską");
+        OS.printToConsole("JobToHDD kopijuoja duomenis į diską");
         
         pd.core.rm.setCH3ClosedForAllProcessors();
         //Susikuriam sarasa del patogumo
@@ -113,7 +114,7 @@ public class JobToHDD extends Process
                     String temp = (String) r.value;
                     if (temp.length() == 0)
                     {
-                        System.out.println("Kopijuojama eilute " + s);
+                        OS.printToConsole("Kopijuojama eilute " + s);
                         r.value = s;
                         taskInHDD.add((String)r.value); //TODO
                         //reikia butinai priskirt r.value ta reiksme.
@@ -134,7 +135,7 @@ public class JobToHDD extends Process
     //5
     private void createTaskInHDD()
     {
-        System.out.println("JobToHDD kuria resursą Užduotis HDD");
+        OS.printToConsole("JobToHDD kuria resursą Užduotis HDD");
         
         LinkedList<Object> components = new LinkedList();
         components.add(taskInHDD);
@@ -146,7 +147,7 @@ public class JobToHDD extends Process
     
     private void freeSupervisor()
     {
-        System.out.println("JobToHDD atlaisvina resursą Supervizorinė atmintis");
+        OS.printToConsole("JobToHDD atlaisvina resursą Supervizorinė atmintis");
      
         
         LinkedList<Object> tmpList = (LinkedList<Object>)pd.ownedResources.get(1).value;

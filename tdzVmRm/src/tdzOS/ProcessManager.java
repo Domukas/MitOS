@@ -7,6 +7,7 @@ package tdzOS;
 import java.util.LinkedList;
 import tdzOS.OS.ProcessState;
 import tdzVmRm.Processor;
+import tdzOS.OS;
 
 /**
  *
@@ -22,11 +23,20 @@ public class ProcessManager {
     
     public void Execute() //planuotojo darbas
     {
-        System.out.println("Planuojas pradeda darba");
+        OS.printToConsole("Planuojas pradeda darba");
+        
+        
+        OS.printToConsole("Pries: ");
+        
+        for (Process p:os.runProcesses)
+        {
+            OS.printToConsole(p.pd.externalID + " " + p.pd.state);
+        }
+        
         
         //Sutvarkom blokuotus procesus. Galima situacija, kad procesas prase resurso ir jo negavo.
         //Todel turim is jo atimt procesoriu
-        handleBlockedProcesses();
+        handleProcesses();
         
         Processor idleProcessor = getIdleProcessor();
         Process highestReady = getHighestPriorityReadyProcess();
@@ -56,6 +66,14 @@ public class ProcessManager {
             else break;
         }
         
+        OS.printToConsole("Po: ");
+        for (Process p:os.runProcesses)
+        {
+            OS.printToConsole(p.pd.externalID + " " + p.pd.state);
+        }
+        
+        
+        
     }
     
     
@@ -80,7 +98,7 @@ public class ProcessManager {
         return p;
     }
     
-    private void handleBlockedProcesses()
+    private void handleProcesses()
     {        
         LinkedList<Process> tempList = new LinkedList<>();
         for (Process p:os.runProcesses)
@@ -93,6 +111,8 @@ public class ProcessManager {
                 stopProcess(p);
                 os.blockedProcesses.add(p);
             }   
+            else if (p.pd.state == ProcessState.Ready)
+                p.pd.state = ProcessState.Run;
         }
     }
     
@@ -103,7 +123,7 @@ public class ProcessManager {
         //pasalinam is dabar vykdomu saraso
         os.runProcesses.remove(currentProcess);
 
-        System.out.println("Atimamas procesorius #"+ currentProcess.pd.processor.pd.number +
+        OS.printToConsole("Atimamas procesorius #"+ currentProcess.pd.processor.pd.number +
         " iš: " + currentProcess.pd.externalID + "#" + currentProcess.pd.internalID);
             
         if (p.pd.externalID == OS.ProcName.VirtualMachine)
@@ -123,24 +143,6 @@ public class ProcessManager {
         }
             
     }
-
-    /*
-    public Process getHighestRunningProcess() //randa ir grazina didziausio prioriteto dabar vykdoma procesa
-    {
-        int priority = 0;
-        Process highestRunnningProcess = null;
-	for (int i = 0; i < os.runProcesses.size(); i++)
-        {
-            if (os.runProcesses.get(i).pd.priority > priority)
-                {
-                    priority = os.runProcesses.get(i).pd.priority;
-                    highestRunnningProcess = os.runProcesses.get(i);
-                }
-	}
-        return highestRunnningProcess;
-    }
-    * 
-    */
         
     public Process highestReadyProcess()//jei yra pasiruosusiu tai paima didziausio prioriteto, jei ne tai println
     {
@@ -151,7 +153,7 @@ public class ProcessManager {
         }
         else
         {
-            System.out.println("Nera pasiruošusių procesu");
+            OS.printToConsole("Nera pasiruošusių procesu");
         }
         return highestReadyProcess;
     }
@@ -182,7 +184,7 @@ public class ProcessManager {
         //procesoriaus deskriptoriuje nurodom dabar vykdoma procesa
         idleProcessor.pd.currentProcess = currentProcess;                                                   
         
-        System.out.println("Procesorius #" + idleProcessor.pd.number + 
+        OS.printToConsole("Procesorius #" + idleProcessor.pd.number + 
                 " perduotas procesui " + currentProcess.pd.externalID +  "#" + currentProcess.pd.internalID);
     }
     

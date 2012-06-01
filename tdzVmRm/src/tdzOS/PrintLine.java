@@ -7,6 +7,7 @@ package tdzOS;
 import java.util.LinkedList;
 import tdzOS.OS.ResName;
 import tdzVmRm.Processor;
+import tdzOS.OS;
 
 /**
  *
@@ -51,7 +52,7 @@ public class PrintLine extends Process
     //1
     private void blockForEiluteAtmintyje()
     { 
-        System.out.println("PrintLine blokuojasi dėl resurso [Eilutė atmintyje]");
+        OS.printToConsole("PrintLine blokuojasi dėl resurso [Eilutė atmintyje]");
         pd.core.requestResource(this, OS.ResName.EiluteAtmintyje, 1);
         next();
     }
@@ -59,7 +60,7 @@ public class PrintLine extends Process
     //2
     private void blockForIsvedimoIrenginys()
     {
-        System.out.println("PrintLine blokuojasi dėl resurso [Išvedimo įrenginys]");
+        OS.printToConsole("PrintLine blokuojasi dėl resurso [Išvedimo įrenginys]");
         pd.core.requestResource(this, OS.ResName.IsvedimoIrenginys, 1);
         next();
     }
@@ -67,7 +68,7 @@ public class PrintLine extends Process
     //3
     private void sendMessageToOutput()
     {
-        System.out.println("PrintLine spausdina į išvedimo įrenginį");
+        OS.printToConsole("PrintLine spausdina į išvedimo įrenginį");
         pd.core.rm.setCH1ClosedForAllProcessors();
         pd.core.rm.out.send((String)pd.ownedResources.getFirst().value);
         next();
@@ -76,12 +77,12 @@ public class PrintLine extends Process
     //4
     private void freeResourceIsvedimoIrenginys()
     {
-        System.out.println("PrintLine atlaisvina resursą [išvedimo įrenginys]");
+        OS.printToConsole("PrintLine atlaisvina resursą [išvedimo įrenginys]");
         for (ResComponent re:pd.ownedResources)
-            System.out.println(re.value);
+            OS.printToConsole(re.value);
         
         
-        //System.out.println ("Ireng" + pd.ownedResources.getLast().parent);
+        //OS.printToConsole ("Ireng" + pd.ownedResources.getLast().parent);
         pd.core.freeResource(this, pd.ownedResources.getLast().parent);
         
         pd.core.rm.setCH1OpenForAllProcessors();
@@ -90,7 +91,7 @@ public class PrintLine extends Process
         
         if (pd.ownedResources.getFirst().parent.rd.creator instanceof JobGovernor)
         {
-            System.out.println("true");
+            OS.printToConsole("true");
             next();
         }
         else
@@ -105,7 +106,7 @@ public class PrintLine extends Process
     //5
     private void createResourceIsvestaEilute()
     {
-        System.out.println("PrintLine kuria resursą [išvesta eilutė]");
+        OS.printToConsole("PrintLine kuria resursą [išvesta eilutė]");
         
         LinkedList<Object> components = new LinkedList();
         components.add(pd.ownedResources.getFirst().parent.rd.creator);

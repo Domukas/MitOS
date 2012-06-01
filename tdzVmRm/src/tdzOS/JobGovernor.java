@@ -12,6 +12,7 @@ import tdzVmRm.Memory;
 import tdzVmRm.MemoryBlock;
 import tdzVmRm.Processor;
 import tdzVmRm.RealMachine;
+import tdzOS.OS;
 
 /**
  *
@@ -126,7 +127,7 @@ public class JobGovernor extends Process
     //1
     private void blockForMemoryForPaging()
     {
-        System.out.println("JobGovernor blokuojasi dėl resurso [Vartotojo atmintis]. Puslapių lentelei saugoti");
+        OS.printToConsole("JobGovernor blokuojasi dėl resurso [Vartotojo atmintis]. Puslapių lentelei saugoti");
         pd.core.requestResource(this, ResName.VartotojoAtmintis, 1);
         next();
     }
@@ -139,7 +140,7 @@ public class JobGovernor extends Process
         String tempString = (String)programInHDD.getFirst();
         int count = Integer.parseInt(tempString);
         
-        System.out.println("JobGovernor blokuojasi dėl resurso [Vartotojo atmintis]. Prašo " + count + " blokų");
+        OS.printToConsole("JobGovernor blokuojasi dėl resurso [Vartotojo atmintis]. Prašo " + count + " blokų");
         pd.core.requestResource(this, ResName.VartotojoAtmintis, count);
         next();
     }
@@ -147,7 +148,7 @@ public class JobGovernor extends Process
     //3
     private void createMessageToLoader()
     {
-        System.out.println("JobGovernor kuria pranešimą Loader procesui");
+        OS.printToConsole("JobGovernor kuria pranešimą Loader procesui");
         
         LinkedList<Object> components = new LinkedList<>();
         components.add(programInHDD);
@@ -167,7 +168,7 @@ public class JobGovernor extends Process
     //4
     private void blockForLoadingFinished()
     {
-        System.out.println("JobGovernor blokuojasi dėl resurso [Užduoties pakrovimas į vartotojo atmintį baigtas]");
+        OS.printToConsole("JobGovernor blokuojasi dėl resurso [Užduoties pakrovimas į vartotojo atmintį baigtas]");
         pd.core.requestResource(this, ResName.UzduotiesPakrovimasBaigtas, 1);
         
         next();
@@ -176,7 +177,7 @@ public class JobGovernor extends Process
     //5
     private void createSharedMemoryControl()
     {
-        System.out.println("JobGovernor kuria SharedMemoryControl");
+        OS.printToConsole("JobGovernor kuria SharedMemoryControl");
         pd.core.createProcess(this, ProcessState.Ready, 60, null, ProcName.SharedMemoryControl);
         next();
     }
@@ -184,7 +185,7 @@ public class JobGovernor extends Process
     //6
     private void createVM()
     {
-        System.out.println("JobGovernor kuria Virtualią mašiną");
+        OS.printToConsole("JobGovernor kuria Virtualią mašiną");
         
         LinkedList<ResComponent> toGive = new LinkedList<>();
         
@@ -211,7 +212,7 @@ public class JobGovernor extends Process
     //7
     private void blockForInterrupt()
     {
-        System.out.println("JobGovernor blokuojasi dėl resurso [Pertraukimas]");
+        OS.printToConsole("JobGovernor blokuojasi dėl resurso [Pertraukimas]");
         pd.core.requestResource(this, ResName.Pertraukimas, 1);
         for (ResComponent rc : pd.ownedResources)
         {
@@ -224,7 +225,7 @@ public class JobGovernor extends Process
     //8
     private void stopVirtualMachine()
     {
-        System.out.println("JobGovernor stabdo VM");
+        OS.printToConsole("JobGovernor stabdo VM");
         pd.children.getLast().pd.state = ProcessState.BlockedS;
         
         next();
@@ -239,12 +240,12 @@ public class JobGovernor extends Process
         if (((String)tempList.getFirst() == "DG") || ((String)tempList.getFirst() == "DP") ||
                 ((String)tempList.getFirst() == "Garsiakalbis"))
         {
-            System.out.println("IO arba garso pertraukimas");
+            OS.printToConsole("IO arba garso pertraukimas");
             goTo(16);
         }
         else
         {
-            System.out.println("Ne IO arba garso pertraukimas");
+            OS.printToConsole("Ne IO arba garso pertraukimas");
             goTo(10);
         }
         
@@ -254,12 +255,12 @@ public class JobGovernor extends Process
     {
         if ((String)tempList.getFirst() == "Bendra atmintis")
         {
-            System.out.println("Darbo su bendra atmintimi pertraukimas");
+            OS.printToConsole("Darbo su bendra atmintimi pertraukimas");
             goTo(23);
         }
         else
         {
-            System.out.println("Ne darbo su bendra atmintimi pertraukimas. Naikinama VM");
+            OS.printToConsole("Ne darbo su bendra atmintimi pertraukimas. Naikinama VM");
             goTo(11);
         }         
         
@@ -268,7 +269,7 @@ public class JobGovernor extends Process
     //11
     private void destroyVM()
     {
-        System.out.println("JobGovernor naikina VM");
+        OS.printToConsole("JobGovernor naikina VM");
         RealMachine.gui.dropVMTab((VirtualMachine)pd.children.getLast());
         pd.core.destroyProcess(pd.children.getLast());
         next();
@@ -278,7 +279,7 @@ public class JobGovernor extends Process
     //12
     private void freeMemory()
     {
-        System.out.println("JobGovernor atlaisvina atmintį");
+        OS.printToConsole("JobGovernor atlaisvina atmintį");
         pd.core.freeResource(this, pd.ownedResources.get(2).parent);
         
         next();
@@ -287,7 +288,7 @@ public class JobGovernor extends Process
     //13
     private void destroySharedMemoryControl()
     {
-        System.out.println("JobGovernor naikina procesą SharedMemoryControl");
+        OS.printToConsole("JobGovernor naikina procesą SharedMemoryControl");
         pd.core.destroyProcess(pd.children.getFirst());
         
         next();
@@ -296,7 +297,7 @@ public class JobGovernor extends Process
     //14
     private void createJobInHDD()
     {
-        System.out.println("JobGovernor kuria fiktyvų užduoties resursą");
+        OS.printToConsole("JobGovernor kuria fiktyvų užduoties resursą");
         LinkedList<String> tmp = new LinkedList<>();
         LinkedList<Object> parameter = new LinkedList<>();
         
@@ -310,7 +311,6 @@ public class JobGovernor extends Process
     //15
     private void blockForUnexistingResource()
     {
-        System.out.println();
         pd.core.requestResource(this, ResName.Neegzistuojantis, 1);
         
     }
@@ -320,12 +320,12 @@ public class JobGovernor extends Process
     {
         if (((String)tempList.getFirst() == "DG") || ((String)tempList.getFirst() == "DP"))
         {
-            System.out.println("IO pertraukimas");
+            OS.printToConsole("IO pertraukimas");
             goTo(18);
         }
         else
         {
-            System.out.println("Garso pertraukimas");
+            OS.printToConsole("Garso pertraukimas");
             goTo(17);
         }   
     }
@@ -350,12 +350,12 @@ public class JobGovernor extends Process
     {
         if ((String)tempList.getFirst() == "DP")
         {
-            System.out.println("DP komanda");
+            OS.printToConsole("DP komanda");
             goTo(19);
         }
         else
         {
-            System.out.println("DG komanda");
+            OS.printToConsole("DG komanda");
             goTo(21);
         }
     }
@@ -467,7 +467,7 @@ public class JobGovernor extends Process
     //26
     private void activateVirtualMachine()
     {
-        System.out.println("JobGovernor aktyvuoja VM");
+        OS.printToConsole("JobGovernor aktyvuoja VM");
         pd.children.getLast().pd.state = ProcessState.Blocked;
         
         next();
@@ -476,7 +476,7 @@ public class JobGovernor extends Process
     //27
     private void createResourceResumeVM()
     {
-        System.out.println("JobGovernor kuria resursą [Pratęsti VM darbą]");
+        OS.printToConsole("JobGovernor kuria resursą [Pratęsti VM darbą]");
         
         LinkedList<Object> tempParameters = new LinkedList<>();
         tempParameters.add(pd.children.getLast());

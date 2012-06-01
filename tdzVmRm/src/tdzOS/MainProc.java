@@ -7,6 +7,7 @@ package tdzOS;
 import java.util.LinkedList;
 import tdzOS.OS.ProcessState;
 import tdzVmRm.Processor;
+import tdzOS.OS;
 
 /**
  *
@@ -44,7 +45,7 @@ public class MainProc extends Process
     //1
     private void blockForTaskInHDD()
     {
-        System.out.println("MainProc blokuojasi del resurso Užduotis HDD");
+        OS.printToConsole("MainProc blokuojasi del resurso Užduotis HDD");
         pd.core.requestResource(this, OS.ResName.UzduotisHDD, 1);
         next();
     }
@@ -59,7 +60,7 @@ public class MainProc extends Process
         //Jeigu filtyvus resursas, t.y. nera komandu, tada vykdymo laikas nulinis
         if (tempList.size() == 0)
         {
-            System.out.println("MainProc gavo fiktyvų resursą");
+            OS.printToConsole("MainProc gavo fiktyvų resursą");
             goTo(4);
         }
         else
@@ -71,7 +72,7 @@ public class MainProc extends Process
     //3
     private void createJobGovernor()
     {
-        System.out.println("MainProc kuria JobGovernor");
+        OS.printToConsole("MainProc kuria JobGovernor");
         //Paduodam JobGovernor nuorodas i programa HDD
         
         //Paduodam job governoriui paskutini turima resursa 
@@ -90,7 +91,7 @@ public class MainProc extends Process
     //4
     private void destroyJobGovernor()
     {
-        System.out.println("MainProc naikina JobGovernor");
+        OS.printToConsole("MainProc naikina JobGovernor");
             
         //Surandam, kas to fiktyvaus resurso tevas
         Process parent = pd.ownedResources.getFirst().parent.rd.creator;
