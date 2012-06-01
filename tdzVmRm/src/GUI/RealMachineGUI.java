@@ -457,10 +457,12 @@ public class RealMachineGUI extends javax.swing.JFrame implements Runnable {
         {
             os.makeRun = true;
             runJToggleButton.setText("Running");
+            taskButton.setEnabled(false);
         } else 
         {
             os.makeRun = false;
             runJToggleButton.setText("Run");
+            taskButton.setEnabled(true);
         }
     }//GEN-LAST:event_runJToggleButtonActionPerformed
 
