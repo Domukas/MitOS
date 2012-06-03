@@ -489,7 +489,7 @@ public class OS implements Runnable {
         OS.printToConsole("Resursas sunaikintas");
     }
     
-    //TODO primityvas resurso prasymui
+    //primityvas resurso prasymui
     public void requestResource(Process currentProcess, ResName r, int count)
     {
         //Procesas, iškvietęs šį primityvą, yra užblokuojamas
@@ -504,7 +504,7 @@ public class OS implements Runnable {
         resourceManager.execute();
     }
     
-    //TODO primityvas resurso atlaisvinimui
+    //primityvas resurso atlaisvinimui
     public void freeResource(Process process, Resource r)
     {
         //Atlaisvinti resursą.
@@ -645,7 +645,6 @@ public class OS implements Runnable {
         
         createProcess(null, OS.ProcessState.Ready, 90, null, ProcName.StartStop);
 
-        //TODO
     }
     
     private int generateProcessInternalID(ProcName procName)

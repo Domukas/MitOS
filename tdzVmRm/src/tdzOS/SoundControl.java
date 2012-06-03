@@ -74,9 +74,6 @@ public class SoundControl extends Process{
         OS.printToConsole("SoundControl blokuojasi dėl resurso [Garsiakalbio įrenginys]");
         pd.core.requestResource(this, OS.ResName.GarsiakalbioIrenginys, 1);
         
-     //   for(ResComponent rc : pd.ownedResources)
-     //       OS.printToConsole(rc.value);
-        
         //pasidedam komanda 
         command = (String)pd.ownedResources.getFirst().value;
         VM = (VirtualMachine)pd.ownedResources.getFirst().parent.rd.creator.pd.children.getLast();

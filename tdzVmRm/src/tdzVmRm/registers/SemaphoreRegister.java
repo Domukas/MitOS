@@ -22,7 +22,7 @@ public class SemaphoreRegister{
         return data;
     }
     
-    public SemaphoreRegister() //Pradzioj visi locked ar unlocked?
+    public SemaphoreRegister()
     {
         data = 0;
     }
@@ -39,11 +39,6 @@ public class SemaphoreRegister{
         short temp  = (short)(1 << number);
         short temp2 = (short)(data ^ temp);
         data = (short)(data & temp2);
-        
-        // 1001 1111 
-        // 0000 0100 XOR
-        // 1001 1011 AND su pirmu
-        // 1001 1011
     }
     
     public boolean isBitSet(int number)

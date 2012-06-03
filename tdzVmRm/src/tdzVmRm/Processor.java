@@ -43,7 +43,7 @@ public class Processor {
         CH4 = new CHRegister();
         
         //Kelintas procesorius
-        pd = new ProcessorDescriptor(RealMachine.processorCount, numberOfInstances); //TODO
+        pd = new ProcessorDescriptor(RealMachine.processorCount, numberOfInstances);
         numberOfInstances++;
     }
     

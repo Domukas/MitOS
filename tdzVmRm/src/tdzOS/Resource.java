@@ -16,7 +16,7 @@ public class Resource {
     public static int numberOfInstances = 0;
     
     public Resource(Process creator, ResName externalID, int internalID,
-            boolean reusable, LinkedList<Object> components, //APTARNAUJAMU SARASAS NEREIKALINGAS AR REIKALINGAS?
+            boolean reusable, LinkedList<Object> components,
             ResourceManager resourceManager)
     {
         

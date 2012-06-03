@@ -162,13 +162,6 @@ public class SharedMemoryControl extends Process{
         
         
         next();
-        /*
-        if(!pd.processor.S.isBitSet((int)pd.ownedResources.get(1).value))
-        {
-            next();
-        }
-        * 
-        */
     }
     
     //5
@@ -213,7 +206,6 @@ public class SharedMemoryControl extends Process{
     private void isBlockedByThisVM1()
     {
         OS.printToConsole("SharedMemoryControl tikrina ar bloka uzrakino ta pati VM");
-        //OS.printToConsole(lockedBLocks + " " + adress);
         if(lockedBLocks[adress] == 1) //ar uzrakino ta pati masina
         {
             next();
@@ -255,7 +247,6 @@ public class SharedMemoryControl extends Process{
     private void isBlockLocked()
     {
         OS.printToConsole("SharedMemoryControl tikrina ar tas blokas užrakintas");
-        //OS.printToConsole(adress + " " + adress/16 + Integer.toBinaryString(pd.processor.S.getValue()) + pd.processor.S.isBitSet(adress/16));
         if(pd.processor.S.isBitSet(adress/16))
         {
             next();

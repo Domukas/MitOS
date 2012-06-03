@@ -20,25 +20,10 @@ public class RealMachine {
     public static final int processorCount = 2;
     
     public static RealMachineGUI gui;
-    
-    
-    /*
-    public static PLRRegister PLR;
-    public static DataRegister R1, R2;
-    public static ICRegister IC;
-    public static CRegister C;
-    public static SemaphoreRegister S;
-    public static TimerRegister timer;
-    public static ModeRegister mode;
-    public static INTRegister PI, SI;
-    public static CHRegister CH1, CH2, CH3, CH4;
-    */
     public static Processor[] proc = new Processor[processorCount];
-    
     public static Speaker[] speakers = new Speaker[2];
     public static Output out;
     
-    //public static VirtualMachine VM;
     public static final int PLR_BLOCK_MEMORY_OFFSET = 0x100;
     public static final int PLR_MAX_A2 = 0x5;
     public static final int PLR_LAST_A3 = 0x4;
@@ -72,10 +57,6 @@ public class RealMachine {
             freeBlocks[i] = true;
         freeBlockCount = blocks;
         virtualMachineCount = 0;
-        
-        //CreateVirtualMachine("program");
-
-        
     }
     
     public boolean CreateVirtualMachine(String fileName){
@@ -91,7 +72,6 @@ public class RealMachine {
                 if (virtualMemory != null)
                 {
                     loadProgram(virtualMemory, input);
-                    //VM = new VirtualMachine(proc[0].R1, proc[0].R2, proc[0].IC, proc[0].C, virtualMemory);
                     proc[0].SI.setValue(0);
                     proc[0].PI.setValue(0);
                 }
@@ -116,7 +96,6 @@ public class RealMachine {
             virtualMachineCount++;
             Random rnd = new Random();
             //Nustatome PLR registro reiksmes skirtas vienai virtualiai masinai
-            //A1 - programai skirtas puslapiu skaicius, visada 16
             if (requiredBlocks >= 0x10)
                 proc[0].PLR.setA1((byte) 0);
             else

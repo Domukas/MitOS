@@ -15,13 +15,13 @@ public class ResourceDescriptor {
     public int internalID;
     public ResName externalID;
     boolean reusable;
-    public Process creator;          //DOKUMENTE PARASYTA, KAD VIDINIS KUREJO VARDAS, O NE ID
+    public Process creator;
     public LinkedList<ResComponent> components; 
     ResourceManager resourceManager;
  
     
     public ResourceDescriptor(Process creator, ResName externalID, int internalID,
-            boolean reusable, LinkedList<ResComponent> components, //APTARNAUJAMU SARASAS NEREIKALINGAS AR REIKALINGAS?
+            boolean reusable, LinkedList<ResComponent> components,
             ResourceManager resourceManager)
     {
         this.creator = creator;

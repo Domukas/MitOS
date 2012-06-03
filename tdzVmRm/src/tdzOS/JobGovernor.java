@@ -333,7 +333,7 @@ public class JobGovernor extends Process
     //17
     private void createMessageForSoundControl()
     {
-        System.out.print("JobGovernor kuria resursą [Pranešimas SoundControl procesui]");
+       OS.printToConsole("JobGovernor kuria resursą [Pranešimas SoundControl procesui]");
         OPC = (String)tempList.get(1);
 
         pd.core.createResource(this, ResName.PranesimasSoundControlProcesui,
@@ -386,7 +386,7 @@ public class JobGovernor extends Process
     //20
     private void blockForLinePrinted()
     {
-        System.out.print("JobGovernor blokuojasi dėl resurso [Išvesta eilutė]");
+        OS.printToConsole("JobGovernor blokuojasi dėl resurso [Išvesta eilutė]");
         pd.core.requestResource(this, ResName.IsvestaEilute, 1);
         
         goTo(26); //Aktyvuojam VM
@@ -395,7 +395,7 @@ public class JobGovernor extends Process
     //21
     private void createMessageForGetLine()
     {
-        System.out.print("JobGovernor kuria resursą [Pranešimas GetLine procesui]");
+        OS.printToConsole("JobGovernor kuria resursą [Pranešimas GetLine procesui]");
         commandParameter = (Integer)tempList.get(1);
         
         pd.core.createResource(this, ResName.PranesimasGetLineProcesui,
@@ -407,7 +407,7 @@ public class JobGovernor extends Process
     //22
     private void blockForEnteredLineInSupervisor()
     {
-        System.out.print("JobGovernor blokuojasi dėl resurso [Įvesta eilutė atmintyje]");
+        OS.printToConsole("JobGovernor blokuojasi dėl resurso [Įvesta eilutė atmintyje]");
         pd.core.requestResource(this, ResName.IvestaEiluteSupervizorinejeAtmintyje, 1);
         
         goTo(26);
@@ -416,7 +416,7 @@ public class JobGovernor extends Process
     //23
     private void messageToSharedMemoryControl()
     {
-        System.out.print("JobGovernor kuria resursą [Pranešimas SharedMemoryControl]" + "nr." + pd.children.getLast().pd.internalID);
+        OS.printToConsole("JobGovernor kuria resursą [Pranešimas SharedMemoryControl]" + "nr." + pd.children.getLast().pd.internalID);
         LinkedList<Object> tempParameters = new LinkedList<>();
         commandParameter = (Integer)tempList.get(2);
         
@@ -438,7 +438,7 @@ public class JobGovernor extends Process
     //24
     private void blockForResult()
     {
-        System.out.print("JobGovernor blokuojasi dėl resurso [Pranešimas JobGovernor procesui]");
+        OS.printToConsole("JobGovernor blokuojasi dėl resurso [Pranešimas JobGovernor procesui]");
         pd.core.requestResource(this, ResName.PranesimasJobGovernor, 1);
         
         next();
@@ -453,12 +453,12 @@ public class JobGovernor extends Process
         
         if (Integer.parseInt(result) == 0)
         {
-            System.out.print("Rezultatas = 0");
+            OS.printToConsole("Rezultatas = 0");
             goTo(26);
         }
         else 
         {
-            System.out.print("Rezultatas = 1");
+            OS.printToConsole("Rezultatas = 1");
             goTo(11);
         }
         

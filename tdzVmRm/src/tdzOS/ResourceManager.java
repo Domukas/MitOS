@@ -76,7 +76,6 @@ class ResourceManager {
                                                 
                    }
                } 
-               //else OS.printToConsole("Resursas " + resNameList.get(i) + " nerastas laisvu sarase");
            }
        }
        
@@ -96,7 +95,7 @@ class ResourceManager {
             }
         }
     }
-    //-----------------------------------------------------------------------------
+    
     private boolean giveResourceToProcess(Process tmpProcess, Resource r, int count)
     {
         if((r.rd.components.size() >= count) && (tmpProcess != null))

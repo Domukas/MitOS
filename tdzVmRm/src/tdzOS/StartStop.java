@@ -24,10 +24,6 @@ public class StartStop extends Process {
     {
         super(inList, internalID, externalID, ps, p, or, state,
                 priority, parent, core);
-        
-        //TIK testinimui
-        //step();
-
     }
     
     public void step()
@@ -79,7 +75,7 @@ public class StartStop extends Process {
         next();
     }
     
-    private void createSystemProcesses() //TODO
+    private void createSystemProcesses()
     {
         OS.printToConsole("StartStop kuria sisteminius procesus");  
         

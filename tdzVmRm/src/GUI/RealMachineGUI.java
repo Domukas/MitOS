@@ -366,8 +366,6 @@ public class RealMachineGUI extends javax.swing.JFrame implements Runnable {
     private void taskButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_taskButtonActionPerformed
         String taskName;
         taskName = taskNameField.getText();
-
-        System.out.println(taskName);
         File f = new File("src/tdzVmRm/"+taskName+".tdz");
 
         if(f.exists())

@@ -1,1 +1,0 @@
-java -jar MiniCompiler.jar

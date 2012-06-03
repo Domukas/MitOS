@@ -31,7 +31,7 @@ public class DataRegister {
         catch (NumberFormatException e)
         {
             RealMachine.gui.showMessage(value.getValue() + " is not a valid number");
-            RealMachine.proc[0].PI.setValue(1); //TODO
+            RealMachine.proc[0].PI.setValue(1);
             RealMachine.proc[0].mode.SetSupervisor();
         }
     }
