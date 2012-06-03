@@ -39,9 +39,6 @@ public class RealMachineGUI extends javax.swing.JFrame implements Runnable {
     OS os;
     JTable vm1MemoryTable;
     public boolean updateTables = false;
-    
-    //Reikalinga nusakyti lenteles reiksmiu tipui
-    TableDataTypes tableDataType = TableDataTypes.Hex;
 
     @Override
     public void run() {
@@ -64,15 +61,6 @@ public class RealMachineGUI extends javax.swing.JFrame implements Runnable {
     }
    
     
-    public enum TableDataTypes {
-        Int,
-        Hex,
-        Char
-    }
-    public TableDataTypes getTableDataType(){
-        return tableDataType;
-    }
-    
     public RealMachineGUI(RealMachine RM, OS os) {
         super("Real machine");
         RM.addGui(this);
@@ -86,7 +74,6 @@ public class RealMachineGUI extends javax.swing.JFrame implements Runnable {
             processorsTabbedPane.add("P"+i, procPanel);
         }
         
-        updateProcessorJPanels();
         //Norim, kad adreso stulpelio dydis nesikeistu - vietos butu tiek, kiek uztenka
         memoryTable.getColumnModel().getColumn(0).setMaxWidth(32);
         memoryTable.getColumnModel().getColumn(0).setMinWidth(32);  
@@ -110,19 +97,14 @@ public class RealMachineGUI extends javax.swing.JFrame implements Runnable {
         procJTable.getSelectionModel().addListSelectionListener(procJTableListener);
         
         resJTable.setModel(new ResourcesTableModel(os));
-        
-        ListSelectionListener resJTableListener = new ListSelectionListener()
-        {
-            public void valueChanged(ListSelectionEvent e) {
-                //updateInfoJTable();
-            }
-        };
-        resJTable.getSelectionModel().addListSelectionListener(resJTableListener);
+
         ResourcesTableRenderer rr =new ResourcesTableRenderer();
         for (int i=0;i < resJTable.getColumnCount(); i++)
         {
             resJTable.getColumn(resJTable.getColumnName(i)).setCellRenderer(rr);
         }
+        
+        updateAll();
     }
     
     private void procTableSelected() {
@@ -181,19 +163,12 @@ public class RealMachineGUI extends javax.swing.JFrame implements Runnable {
     }
     
     public void updateAll(){
-        updateProcessorJPanels();
+        ((ProcessorJPanel) processorsTabbedPane.getComponentAt(processorsTabbedPane.getSelectedIndex()) ).updateFields();
         memoryTabbedPane.getComponentAt(memoryTabbedPane.getSelectedIndex()).repaint();
         procJTable.revalidate();
         resJTable.revalidate();
         procJTable.repaint();
-        //procJTable.paint(procJTable.getGraphics());
         resJTable.repaint();
-    }
-   
-    
-    private void updateProcessorJPanels(){
-        for (int i = 0; i < RM.proc.length; i++)
-            ((ProcessorJPanel) processorsTabbedPane.getComponentAt(i)).updateFields();
     }
     
     public void showMessage(String text)
@@ -381,7 +356,6 @@ public class RealMachineGUI extends javax.swing.JFrame implements Runnable {
 
     private void stepButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_stepButtonActionPerformed
         os.makeStepToVM = true;
-        //RM.VM.step();
         updateAll();
     }//GEN-LAST:event_stepButtonActionPerformed
 
@@ -390,49 +364,30 @@ public class RealMachineGUI extends javax.swing.JFrame implements Runnable {
     }//GEN-LAST:event_memoryTableInputMethodTextChanged
 
     private void taskButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_taskButtonActionPerformed
-            String taskName;
-            taskName = taskNameField.getText();
-            
-            System.out.println(taskName);
-            File f = new File("src/tdzVmRm/"+taskName+".tdz");
-            
-            if(f.exists())
-            {
-                //Cia jau kuriam resursa IvedimoSrautas
-                //Paimam is OS'o startStop tik tam, kad kuriant resursa galetume paduot jo teva teisingai
-                
-                LinkedList<Object> elements = new LinkedList<>();
-                
-                FileInputStream input = null;
-                try {
-                    input = new FileInputStream(f);
-    
-                    elements.add(input);
-                    
-                    os.createResource(os.getMainproc(), OS.ResName.IvedimoSrautas, elements);
-                } catch (IOException ex) {
-                    Logger.getLogger(RealMachineGUI.class.getName()).log(Level.SEVERE, null, ex);
-                }
-                
-                
-                
-                /*
-                if (RealMachine.VM == null)
-                {
-                    if (RM.CreateVirtualMachine(taskName))
-                            createVMTab();
-                        else
-                            showMessage("Number of blocks, assigned to virtual machine, is invalid");
-                }
-                else
-                    RM.CreateVirtualMachine(taskName);
-                
-                updateAll();       
-                }else{
-                    showMessage("File not found.");
-                    * 
-                    */
+        String taskName;
+        taskName = taskNameField.getText();
+
+        System.out.println(taskName);
+        File f = new File("src/tdzVmRm/"+taskName+".tdz");
+
+        if(f.exists())
+        {
+            //Cia jau kuriam resursa IvedimoSrautas
+            //Paimam is OS'o startStop tik tam, kad kuriant resursa galetume paduot jo teva teisingai
+
+            LinkedList<Object> elements = new LinkedList<>();
+
+            FileInputStream input = null;
+            try {
+                input = new FileInputStream(f);
+
+                elements.add(input);
+
+                os.createResource(os.getMainproc(), OS.ResName.IvedimoSrautas, elements);
+            } catch (IOException ex) {
+                Logger.getLogger(RealMachineGUI.class.getName()).log(Level.SEVERE, null, ex);
             }
+        }
     }//GEN-LAST:event_taskButtonActionPerformed
 
     private void osStepButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_osStepButtonActionPerformed
@@ -441,7 +396,7 @@ public class RealMachineGUI extends javax.swing.JFrame implements Runnable {
     }//GEN-LAST:event_osStepButtonActionPerformed
 
     private void taskNameFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_taskNameFieldActionPerformed
-        // TODO add your handling code here:
+
     }//GEN-LAST:event_taskNameFieldActionPerformed
 
     private void taskNameFieldMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_taskNameFieldMouseClicked

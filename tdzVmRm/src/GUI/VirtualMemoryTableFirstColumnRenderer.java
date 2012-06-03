@@ -38,21 +38,6 @@ public Component getTableCellRendererComponent(JTable table, Object value,boolea
             setToolTipText("");
             setBackground(table.getBackground());
             setForeground(table.getForeground());
-            //Spalvinam virtualios masinos atminties blokus geltonai
-         //   for (int i = 0; i < 15; i++){
-         //       if (row == vm.memory.getBlock(vm.PLR.getA2()*0x10 + vm.PLR.getA3()).getWord(i))
-         //       {
-         //           setBackground(new Color(0xFFFF00));
-         //           setToolTipText("Virtualios masinos "+(i+1)+" blokas");
-         //       }
-         //   }
-            //Spalvinam bendros atminties blokus zaliai
-        //    if (row >= rm.SHARED_MEMORY_BLOCK_OFFSET && row < rm.SHARED_MEMORY_BLOCK_OFFSET+0x10)
-       //     {
-        //        setToolTipText("Bendra atmintis");
-      //          setBackground(new Color(0x77FF77));
-      //      }
-
         }
          return this;
      }

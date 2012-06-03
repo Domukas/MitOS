@@ -53,7 +53,9 @@ public class ResourcesTableModel extends AbstractTableModel {
             rd = os.resources.get(rowIndex).rd;
                 else
                     if (RealMachine.gui.procJTable.getSelectedRow() >= 0)
-                        rd = os.processes.get(RealMachine.gui.procJTable.getSelectedRow()).pd.ownedResources.get(rowIndex-os.resources.size()).parent.rd;
+                        try {
+                        rd = os.processes.get(RealMachine.gui.procJTable.getSelectedRow()).pd.ownedResources.get(rowIndex - os.resources.size()).parent.rd;
+                        } catch (IndexOutOfBoundsException e) { return "ERROR";}
                     else
                         return "ERROR";
             
